@@ -1,79 +1,21 @@
 body {
     background-color: #f5f5f5;
-}
-
-.top-bar {
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #ddd;
-}
-
-.social-icon {
-    width: 30px;
-    margin: 0 10px;
-}
-
-.logo-nav {
-    background-color: #fff;
-    border-bottom: 1px solid #ddd;
-    padding: 20px 0;
-}
-
-.logo-img {
-    max-width: 332px;  /* Imposta la larghezza massima */
-    height: 92px;     /* Mantiene le proporzioni originali */
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 .navbar {
-    background-color: #fff;
-}
-
-.navbar-nav {
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    width: 100%;
-}
-
-.nav-item {
-    margin: 0 15px;
+    background-color: rgb(155, 81, 224); /* Colore di sfondo specificato */
 }
 
 .nav-link {
-    color: #333 !important;
-    font-weight: bold;
+    color: #32E04A !important; /* Cambia il colore delle scritte delle voci del menu */
 }
 
-
-/* Carousel */
-.carousel-inner {
-    width: 100%;
-}
-
-.carousel-image {
-    width: 100%;
-    height: 400px;
-    background-size: cover;
-    background-position: center;
-}
-
-.carousel-inner img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.container h1 {
-    color: #333;
-}
-
-.container p {
-    color: #666;
-}
-
-
-.carousel-item .d-block {
-    width: 100%;
-    height: 100%;
+.nav-link:hover {
+    color: #FFF !important; /* Cambia il colore delle scritte delle voci del menu quando si passa sopra con il mouse */
 }
 
 .social-icon {
@@ -87,11 +29,62 @@ body {
     color: #555; /* Colore di hover */
 }
 
+.logo-img {
+    max-width: 332px;
+    height: 92px;
+}
+
+/* Media query per schermi più piccoli */
+@media (max-width: 767.98px) {
+    .logo-img {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
 footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
     background-color: #000; /* Nero */
     color: #fff; /* Bianco */
     padding: 15px 0;
+    position: relative;
+    width: 100%;
+    bottom: 0;
+}
+
+.container {
+    flex-grow: 1;
+}
+
+.container-fluid {
+    flex-grow: 1;
+}
+
+h1, h2, h3 {
+    color: rgb(155, 81, 224);
+}
+
+p, ul {
+    color: #333;
+}
+
+form label {
+    color: rgb(155, 81, 224);
+}
+
+form button {
+    background-color: rgb(155, 81, 224);
+    border: none;
+}
+
+form button:hover {
+    background-color: #a152cc;
+}
+
+/* Stile per l'icona dell'hamburger */
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.1); /* Cambia il colore del bordo */
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgb(155, 81, 224)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
 }

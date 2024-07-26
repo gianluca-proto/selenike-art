@@ -1,19 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container">
-    <h1>Art Gallery</h1>
+<div class="container my-4">
+    <h1 class="text-center mb-4">Art Gallery</h1>
     <div class="row">
-        <!-- Add your artwork images here -->
-        <div class="col-md-4">
-            <img src="{{ url_for('static', filename='img/art1.jpg') }}" class="img-fluid" alt="Artwork 1">
+        {% for image in images %}
+        <div class="col-md-3 mb-4">
+            <a href="{{ url_for('static', filename='img/gallery/' ~ image) }}" data-toggle="lightbox" data-gallery="gallery" class="col-md-4">
+                <img src="{{ url_for('static', filename='img/gallery/' ~ image) }}" class="img-fluid rounded">
+            </a>
         </div>
-        <div class="col-md-4">
-            <img src="{{ url_for('static', filename='img/art2.jpg') }}" class="img-fluid" alt="Artwork 2">
-        </div>
-        <div class="col-md-4">
-            <img src="{{ url_for('static', filename='img/art3.jpg') }}" class="img-fluid" alt="Artwork 3">
-        </div>
-        <!-- Add more artwork images as needed -->
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

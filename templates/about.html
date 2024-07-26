@@ -1,14 +1,20 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container">
-    <h1>About Selenike</h1>
-    <p>Selenike is a talented artist known for her unique style and captivating artworks. Explore her journey and learn more about her inspirations and creative process.</p>
-    <p>Follow Selenike on social media:</p>
-    <ul>
-        <li><a href="https://www.facebook.com/selenikeart">Facebook</a></li>
-        <li><a href="https://www.instagram.com/selenikeart">Instagram</a></li>
-        <li><a href="https://www.patreon.com/selenikeart">Patreon</a></li>
-        <!-- Add more social media links as needed -->
-    </ul>
+<div class="container my-4">
+    <h1 class="text-center mb-4">Selenike</h1>
+    <div class="row">
+        <div class="col-lg-6 col-md-12">
+            <h2>Selenike</h2>
+            <p>Ciao a tutti sono Selenike un’Artista autodidatta e Diplomata in grafica pubblicitaria, il mio viaggio nell’arte inizia nei ricordi più dolci dell’infanzia, dove le prime linee tracciate su un foglio bianco segnavano l’inizio di un’esplorazione senza fine della mia espressione personale.</p>
+            <p>Disegnare, per me, non è solo una professione o un hobby; è l’essenza stessa del mio essere, un linguaggio universale attraverso il quale racconto storie, emozioni e visioni del mondo che mi circonda. Ogni opera d’arte che creo è un pezzo del mio cuore, un invito ad avventurarsi nelle profondità della mia anima artistica.</p>
+            <p>La mia passione per l’arte si intreccia strettamente con l’amore per la vita in tutte le sue forme. Praticante di Kung fu per anni e di Karate da adolescente, ho imparato l’importanza della disciplina, della resilienza e della bellezza nascosta in ogni movimento. Queste lezioni si riflettono nel mio approccio all’arte, dove ogni pennellata e ogni tratto di matita sono meditati e pieni di intenzione.</p>
+            <p>La natura, gli animali, le serie tv, i videogiochi e i fumetti alimentano la mia immaginazione e si riflettono nelle mie opere. Cresciuta leggendo Topolino, ho conservato quella curiosità e quel senso di meraviglia che caratterizzano ogni pagina di un fumetto, traducendoli in arte che parla sia ai bambini che agli adulti.</p>
+            <p>Nel mio studio, circondata da matite, pennarelli, tempere e colori a olio, trovo la mia pace. Tuttavia, è il mio inseparabile iPad per il disegno digitale che mi permette di spingere i confini della mia creatività, esplorando nuove tecniche e stili che rendono ogni pezzo unico.</p>
+            <p>Invito tutti voi ad esplorare la mia collezione d’arte, una fusione tra tradizione e innovazione, un viaggio attraverso colori vivaci e storie avvincenti. Sia che cerchiate un pezzo che parli al vostro spirito avventuroso, o semplicemente un’opera che aggiunga un tocco di bellezza alla vostra quotidianità, in Selenike troverete un’arte che parla al cuore.</p>
+        </div>
+        <div class="col-lg-6 col-md-12 text-center">
+            <img src="{{ url_for('static', filename='img/selenike.png') }}" alt="Selenike" class="img-fluid rounded">
+        </div>
+    </div>
 </div>
 {% endblock %}

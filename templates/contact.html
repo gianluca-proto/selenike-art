@@ -1,22 +1,47 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container">
-    <h1>Contact Us</h1>
-    <p>If you have any questions or would like to get in touch, please fill out the form below:</p>
-    <form action="mailto:selenike@example.com" method="post" enctype="text/plain">
-        <div class="form-group">
-            <label for="name">Name:</label>
-            <input type="text" class="form-control" id="name" name="name" required>
+<div class="container my-4">
+    <h1 class="text-center mb-4">Contattaci</h1>
+    <div class="row">
+        <div class="col-lg-6 col-md-12">
+            <form>
+                <div class="form-group">
+                    <label for="name">Il tuo nome</label>
+                    <input type="text" class="form-control" id="name" placeholder="Il tuo nome">
+                </div>
+                <div class="form-group">
+                    <label for="email">La tua email</label>
+                    <input type="email" class="form-control" id="email" placeholder="La tua email">
+                </div>
+                <div class="form-group">
+                    <label for="subject">Oggetto</label>
+                    <input type="text" class="form-control" id="subject" placeholder="Oggetto">
+                </div>
+                <div class="form-group">
+                    <label for="drawingType">Tipo Disegno</label>
+                    <select class="form-control" id="drawingType">
+                        <option>Digitale</option>
+                        <option>Cartaceo</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="format">Formato</label>
+                    <select class="form-control" id="format">
+                        <option>A3: 29,7 x 42,0 cm</option>
+                        <option>A4: 21,0 x 29,7 cm</option>
+                        <option>A5: 14,8 x 21,0 cm</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="message">Il tuo messaggio</label>
+                    <textarea class="form-control" id="message" rows="5" placeholder="Il tuo messaggio"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Invia</button>
+            </form>
         </div>
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" class="form-control" id="email" name="email" required>
+        <div class="col-lg-6 col-md-12 text-center">
+            <img src="{{ url_for('static', filename='img/contact-image.png') }}" alt="Contact Image" class="img-fluid rounded">
         </div>
-        <div class="form-group">
-            <label for="message">Message:</label>
-            <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">Send</button>
-    </form>
+    </div>
 </div>
 {% endblock %}

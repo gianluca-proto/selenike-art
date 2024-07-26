@@ -1,8 +1,78 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container">
-    <h1>Commissions</h1>
-    <p>For commissions, please contact Selenike with your request and details. Prices vary depending on the complexity and requirements of the commission.</p>
-    <p>Email: <a href="mailto:selenike@example.com">selenike@example.com</a></p>
+<div class="container my-4">
+    <h1 class="text-center mb-4">Commissions</h1>
+    <div class="row">
+        <div class="col-lg-6 col-md-12">
+            <p>Ciao, se hai cliccato questa pagina vuol dire che vuoi chiedermi un disegno su commissione, posso disegnare quasi tutto quello che vuoi: un ritratto? un animale domestico? Vuoi rendere disegno una foto ricordo? Una tavola da fumetto?</p>
+            <p>Ovviamente l’idea non basta ci vuole anche il formato: A3, A4, A5, Digitale, Cartaceo?</p>
+            <p>Come vorresti la colorazione? bianco e nero o colorato? Matite? Pantone? ecc..</p>
+            <p>Nel frattempo se volete farvi un’idea del mio stile visitate la sezione Art Gallery e i miei profili Facebook, Instagram, Patreon, Twitter e Threads</p>
+            <p>Dopo che ti sarai fatto un’idea di come vorresti sviluppare il tuo progetto contattami pure usando il modulo di contatto qui in basso. ⬇⬇⬇</p>
+            <p>Una volta che avrò ricevuto il vostro messaggio nel giro poche ore vi ricontatterò.</p>
+            <p>a presto<br>Selenike</p>
+        </div>
+        <div class="col-lg-6 col-md-12">
+            <h3>Listino Prezzi</h3>
+            <ul>
+                <li>Ritratto: 30 euro</li>
+                <li>Busto: 35 euro</li>
+                <li>Mezzo corpo: 55 euro</li>
+                <li>Corpo intero: 85 euro (se aggiungi altri personaggi, sono 15 euro in più per personaggio)</li>
+                <li>Se includi un animale domestico: 15 euro</li>
+                <li>Senza sfondo. (Se aggiungi uno sfondo, sono 25 euro in più)</li>
+                <li>Se aggiungi il colore, sono 25 euro in più in tutte le categorie</li>
+            </ul>
+        </div>
+    </div>
+    <!-- Contact Form and Image -->
+    <div class="row mt-5">
+        <div class="col-lg-6 col-md-12 mb-4">
+            <h3 class="mb-4">Modulo di Contatto</h3>
+            <form>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="name">Il tuo nome</label>
+                        <input type="text" class="form-control" id="name" placeholder="Il tuo nome">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="email">La tua email</label>
+                        <input type="email" class="form-control" id="email" placeholder="La tua email">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="subject">Oggetto</label>
+                        <input type="text" class="form-control" id="subject" placeholder="Oggetto">
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="drawingType">Tipo Disegno</label>
+                        <select class="form-control" id="drawingType">
+                            <option>Digitale</option>
+                            <option>Cartaceo</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="format">Formato</label>
+                        <select class="form-control" id="format">
+                            <option>A3: 29,7 x 42,0 cm</option>
+                            <option>A4: 21,0 x 29,7 cm</option>
+                            <option>A5: 14,8 x 21,0 cm</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="message">Il tuo messaggio</label>
+                    <textarea class="form-control" id="message" rows="5" placeholder="Il tuo messaggio"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Invia</button>
+            </form>
+        </div>
+        <div class="col-lg-6 col-md-12 text-center">
+            <img src="{{ url_for('static', filename='img/commission-image.png') }}" alt="Commission Image" class="img-fluid rounded">
+        </div>
+    </div>
 </div>
 {% endblock %}
