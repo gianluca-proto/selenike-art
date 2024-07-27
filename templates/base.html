@@ -4,16 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Selenike Art</title>
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
 </head>
 <body>
     <!-- Top bar with social media icons -->
- <div class="container-fluid bg-light py-2">
+    <div class="container-fluid bg-light py-2">
         <div class="row justify-content-center">
-
             <div class="col-md-4 text-left">
                 <a href="https://www.facebook.com/selenikeart" class="social-icon"><i class="bi bi-facebook"></i></a>
                 <a href="https://www.instagram.com/selenikeart" class="social-icon"><i class="bi bi-instagram"></i></a>
@@ -29,8 +27,8 @@
     </div>
 
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg w-100">
-        <div class="container-fluid">
+    <nav class="navbar navbar-expand-lg navbar-light w-100">
+        <div class="container-fluid px-0">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -56,20 +54,50 @@
         </div>
     </nav>
 
-    <div class="container">
+    <div class="container-fluid px-0">
         {% block content %}{% endblock %}
     </div>
 
-      <!-- Footer -->
-    <footer class="bg-dark text-white text-center py-3">
+    <!-- Footer -->
+    <footer>
         <div class="container">
-            <p>&copy; 2024 Selenike Art. All rights reserved.</p>
+            <div class="row">
+                <!-- Logo -->
+                <div class="col-md-4 text-center mb-3 mb-md-0">
+                    <img src="{{ url_for('static', filename='img/LogoSito.png') }}" alt="Selenike Art" class="logo-img" style="max-width: 200px;">
+                </div>
+                <!-- Info -->
+                <div class="col-md-4 text-center text-md-left mb-3 mb-md-0">
+                    <h5>Info:</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/contact" class="text-white">Contattaci</a></li>
+                        <li><a href="/about" class="text-white">Selenike</a></li>
+                        <li><a href="/privacy-policy" class="text-white">Privacy Policy</a></li>
+                        <li class="text-white">PARTITA IVA 13490680967</li>
+                    </ul>
+                </div>
+                <!-- Social -->
+                <div class="col-md-4 text-center text-md-right">
+                    <h5>Social:</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="https://www.facebook.com/selenikeart" class="text-white"><i class="bi bi-facebook"></i> Facebook</a></li>
+                        <li><a href="https://www.instagram.com/selenikeart" class="text-white"><i class="bi bi-instagram"></i> Instagram</a></li>
+                        <li><a href="https://www.patreon.com/selenikeart" class="text-white"><i class="bi bi-patreon"></i> Patreon</a></li>
+                        <li><a href="https://www.twitter.com/selenikeart" class="text-white"><i class="bi bi-twitter"></i> Twitter</a></li>
+                        <li><a href="https://www.threads.net/selenikeart" class="text-white"><i class="bi bi-threads"></i> Threads</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col text-center">
+                    <p class="mb-0 text-white" >Managed by Gianluca Proto.</p>
+                </div>
+            </div>
         </div>
     </footer>
 
-   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

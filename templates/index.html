@@ -10,22 +10,13 @@
         </ol>
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <div class="carousel-image" style="background-color: #ffcccc;">
-                    <!-- Inserisci qui un'immagine se preferisci -->
-                    <div class="d-block w-100" style="height: 400px;"></div>
-                </div>
+                <img src="{{ url_for('static', filename='img/banner/Banner1.png') }}" class="d-block w-100" alt="First slide" style="height: 400px; object-fit: cover;">
             </div>
             <div class="carousel-item">
-                <div class="carousel-image" style="background-color: #ccffcc;">
-                    <!-- Inserisci qui un'immagine se preferisci -->
-                    <div class="d-block w-100" style="height: 400px;"></div>
-                </div>
+                <img src="{{ url_for('static', filename='img/banner/Banner2.png') }}" class="d-block w-100" alt="Second slide" style="height: 400px; object-fit: cover;">
             </div>
             <div class="carousel-item">
-                <div class="carousel-image" style="background-color: #ccccff;">
-                    <!-- Inserisci qui un'immagine se preferisci -->
-                    <div class="d-block w-100" style="height: 400px;"></div>
-                </div>
+                <img src="{{ url_for('static', filename='img/banner/Banner3.png') }}" class="d-block w-100" alt="Third slide" style="height: 400px; object-fit: cover;">
             </div>
         </div>
         <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -38,6 +29,44 @@
         </a>
     </div>
 </div>
+<div class="container mt-5">
+    <!-- Benvenuti su Selenike Art -->
+    <div class="text-center mb-5">
+        <h1>Bevenuti su Selenike Art!</h1>
+        <p>Ciao e benvenuti sul mio sito, Selenikeart.com! Sono Elena, ma potete chiamarmi Selenike. Sono un’artista che si specializza in disegni su commissione, illustrazioni, tavole da fumetto, disegni di animali e anche disegni erotici (shh, non ditelo troppo forte!). Qui potete trovare una vasta selezione di opere originali in formato cartaceo e digitale. Sfogliate la sezione Art Gallery, e trovate il disegno perfetto per voi o come regalo unico per i vostri cari. Grazie per aver visitato il mio sito e spero che vi piacerà il mio lavoro tanto quanto mi piace crearlo! Se siete interessati a uno dei miei disegni della sezione Art Gallery potete usare la pagina Contattaci, sia cartacei che digitali, o desiderate commissionare un’opera, potete scrivere nella sezione Commissions del sito.</p>
+    </div>
 
+    <!-- Disegni Erotici -->
+    <div class="row mb-5">
+        <div class="col-md-8">
+            <h2>Disegni Erotici</h2>
+            <p>Qui potete trovare una selezione di opere d’arte che celebrano la sensualità del corpo umano e l’espressione dell’intimità. I miei disegni erotici sono caratterizzati da un’estetica audace e raffinata, pensati per evocare emozioni forti e piacevoli. Sono perfetti per chi cerca un’opera d’arte sensuale e provocatoria per decorare la propria casa o per chi vuole fare un regalo originale e sorprendente. Esplorate la mia selezione di disegni erotici e lasciatevi trasportare dalla loro bellezza e dalla loro passionalità. Vi assicuro la massima discrezione e riservatezza, questo genere di prodotti sono destinati solo a un pubblico adulto.</p>
+        </div>
+        <div class="col-md-4">
+            <img src="{{ url_for('static', filename='img/index1.png') }}" class="img-fluid" alt="Disegni Erotici">
+        </div>
+    </div>
 
+    <!-- Disegni di Animali -->
+    <div class="row mb-5">
+        <div class="col-md-8">
+            <h2>Disegni di animali</h2>
+            <p>Qui potete trovare una selezione di opere d’arte che celebrano la bellezza e la varietà del mondo animale. I miei disegni di animali sono realizzati con passione e dedizione, e catturano l’essenza e la personalità di ogni creatura. Sono perfetti per chi ama gli animali e desidera decorare la propria casa o il proprio ufficio con opere d’arte ispirate alla natura. Esplorate la mia selezione di disegni di animali e lasciatevi trasportare dalla loro bellezza e dalla loro varietà. Dai pelosi amici domestici alle creature esotiche, troverete sicuramente l’animale che fa per voi.</p>
+        </div>
+        <div class="col-md-4">
+            <img src="{{ url_for('static', filename='img/index2.png') }}" class="img-fluid" alt="Disegni di Animali">
+        </div>
+    </div>
+
+    <!-- Tavole da fumetto -->
+    <div class="row mb-5">
+        <div class="col-md-8">
+            <h2>Tavole da fumetto</h2>
+            <p>Qui potete trovare una selezione di opere d’arte che rappresentano il meglio dell’arte del fumetto. Nelle illustrazioni qui di fianco ci sono anche delle tavole Fan Art che ho fatto per Topolino. Le mie tavole da fumetto sono caratterizzate da un mix di suspense, narrazione e arte, realizzate con grande maestria e passione. Sono perfette per gli appassionati di fumetti e di graphic novel, così come per gli amanti dell’arte che desiderano aggiungere un tocco di originalità alle loro collezioni. Esplorate la mia selezione di tavole da fumetto e lasciatevi trasportare in un mondo di avventure, di eroi e di cattivi. Dai comics classici alle opere più innovative, troverete sicuramente la tavola da fumetto che fa per voi.</p>
+        </div>
+        <div class="col-md-4">
+            <img src="{{ url_for('static', filename='img/index3.png') }}" class="img-fluid" alt="Tavole da fumetto">
+        </div>
+    </div>
+</div>
 {% endblock %}

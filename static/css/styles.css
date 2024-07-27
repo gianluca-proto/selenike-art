@@ -1,13 +1,25 @@
+/* Impostiamo il box-sizing per includere padding e bordi nelle dimensioni */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 body {
     background-color: #f5f5f5;
     margin: 0;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    padding: 0;
+    overflow-x: hidden; /* Nasconde l'overflow orizzontale */
 }
 
 .navbar {
     background-color: rgb(155, 81, 224); /* Colore di sfondo specificato */
+    width: 100%; /* Assicura che la navbar occupi l'intera larghezza */
+    margin: 0; /* Rimuove eventuali margini */
+    padding: 0; /* Rimuove eventuali padding */
 }
 
 .nav-link {
@@ -31,14 +43,14 @@ body {
 
 .logo-img {
     max-width: 332px;
-    height: 92px;
+    height: auto; /* Altezza automatica per mantenere le proporzioni */
 }
 
 /* Media query per schermi più piccoli */
 @media (max-width: 767.98px) {
     .logo-img {
         max-width: 100%;
-        height: auto;
+        height: auto; /* Altezza automatica per mantenere le proporzioni */
     }
 }
 
@@ -46,9 +58,19 @@ footer {
     background-color: #000; /* Nero */
     color: #fff; /* Bianco */
     padding: 15px 0;
-    position: relative;
-    width: 100%;
+    width: 100%; /* Assicura che il footer occupi l'intera larghezza */
     bottom: 0;
+    margin: 0; /* Rimuove eventuali margini */
+    padding: 0; /* Rimuove eventuali padding */
+}
+
+footer a {
+    color: #fff; /* Colore dei link bianco */
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: #a152cc; /* Colore dei link al passaggio del mouse */
 }
 
 .container {
@@ -56,7 +78,10 @@ footer {
 }
 
 .container-fluid {
-    flex-grow: 1;
+    width: 100%; /* Assicura che il container-fluid occupi l'intera larghezza */
+    padding-left: 0; /* Rimuove il padding a sinistra */
+    padding-right: 0; /* Rimuove il padding a destra */
+    margin: 0; /* Rimuove eventuali margini */
 }
 
 h1, h2, h3 {
@@ -82,9 +107,41 @@ form button:hover {
 
 /* Stile per l'icona dell'hamburger */
 .navbar-toggler {
-    border-color: rgba(255, 255, 255, 0.1); /* Cambia il colore del bordo */
+    border-color: rgba(255, 255, 255, 1); /* Cambia il colore del bordo a bianco */
 }
 
 .navbar-toggler-icon {
-    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgb(155, 81, 224)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='white' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E"); /* Cambia il colore dell'icona a bianco */
+}
+
+.carousel-item img {
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+    object-fit: cover;
+}
+
+@media (max-width: 767.98px) {
+    .carousel-item img {
+        max-height: 150px; /* Regola l'altezza per i dispositivi mobili */
+    }
+}
+
+/* Assicura che tutti gli elementi non superino la larghezza della pagina */
+.container-fluid,
+.row,
+.col-md-4,
+.col {
+    padding: 0;
+    margin: 0;
+}
+
+.no-gutters {
+    margin-right: 0;
+    margin-left: 0;
+    > .col,
+    > [class*="col-"] {
+        padding-right: 0;
+        padding-left: 0;
+    }
 }
