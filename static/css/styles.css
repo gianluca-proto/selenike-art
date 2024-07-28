@@ -145,3 +145,67 @@ form button:hover {
         padding-left: 0;
     }
 }
+
+  .whatsapp-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            padding: 15px;
+            font-size: 24px;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background-color: rgb(155, 81, 224);
+            border-color: rgb(155, 81, 224);
+        }
+
+        .btn-primary:hover {
+            color: #fff;
+            background-color: #32E04A !important;
+            border-color: #32E04A !important;
+        }
+
+        .btn-primary:focus {
+            color: #fff;
+            background-color: #32E04A !important;
+            border-color: #32E04A !important;
+        }
+
+@font-face {
+    font-family: 'Lobster';
+    src: url('../fonts/Lobster-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Definisci una classe per il font personalizzato */
+.lobster-font-menu {
+    font-family: 'Lobster', sans-serif;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.lobster-font {
+    font-family: 'Lobster', sans-serif;
+    font-size: 42px;
+    font-weight: bold;
+}
+
+  /* Prevenire il drag and drop delle immagini */
+        img {
+            -webkit-user-drag: none;
+            -khtml-user-drag: none;
+            -moz-user-drag: none;
+            -o-user-drag: none;
+            user-drag: none;
+        }
+
+        /* Disabilitare il tasto destro solo sulle immagini */
+        .no-right-click {
+            pointer-events: all;
+        }
