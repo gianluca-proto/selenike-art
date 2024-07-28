@@ -209,3 +209,19 @@ form button:hover {
         .no-right-click {
             pointer-events: all;
         }
+
+        .gallery-filter {
+            margin-bottom: 20px;
+        }
+
+        .gallery-filter button {
+            margin-right: 10px;
+        }
+
+        .gallery-item {
+            display: none;
+        }
+
+        .gallery-item.show {
+            display: block;
+        }

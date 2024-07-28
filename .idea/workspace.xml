@@ -5,48 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="14253df0-ae5a-481e-8a12-af9d47af9467" name="Changes" comment="fix(2) - aggiustamenti grafici">
-      <change afterPath="$PROJECT_DIR$/static/fonts/Lobster-Regular.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/img/Commissioni.jpeg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/img/Selenike.jpeg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/css/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/gallery/AlternativeWar.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/gallery/illustrations/AlternativeWar.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/gallery/Candelabro.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/gallery/illustrations/Candelabro.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/gallery/Cat.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/gallery/animals/Cat.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/gallery/Cat2.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/gallery/animals/Cat2.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/gallery/ChildAndDog.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/gallery/illustrations/ChildAndDog.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/gallery/ConceptArt.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/gallery/illustrations/ConceptArt.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/gallery/Cuorisità.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/gallery/illustrations/Cuorisità.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/gallery/Disney1.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/gallery/illustrations/Disney1.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/gallery/Disney2.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/gallery/illustrations/Disney2.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/gallery/Disney3.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/gallery/illustrations/Disney3.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/gallery/Disney4.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/gallery/illustrations/Disney4.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/gallery/DisneyFANART1.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/gallery/illustrations/DisneyFANART1.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/gallery/HarleyFANART.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/gallery/illustrations/HarleyFANART.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/gallery/Ibraimovic.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/gallery/illustrations/Ibraimovic.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/gallery/Leo.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/gallery/animals/Leo.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/gallery/Matrimonio.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/gallery/illustrations/Matrimonio.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/gallery/Piscina.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/gallery/comics/Piscina.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/gallery/Pollo.png" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/gallery/animals/Pollo.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/gallery/Pollo2.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/gallery/animals/Pollo2.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/gallery/RedCap.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/gallery/comics/RedCap.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/gallery/SailorFANART.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/gallery/comics/SailorFANART.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/gallery/ScoobyFANART.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/gallery/comics/ScoobyFANART.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/gallery/ShirtDragonBall.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/gallery/comics/ShirtDragonBall.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/gallery/Snopy.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/gallery/comics/Snopy.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/gallery/SpidermanCatBlack.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/gallery/comics/SpidermanCatBlack.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/gallery/Star.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/gallery/comics/Star.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/gallery/Succub.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/gallery/comics/Succub.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/gallery/Two.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/gallery/comics/Two.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/gallery/Two2.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/gallery/comics/Two2.jpeg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/gallery/Wonder.png" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/gallery/comics/Wonder.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/about.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/about.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/commissions.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/commissions.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/contact.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/contact.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/gallery.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/gallery.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,9 +17,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 0
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
   <component name="ProjectId" id="2jqgVGvuqE96Wn2HCytvPhE4zSb" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -70,7 +31,8 @@
     "Python.app.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "develop",
-    "last_opened_file_path": "/home/popdeveloper/personal_project/selenike-art/static"
+    "last_opened_file_path": "/home/popdeveloper/personal_project/selenike-art/static",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
 }]]></component>
   <component name="RecentsManager">
