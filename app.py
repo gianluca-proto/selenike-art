@@ -1,24 +1,59 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, flash
+from flask_mail import Mail, Message
 import os
 
 app = Flask(__name__)
+app.secret_key = 'tuo_segreto'  # Necessario per visualizzare messaggi di conferma
+
+# Configurazione email
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'gianlucaproto@gmail.com'
+app.config['MAIL_PASSWORD'] = 'ziojaemccrrjydyp'
+
+mail = Mail(app)  # Corretta inizializzazione
+
 
 @app.route('/')
 def home():
     return render_template('index.html')
 
 
-
 @app.route('/commissions')
 def commissions():
     return render_template('commissions.html')
+
 
 @app.route('/about')
 def about():
     return render_template('about.html')
 
-@app.route('/contact')
+
+@app.route('/contact', methods=['GET', 'POST'])
 def contact():
+    if request.method == 'POST':
+        nome = request.form['name']
+        email = request.form['email']
+        oggetto = request.form['subject']
+        tipo_disegno = request.form['drawingType']
+        formato = request.form['format']
+        messaggio = request.form['message']
+
+        msg = Message(oggetto,
+                      sender=email,
+                      recipients=["info@selenikeart.com"])
+        msg.body = f"""
+        Da: {nome} <{email}>
+        Tipo di Disegno: {tipo_disegno}
+        Formato: {formato}
+
+        {messaggio}
+        """
+        mail.send(msg)
+        flash('Email inviata con successo!', 'success')
+        return redirect('/contact')
+
     return render_template('contact.html')
 
 
@@ -29,6 +64,7 @@ def get_images_from_folder(folder, category):
             image_path = os.path.join('img/gallery', category, filename)
             image_list.append({'filename': image_path, 'category': category})
     return image_list
+
 
 @app.route('/art-gallery')
 def art_gallery():

@@ -225,3 +225,36 @@ form button:hover {
         .gallery-item.show {
             display: block;
         }
+
+        .social-icon {
+            font-size: 32px; /* Dimensione delle icone */
+            margin: 0 10px;
+            color: rgb(155, 81, 224); /* Colore nero */
+            text-decoration: none;
+        }
+
+        .social-icon:hover {
+            color: #32E04A; /* Colore di hover */
+        }
+
+        .social-icon-footer {
+            font-size: 18px; /* Dimensione delle icone */
+            margin: 0 10px;
+            color: #000; /* Colore nero */
+            text-decoration: none;
+        }
+
+        .social-icon-footer:hover {
+            color: #555; /* Colore di hover */
+        }
+
+        .cookie-banner {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #000;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            z-index: 1000;
+        }
