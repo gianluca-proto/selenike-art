@@ -10,7 +10,34 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+  <style>
+{% block head %}
 
+  .img-gallery img {
+      max-width: 300px; /* Larghezza massima dell'immagine */
+      max-height: 300px; /* Altezza massima dell'immagine */
+      width: auto;  /* Mantiene l'immagine responsiva */
+      height: auto; /* Mantiene l'immagine responsiva */
+      object-fit: contain; /* Mantiene le proporzioni dell'immagine senza tagliarla */
+      margin-bottom: 10px; /* Spazio sotto l'immagine */
+      display: block; /* Evita problemi di allineamento */
+  }
+  .img-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Crea una griglia responsive */
+      gap: 10px; /* Spazio tra le immagini */
+  }
+  .img-manage {
+    text-align: center;
+  }
+  .img-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+
+{% endblock %}
+</style>
 </head>
 <!-- Banner dei Cookie -->
 <div id="cookie-banner" style="position: fixed; bottom: 0; width: 100%; background-color: black; color: white; text-align: center; padding: 10px; z-index: 1000;">
@@ -46,20 +73,9 @@
             <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                 <ul class="navbar-nav lobster-font-menu">
                     <li class="nav-item">
-                        <a class="nav-link" href="/">Homepage</a>
+                        <a class="nav-link" >Admin Page Login</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/art-gallery">Art Gallery</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/commissions">Commissions</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/about">Selenike</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/contact">Contattaci</a>
-                    </li>
+
                 </ul>
             </div>
         </div>
@@ -82,7 +98,9 @@
     </div>
     {% endif %}
     {% endwith %}
-
+    <div class="d-flex justify-content-center mt-3">
+        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-primary">Torna alla Dashboard</a>
+    </div>
         {% block content %}{% endblock %}
     </div>
 
@@ -184,6 +202,42 @@
 
 
         filterGallery('all'); // Show all items by default
+
+          function deleteImage(category, filename) {
+    if (confirm('Are you sure you want to delete this image?')) {
+      fetch(`/delete-image/${category}/${filename}`, { method: 'POST' })
+      .then(response => response.json())
+      .then(data => {
+        if(data.success) {
+          alert('Image deleted successfully');
+          location.reload();
+        } else {
+          alert('Error deleting image');
+        }
+      })
+      .catch(error => console.error('Error:', error));
+    }
+  }
+
+  function moveImage(src_category, dest_category, filename) {
+    if (dest_category) {
+      fetch('/move-image', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: `src_category=${encodeURIComponent(src_category)}&dest_category=${encodeURIComponent(dest_category)}&filename=${encodeURIComponent(filename)}`
+      })
+      .then(response => response.json())
+      .then(data => {
+        if(data.success) {
+          alert('Image moved successfully');
+          location.reload();
+        } else {
+          alert('Error moving image');
+        }
+      })
+      .catch(error => console.error('Error:', error));
+    }
+  }
     </script>
 </body>
 </html>

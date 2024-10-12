@@ -1,0 +1,36 @@
+{% extends 'base_dashboard.html' %}
+<head>
+
+  </head>
+
+{% block content %}
+<div class="container mt-5 img-gallery">
+  {% for category, image_files in images.items() %}
+    <div class="mb-4">
+      <h3>{{ category | capitalize }}</h3>
+      {% for image in image_files %}
+        <div class="img-manage">
+          <img src="{{ url_for('static', filename=image['path']) }}" alt="{{ image['filename'] }}" class="img-thumbnail">
+          <div class="img-controls mt-2">
+            <button class="btn btn-danger btn-sm" onclick="deleteImage('{{ category }}', '{{ image['filename'] }}')">Delete</button>
+            <select class="form-control" onchange="moveImage('{{ category }}', this.value, '{{ image['filename'] }}')">
+              <option value="">Move to...</option>
+              {% for cat in categories %}
+                {% if cat != category %}
+                  <option value="{{ cat }}">{{ cat | capitalize }}</option>
+                {% endif %}
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+
+</script>
+{% endblock %}
