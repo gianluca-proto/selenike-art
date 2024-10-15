@@ -1,20 +1,18 @@
-import shutil
-
-from flask_mail import Mail, Message
+import logging
 import os
+import shutil
+from functools import wraps
+from logging.handlers import RotatingFileHandler
+
+import requests
+from flask import Flask, render_template, request, redirect, flash, url_for, \
+    session, jsonify
+from flask_mail import Mail, Message
+from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from werkzeug.utils import secure_filename
-from flask import Flask, render_template, request, redirect, flash, url_for, \
-    session, jsonify, logging
-from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
-from functools import wraps
-import logging
-from logging.handlers import RotatingFileHandler
-import requests
-from markupsafe import Markup
-
 
 # Configurazione del logger
 
