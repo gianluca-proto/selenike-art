@@ -49,9 +49,23 @@
                     <input type="checkbox" id="privacy-consent" name="privacy-consent" required>
                     <label for="privacy-consent">Accetto la <a href="/privacy-policy">Politica sulla Privacy</a></label>
                  </div>
+                <input type="hidden" id="recaptchaResponse" name="recaptcha_response">
+
                 <button type="submit" class="btn btn-primary">Invia</button>
+
             </form>
         </div>
+
+        <script src="https://www.google.com/recaptcha/api.js?render=6LfRNVMgAAAAAG-4j_sBpFtjnERUpbtuQWC7r6zG"></script>
+
+<script>
+grecaptcha.ready(function() {
+    grecaptcha.execute('6LfRNVMgAAAAAG-4j_sBpFtjnERUpbtuQWC7r6zG', {action: 'contact'}).then(function(token) {
+        // Puoi aggiungere il token a un campo nascosto nel form o tenerlo per inviarlo con il form
+        document.getElementById('recaptchaResponse').value = token;
+    });
+});
+</script>
         <div class="col-lg-6 col-md-12 text-center">
             <img src="{{ url_for('static', filename='img/Logo-Contattaci.png') }}" alt="Contact Image" class="img-fluid rounded">
             <div class="mt-4">
@@ -61,4 +75,6 @@
         </div>
     </div>
 </div>
+
+
 {% endblock %}

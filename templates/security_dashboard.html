@@ -1,0 +1,45 @@
+{% extends 'base_dashboard.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Dashboard di Sicurezza</h2>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>IP</th>
+                <th>Request URL</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for line in log_lines %}
+            {% set parts = line.split(' - ') %}
+            {% if parts|length > 3 %}
+            {% set ip = parts[2].split('IP: ')[1].strip() if 'IP:' in parts[2] else 'N/A' %}
+            {% set request = parts[3].split('Request: ')[1].strip() if 'Request:' in parts[3] else 'N/A' %}
+            {% set status = parts[4].split('Response: ')[1].strip() if 'Response:' in parts[4] else 'N/A' %}
+            {% set status_class = 'http-other' %}
+            {% if '200' == status %}
+                {% set status_class = 'http-200' %}
+            {% elif '404' == status %}
+                {% set status_class = 'http-404' %}
+            {% elif '500' == status %}
+                {% set status_class = 'http-500' %}
+            {% endif %}
+            <tr class="{{ status_class }}">
+                <td>{{ parts[0] }}</td>
+                <td>{{ ip }}</td>
+                <td>{{ request }}</td>
+                <td>{{ status }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4">Log format error</td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

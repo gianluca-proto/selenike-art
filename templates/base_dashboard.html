@@ -36,6 +36,12 @@
     gap: 10px;
   }
 
+
+  .http-200 { background-color: #d4edda; color: #155724; } /* verde */
+  .http-404 { background-color: #f8d7da; color: #721c24; } /* rosso */
+  .http-500 { background-color: #f1c40f; color: #ffffff; } /* giallo */
+  .http-other { background-color: #d6dbdf; color: #515a5a; } /* grigio */
+</style>
 {% endblock %}
 </style>
 </head>
@@ -191,14 +197,18 @@
         }
 
 
-        function acceptCookies() {
-            document.getElementById('cookie-banner').style.display = 'none';
-            localStorage.setItem('cookiesAccepted', 'true');
-        }
+         // Funzione per accettare i cookie e nascondere il banner
+    function acceptCookies() {
+        localStorage.setItem('cookiesAccepted', 'true'); // Salva nel localStorage che i cookie sono stati accettati
+        document.getElementById('cookie-banner').style.display = 'none'; // Nasconde il banner
+    }
 
+    // Controllo all'avvio della pagina
+    window.onload = function() {
         if (localStorage.getItem('cookiesAccepted') === 'true') {
-            document.getElementById('cookie-banner').style.display = 'none';
+            document.getElementById('cookie-banner').style.display = 'none'; // Nasconde il banner se i cookie sono già stati accettati
         }
+    }
 
 
         filterGallery('all'); // Show all items by default

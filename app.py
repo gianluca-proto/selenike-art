@@ -5,14 +5,38 @@ import os
 from flask_wtf.file import FileField, FileAllowed
 from werkzeug.utils import secure_filename
 from flask import Flask, render_template, request, redirect, flash, url_for, \
-    session, jsonify
+    session, jsonify, logging
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
 from functools import wraps
+import logging
+from logging.handlers import RotatingFileHandler
+import requests
+
+# Configurazione del logger
+
 
 app = Flask(__name__)
 app.secret_key = 'tuo_segreto'  # Necessario per visualizzare messaggi di conferma
+app.config['PRODUCTION'] = False  # Imposta a True in produzione
+app.config['RECAPTCHA_SECRET_KEY'] = '6LfRNVMgAAAAAN0pabmCJdANjHphZ2pX-Pzx-1yg'
+
+# Configurazione del logger
+logging.basicConfig(level=logging.INFO)
+handler = RotatingFileHandler('access.log', maxBytes=10000, backupCount=1)
+handler.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+
+app.logger.addHandler(handler)
+
+@app.after_request
+def log_request(response):
+    app.logger.info(f"IP: {request.remote_addr} - Request: {request.method} {request.scheme}://{request.host}{request.path} - Response: {response.status_code}")
+    return response
+
+app.after_request(log_request)
 
 # Configurazione email
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -27,10 +51,9 @@ mail = Mail(app)  # Corretta inizializzazione
 ADMIN_USERNAME = 'admin'
 ADMIN_PASSWORD = 'password123'
 
-print("Root path:", app.root_path)
 
 # Configurazione del percorso per il caricamento delle immagini
-gallery_upload_folder = os.path.join('static', 'img', 'gallery')
+gallery_upload_folder = os.path.join('static', 'img', 'gallery/altro')
 if not os.path.exists(gallery_upload_folder):
     os.makedirs(gallery_upload_folder)
 
@@ -74,28 +97,41 @@ def about():
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
     if request.method == 'POST':
+        recaptcha_response = request.form.get('recaptcha_response')
+        if not recaptcha_response:
+            flash('Errore di verifica CAPTCHA: nessuna risposta fornita.', 'error')
+            return redirect('/contact')
+
+        response = requests.post(
+            'https://www.google.com/recaptcha/api/siteverify',
+            data={
+                'secret': app.config['RECAPTCHA_SECRET_KEY'],
+                'response': recaptcha_response
+            }
+        )
+        result = response.json()
+        if not result.get('success', False) or result.get('score', 0) < 0.5:
+            flash('Errore di verifica CAPTCHA, prova di nuovo.', 'error')
+            return redirect('/contact')
+
         nome = request.form['name']
         email = request.form['email']
         oggetto = request.form['subject']
-        tipo_disegno = request.form['drawingType']
-        formato = request.form['format']
         messaggio = request.form['message']
 
+        # Creazione e invio dell'email
         msg = Message(oggetto,
-                      sender=email,
-                      recipients=["info@selenikeart.com"])
-        msg.body = f"""
-        Da: {nome} <{email}>
-        Tipo di Disegno: {tipo_disegno}
-        Formato: {formato}
-
-        {messaggio}
-        """
+                      sender=app.config['MAIL_USERNAME'],
+                      recipients=['info@selenikeart.com'],
+                      # Modifica con il tuo indirizzo di destinazione
+                      body=f"Da: {nome} <{email}>\n\n{messaggio}")
         mail.send(msg)
-        flash('Email inviata con successo!', 'success')
+
+        flash('Messaggio inviato con successo!', 'success')
         return redirect('/contact')
 
     return render_template('contact.html')
+
 
 
 def get_images_from_folder(folder, category):
@@ -171,7 +207,7 @@ def admin_logout():
 @app.route('/manage-gallery')
 def manage_gallery():
     base_path = 'img/gallery'  # Percorso relativo alla root dell'app Flask
-    categories = ['animals', 'comics', 'illustrations']
+    categories = ['animals', 'comics', 'illustrations','altro']
     images = {}
     for category in categories:
         category_path = os.path.join(base_path, category)
@@ -198,6 +234,33 @@ def move_image():
     dest_path = os.path.join('static/img/gallery', dest_category, filename)
     shutil.move(src_path, dest_path)
     return jsonify({'success': True})
+
+@app.route('/admin/security', methods=['GET', 'POST'])
+def admin_security():
+    if request.method == 'POST':
+        # Qui andrebbero gestiti gli aggiornamenti delle impostazioni di sicurezza
+        # Ad esempio: aggiornamento della password, configurazione dei permessi, ecc.
+        return jsonify({'status': 'success', 'message': 'Impostazioni aggiornate'})
+    else:
+        # Questo è per il metodo GET, dove si visualizza la pagina
+        return render_template('admin_security.html')
+
+@app.route('/admin/security-dashboard')
+def security_dashboard():
+    log_lines = []
+    try:
+        with open('access.log', 'r') as log:
+            for line in log:
+                parts = line.strip().split(' - ')
+                app.logger.debug(f'Parsed line with {len(parts)} parts.')
+                log_lines.append(line.strip())
+    except FileNotFoundError:
+        log_lines = ["Nessun log disponibile."]
+    except Exception as e:
+        log_lines = [f"Errore nella lettura del file di log: {str(e)}"]
+    return render_template('security_dashboard.html', log_lines=log_lines)
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
