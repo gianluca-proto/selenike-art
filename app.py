@@ -13,6 +13,8 @@ from functools import wraps
 import logging
 from logging.handlers import RotatingFileHandler
 import requests
+from markupsafe import Markup
+
 
 # Configurazione del logger
 
