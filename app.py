@@ -212,8 +212,8 @@ def upload_image():
         # Carica l'immagine su Cloudinary
         upload_result = cloudinary.uploader.upload(
             file_to_upload,
-            folder='img/gallery/altro'
-            # Sostituisci 'nome_cartella' con il percorso della cartella desiderata
+            folder='img/gallery/altro',
+            format='webp'
         )
         if upload_result.get('secure_url'):
             flash('Immagine caricata con successo su Cloudinary!', 'success')
