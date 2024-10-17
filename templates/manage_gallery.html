@@ -37,18 +37,26 @@
         {% for image in image_files %}
           <div class="col-md-3 mb-4">
             <div class="img-manage card">
-              <img src="{{ url_for('static', filename=image['path']) }}" alt="{{ image['filename'] }}" class="card-img-top img-fluid">
+              <img src="{{ image['url'] }}" alt="{{ image['filename'] }}" class="card-img-top img-fluid">
               <div class="card-body">
                 <div class="img-controls">
-                  <button class="btn btn-danger btn-sm" onclick="deleteImage('{{ category }}', '{{ image['filename'] }}')">Delete</button>
-                  <select class="form-control" onchange="moveImage('{{ category }}', this.value, '{{ image['filename'] }}')">
-                    <option value="">Move to...</option>
-                    {% for cat in categories %}
-                      {% if cat != category %}
-                        <option value="{{ cat }}">{{ cat | capitalize }}</option>
-                      {% endif %}
-                    {% endfor %}
-                  </select>
+                  <button onclick="deleteImage('{{ category }}', '{{ image.filename }}')" class="btn btn-danger">Delete</button>
+
+
+                  <select class="form-control"
+        data-category="{{ category }}"
+        data-filename="{{ image.filename }}"
+        data-public-id="{{ image.filename }}"
+        onchange="moveImage(this)">
+  <option value="">Move to...</option>
+  {% for cat in categories %}
+    {% if cat != category %}
+      <option value="{{ cat }}">{{ cat | capitalize }}</option>
+    {% endif %}
+  {% endfor %}
+</select>
+
+
                 </div>
               </div>
             </div>
@@ -58,4 +66,5 @@
     </div>
   {% endfor %}
 </div>
+
 {% endblock %}

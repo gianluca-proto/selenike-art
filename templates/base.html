@@ -231,21 +231,16 @@
     </script>
     <script>
         function filterGallery(category) {
-            var items = document.getElementsByClassName('gallery-item');
-            console.log('Filtering for category:', category);
-            if (category === 'all') {
-                for (var i = 0; i < items.length; i++) {
-                    items[i].classList.add('show');
-                }
-            } else {
-                for (var i = 0; i < items.length; i++) {
-                    items[i].classList.remove('show');
-                    if (items[i].classList.contains(category)) {
-                        items[i].classList.add('show');
-                    }
-                }
-            }
+    var items = document.getElementsByClassName('gallery-item');
+    for (var i = 0; i < items.length; i++) {
+        if (category === 'all' || items[i].classList.contains(category)) {
+            items[i].style.display = 'block';
+        } else {
+            items[i].style.display = 'none';
         }
+    }
+}
+
 
         function acceptCookies() {
             document.getElementById('cookie-banner').style.display = 'none';

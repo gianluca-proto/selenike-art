@@ -160,94 +160,116 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"></script>
     <script>
-        $(document).ready(function(){
-            $(".alert").delay(5000).slideUp(200, function() {
-                $(this).alert('close');
-            });
-        });
-        $(document).on('click', '[data-toggle="lightbox"]', function(event) {
-            event.preventDefault();
-            $(this).ekkoLightbox();
-        });
+    $(document).ready(function(){
+    $(".alert").delay(5000).slideUp(200, function() {
+        $(this).alert('close');
+    });
+    $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+        event.preventDefault();
+        $(this).ekkoLightbox();
+    });
 
-        // Disabilitare il tasto destro del mouse
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        }, false);
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    }, false);
 
-        // Prevenire il drag and drop delle immagini
-        $('img').on('dragstart', function(event) { event.preventDefault(); });
-    </script>
-    <script>
-        function filterGallery(category) {
-            var items = document.getElementsByClassName('gallery-item');
-            console.log('Filtering for category:', category);
-            if (category === 'all') {
-                for (var i = 0; i < items.length; i++) {
-                    items[i].classList.add('show');
-                }
-            } else {
-                for (var i = 0; i < items.length; i++) {
-                    items[i].classList.remove('show');
-                    if (items[i].classList.contains(category)) {
-                        items[i].classList.add('show');
-                    }
-                }
-            }
+    $('img').on('dragstart', function(event) { event.preventDefault(); });
+});
+
+function filterGallery(category) {
+    var items = document.getElementsByClassName('gallery-item');
+    Array.from(items).forEach(item => {
+        item.classList.remove('show');
+        if (category === 'all' || item.classList.contains(category)) {
+            item.classList.add('show');
         }
+    });
+}
 
+function acceptCookies() {
+    localStorage.setItem('cookiesAccepted', 'true');
+    document.getElementById('cookie-banner').style.display = 'none';
+}
 
-         // Funzione per accettare i cookie e nascondere il banner
-    function acceptCookies() {
-        localStorage.setItem('cookiesAccepted', 'true'); // Salva nel localStorage che i cookie sono stati accettati
-        document.getElementById('cookie-banner').style.display = 'none'; // Nasconde il banner
+window.onload = function() {
+    if (localStorage.getItem('cookiesAccepted') === 'true') {
+        document.getElementById('cookie-banner').style.display = 'none';
     }
+}
 
-    // Controllo all'avvio della pagina
-    window.onload = function() {
-        if (localStorage.getItem('cookiesAccepted') === 'true') {
-            document.getElementById('cookie-banner').style.display = 'none'; // Nasconde il banner se i cookie sono già stati accettati
-        }
-    }
-
-
-        filterGallery('all'); // Show all items by default
-
-          function deleteImage(category, filename) {
+function deleteImage(category, filename) {
+    const public_id = `${filename}`;  // Costruisci il public_id come necessario
     if (confirm('Are you sure you want to delete this image?')) {
-      fetch(`/delete-image/${category}/${filename}`, { method: 'POST' })
-      .then(response => response.json())
-      .then(data => {
-        if(data.success) {
-          alert('Image deleted successfully');
-          location.reload();
-        } else {
-          alert('Error deleting image');
-        }
-      })
-      .catch(error => console.error('Error:', error));
+        fetch(`/delete-image/${encodeURIComponent(public_id)}`, { method: 'POST' })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if(data.success) {
+                alert('Image deleted successfully');
+                window.location.reload();
+            } else {
+                alert('Error deleting image: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error deleting image: ' + error.message);
+        });
     }
-  }
+}
 
-  function moveImage(src_category, dest_category, filename) {
-    if (dest_category) {
-      fetch('/move-image', {
+
+
+
+function moveImage(selectElement) {
+    var fullPath = selectElement.dataset.filename; // per esempio: 'img/gallery/altro/akgnwxfboga87wvakiji'
+    var parts = fullPath.split('/'); // Dividi la stringa in parti lungo ogni '/'
+    var filename = parts.pop(); // Prende l'ultimo elemento dell'array, cioè il nome del file
+
+    var src_category = selectElement.dataset.category; // 'altro'
+    var dest_category = selectElement.value; // 'animals'
+
+    var src_public_id = `img/gallery/${src_category}/${filename}`;
+    var dest_public_id = `img/gallery/${dest_category}/${filename}`;
+
+    fetch('/move-image', {
         method: 'POST',
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: `src_category=${encodeURIComponent(src_category)}&dest_category=${encodeURIComponent(dest_category)}&filename=${encodeURIComponent(filename)}`
-      })
-      .then(response => response.json())
-      .then(data => {
-        if(data.success) {
-          alert('Image moved successfully');
-          location.reload();
-        } else {
-          alert('Error moving image');
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `src_public_id=${encodeURIComponent(src_public_id)}&dest_public_id=${encodeURIComponent(dest_public_id)}`
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP status ${response.status}`);
         }
-      })
-      .catch(error => console.error('Error:', error));
-    }
-  }
+        return response.json();
+    })
+    .then(data => {
+        if(data.success) {
+            alert('Image moved successfully');
+            location.reload();
+        } else {
+            alert('Error moving image: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error moving image: ' + error.message);
+    });
+}
+
+
+
+
+
+
+
+
     </script>
 </body>
 </html>

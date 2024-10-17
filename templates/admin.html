@@ -38,6 +38,11 @@
                     <div class="dashboard-header text-center">
                         <h2>Pannello di Amministrazione</h2>
                     </div>
+                    <div id="pagespeed-results">
+                      <h3>Google PageSpeed Insights</h3>
+                      <div id="performance-score"></div>
+                    </div>
+
                     <div class="dashboard-content">
                         <div class="row">
                             <div class="col-md-6 mb-4">
@@ -106,5 +111,16 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+    fetch('https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=YOUR_WEBSITE_URL&key=YOUR_API_KEY')
+        .then(response => response.json())
+        .then(data => {
+            const performanceScore = data.lighthouseResult.categories.performance.score * 100;
+            document.getElementById('performance-score').innerText = 'Performance Score: ' + performanceScore;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    </script>
 </body>
 </html>

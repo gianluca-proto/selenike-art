@@ -13,14 +13,21 @@ from flask_wtf.file import FileField, FileAllowed
 from werkzeug.utils import secure_filename
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+from cloudinary.api import resources_by_tag, delete_resources_by_tag, resources
 
-# Configurazione del logger
-
+cloudinary.config(
+  cloud_name = os.getenv('CLOUD_NAME'),
+  api_key = os.getenv('CLOUD_API_KEY'),
+  api_secret = os.getenv('CLOUD_API_SECRET')
+)
 
 app = Flask(__name__)
-app.secret_key = 'tuo_segreto'  # Necessario per visualizzare messaggi di conferma
+app.secret_key = os.getenv('APP_SECRET_KEY')  # Necessario per visualizzare messaggi di conferma
 app.config['PRODUCTION'] = False  # Imposta a True in produzione
-app.config['RECAPTCHA_SECRET_KEY'] = '6LfRNVMgAAAAAN0pabmCJdANjHphZ2pX-Pzx-1yg'
+app.config['RECAPTCHA_SECRET_KEY'] = os.getenv('RECAPTCHA_SECRET_KEY')
 
 # Configurazione del logger
 logging.basicConfig(level=logging.INFO)
@@ -39,17 +46,17 @@ def log_request(response):
 app.after_request(log_request)
 
 # Configurazione email
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
+app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER')
+app.config['MAIL_PORT'] = os.getenv('MAIL_PORT')
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'gianlucaproto@gmail.com'
-app.config['MAIL_PASSWORD'] = 'ziojaemccrrjydyp'
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
 
 mail = Mail(app)  # Corretta inizializzazione
 
 # Dummy dati di login per l'amministratore
-ADMIN_USERNAME = 'admin'
-ADMIN_PASSWORD = 'password123'
+ADMIN_USERNAME = os.getenv('ADMIN_USERNAME')
+ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD')
 
 
 # Configurazione del percorso per il caricamento delle immagini
@@ -145,33 +152,27 @@ def get_images_from_folder(folder, category):
 
 @app.route('/art-gallery')
 def art_gallery():
-    gallery_folder = os.path.join(app.static_folder, 'img/gallery')
+    categories = ['animals', 'comics', 'illustrations']
+    images = []
 
-    animals_folder = os.path.join(gallery_folder, 'animals')
-    comics_folder = os.path.join(gallery_folder, 'comics')
-    illustrations_folder = os.path.join(gallery_folder, 'illustrations')
-
-    images = get_images_from_folder(animals_folder, 'animals')
-    images += get_images_from_folder(comics_folder, 'comics')
-    images += get_images_from_folder(illustrations_folder, 'illustrations')
+    for category in categories:
+        res = cloudinary.api.resources(
+            type='upload',
+            prefix=f'img/gallery/{category}/',
+            max_results=100
+        )
+        for img in res.get('resources', []):
+            images.append({
+                'filename': img['public_id'],
+                'url': img['secure_url'],
+                'category': category
+            })
 
     return render_template('gallery.html', images=images)
 
-# Rotta per il caricamento delle immagini (protetta)
-@app.route('/admin/upload', methods=['GET', 'POST'])
-@login_required  # Applica il decorator alla route della dashboard
-def upload_image():
-    if not session.get('admin_logged_in'):
-        flash('Per favore, effettua il login per accedere a questa pagina.', 'warning')
-        return redirect(url_for('admin_login'))
 
-    form = UploadForm()
-    if form.validate_on_submit():
-        filename = secure_filename(form.image.data.filename)
-        form.image.data.save(os.path.join(gallery_upload_folder, filename))
-        flash('Immagine caricata con successo!', 'success')
-        return redirect(url_for('upload_image'))
-    return render_template('upload.html', form=form)
+
+
 
 # Rotta per la dashboard amministrativa
 @app.route('/admin')
@@ -204,36 +205,79 @@ def admin_logout():
     flash('Logout effettuato con successo.', 'success')
     return redirect(url_for('admin_login'))
 
+class UploadForm(FlaskForm):
+    image = FileField('Image File', validators=[DataRequired()])
+
+# Rotta per il caricamento delle immagini (protetta)
+@app.route('/admin/upload', methods=['GET', 'POST'])
+@login_required
+def upload_image():
+    if not session.get('admin_logged_in'):
+        flash('Per favore, effettua il login per accedere a questa pagina.', 'warning')
+        return redirect(url_for('admin_login'))
+
+    form = UploadForm()
+    if form.validate_on_submit():
+        file_to_upload = form.image.data
+        filename = secure_filename(file_to_upload.filename)
+        # Carica l'immagine su Cloudinary
+        upload_result = cloudinary.uploader.upload(
+            file_to_upload,
+            folder='img/gallery/altro'
+            # Sostituisci 'nome_cartella' con il percorso della cartella desiderata
+        )
+        if upload_result.get('secure_url'):
+            flash('Immagine caricata con successo su Cloudinary!', 'success')
+            return redirect(url_for('upload_image'))
+        else:
+            flash('Caricamento non riuscito.', 'danger')
+    return render_template('upload.html', form=form)
+
 @app.route('/manage-gallery')
 def manage_gallery():
-    base_path = 'img/gallery'  # Percorso relativo alla root dell'app Flask
-    categories = ['animals', 'comics', 'illustrations','altro']
+    categories = ['animals', 'comics', 'illustrations', 'altro']
     images = {}
     for category in categories:
-        category_path = os.path.join(base_path, category)
-        full_path = os.path.join(app.root_path, 'static', category_path)  # Aggiungi 'static' qui
-        print("Full path to images:", full_path)  # Debug per confermare il percorso
-        if not os.path.exists(full_path):
-            print(f"The directory {full_path} does not exist.")
+        # Assicurati che 'prefix' sia correttamente specificato
+        res = cloudinary.api.resources(type='upload', prefix=f'img/gallery/{category}/', max_results=100)
+        if res.get('resources'):
+            images[category] = [{'filename': img['public_id'], 'url': img['secure_url']} for img in res['resources']]
         else:
-            images[category] = [{'filename': f, 'path': os.path.join(category_path, f)} for f in os.listdir(full_path) if f.endswith(('png', 'jpg', 'jpeg', 'gif'))]
+            print(f"No images found in category: {category}")
+            images[category] = []
+
+    print(images)  # Stampa per debugging
     return render_template('manage_gallery.html', images=images, categories=categories)
 
-@app.route('/delete-image/<category>/<filename>', methods=['POST'])
-def delete_image(category, filename):
-    file_path = os.path.join('static/img/gallery', category, filename)
-    os.remove(file_path)
-    return jsonify({'success': True})
+@app.route('/delete-image/<path:public_id>', methods=['POST'])
+def delete_image(public_id):
+    try:
+        # Assicurati che il public_id sia corretto e non includa l'estensione del file
+        response = cloudinary.uploader.destroy(public_id, invalidate=True)
+        if response.get('result') == 'ok':
+            return jsonify({'success': True, 'message': 'Image deleted successfully'})
+        else:
+            return jsonify({'success': False, 'message': 'Failed to delete image'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 500
+
+
 
 @app.route('/move-image', methods=['POST'])
 def move_image():
-    src_category = request.form['src_category']
-    dest_category = request.form['dest_category']
-    filename = request.form['filename']
-    src_path = os.path.join('static/img/gallery', src_category, filename)
-    dest_path = os.path.join('static/img/gallery', dest_category, filename)
-    shutil.move(src_path, dest_path)
-    return jsonify({'success': True})
+    src_public_id = request.form.get('src_public_id')
+    dest_public_id = request.form.get('dest_public_id')
+
+    try:
+        response = cloudinary.uploader.rename(src_public_id, dest_public_id)
+        if 'error' in response:
+            return jsonify({'success': False, 'message': response['error']['message']}), 500
+        return jsonify({'success': True, 'message': 'Image moved successfully'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 500
+
+
+
 
 @app.route('/admin/security', methods=['GET', 'POST'])
 def admin_security():

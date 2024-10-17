@@ -24,6 +24,7 @@ body {
 
 .nav-link {
     color: #32E04A !important; /* Cambia il colore delle scritte delle voci del menu */
+    text-align: center
 }
 
 .nav-link:hover {
@@ -147,23 +148,24 @@ form button:hover {
 }
 
 .whatsapp-button {
-    position: fixed;
-    bottom: 650px; /* Posizione fissa dal basso */
-    right: 20px; /* Posizione fissa dalla destra */
-    background-color: #25D366; /* Colore verde WhatsApp */
+    position: fixed;  /* Posizionamento fisso sulla pagina */
+    top: 20px;        /* Distanza dal bordo superiore */
+    right: 20px;      /* Distanza dal bordo destro */
+    background-color: #25D366;  /* Colore verde WhatsApp */
     color: white;
     border: none;
-    border-radius: 50%; /* Rendi il pulsante circolare */
-    width: 50px; /* Larghezza del pulsante */
-    height: 50px; /* Altezza del pulsante */
-    padding: 10px; /* Spaziatura interna per centrare l'icona */
-    font-size: 24px; /* Dimensione dell'icona del pulsante */
-    z-index: 1050; /* Assicurati che sia al di sopra della navbar */
+    border-radius: 50%;  /* Rendi il pulsante circolare */
+    width: 50px;         /* Larghezza del pulsante */
+    height: 50px;        /* Altezza del pulsante */
+    padding: 10px;       /* Spaziatura interna per centrare l'icona */
+    font-size: 24px;     /* Dimensione dell'icona del pulsante */
+    z-index: 1050;       /* Assicurati che sia al di sopra di altri elementi */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombra per un effetto sollevato */
-    display: flex; /* Usato per centrare l'icona internamente */
+    display: flex;       /* Usato per centrare l'icona internamente */
     justify-content: center; /* Centra orizzontalmente il contenuto all'interno */
     align-items: center; /* Centra verticalmente il contenuto all'interno */
 }
+
 
 
         .btn-primary {
@@ -265,3 +267,4 @@ form button:hover {
             padding: 10px;
             z-index: 1000;
         }
+

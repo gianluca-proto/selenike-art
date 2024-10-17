@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+
 {% block content %}
 <div class="container my-4">
     <h1 class="text-center mb-4 lobster-font">Art Gallery</h1>
@@ -14,8 +15,8 @@
     <div class="row">
         {% for image in images %}
         <div class="col-md-3 mb-4 gallery-item {{ image.category }} show">
-            <a href="{{ url_for('static', filename=image.filename) }}" data-toggle="lightbox" data-gallery="gallery" class="col-md-4">
-                <img src="{{ url_for('static', filename=image.filename) }}" class="img-fluid rounded">
+            <a href="{{ image.url }}" data-toggle="lightbox" data-gallery="gallery" class="col-md-4">
+                <img src="{{ image.url }}" class="img-fluid rounded">
             </a>
         </div>
         {% endfor %}
