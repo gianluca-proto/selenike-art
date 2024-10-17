@@ -39,31 +39,11 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/styles-min.css') }}" rel="stylesheet">
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var navbar = document.querySelector('.navbar');
-            var stickyTrigger = document.querySelector('.logo-img').offsetHeight;
 
-            window.addEventListener('scroll', function() {
-                if (window.pageYOffset > stickyTrigger) {
-                    navbar.classList.add('sticky');
-                } else {
-                    navbar.classList.remove('sticky');
-                }
-            });
-        });
     </script>
-    <style>
-        .sticky {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1030; /* più alto rispetto ad altri elementi della pagina */
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* aggiunge un'ombra per elevare visivamente la navbar */
-            transition: all 0.3s; /* Transizione fluida quando diventa sticky */
-        }
-    </style>
+
 
 
 </head>
@@ -209,48 +189,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"></script>
-    <script>
-        $(document).ready(function(){
-            $(".alert").delay(5000).slideUp(200, function() {
-                $(this).alert('close');
-            });
-        });
-        $(document).on('click', '[data-toggle="lightbox"]', function(event) {
-            event.preventDefault();
-            $(this).ekkoLightbox();
-        });
+S
+    <script src="{{ url_for('static', filename='js/funzioni.js') }}"></script>
 
-        // Disabilitare il tasto destro del mouse
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        }, false);
-
-        // Prevenire il drag and drop delle immagini
-        $('img').on('dragstart', function(event) { event.preventDefault(); });
-    </script>
-    <script>
-        function filterGallery(category) {
-            var items = document.getElementsByClassName('gallery-item');
-            for (var i = 0; i < items.length; i++) {
-                if (category === 'all' || items[i].classList.contains(category)) {
-                    items[i].style.display = 'block';
-                } else {
-                    items[i].style.display = 'none';
-                }
-            }
-        }
-
-        function acceptCookies() {
-            document.getElementById('cookie-banner').style.display = 'none';
-            localStorage.setItem('cookiesAccepted', 'true');
-        }
-
-        if (localStorage.getItem('cookiesAccepted') === 'true') {
-            document.getElementById('cookie-banner').style.display = 'none';
-        }
-
-        filterGallery('all'); // Show all items by default
-    </script>
     <script src="https://www.google.com/recaptcha/api.js?render=6LfRNVMgAAAAAG-4j_sBpFtjnERUpbtuQWC7r6zG"></script>
 </body>
 </html>

@@ -4,9 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14253df0-ae5a-481e-8a12-af9d47af9467" name="Changes" comment="compleata gestione immagini sul cloud e messa in sicurezza delle chiavi">
+    <list default="true" id="14253df0-ae5a-481e-8a12-af9d47af9467" name="Changes" comment="modifiche conversione webp">
+      <change afterPath="$PROJECT_DIR$/static/css/styles-min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/js/funzioni.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/admin.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base_dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base_dashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/commissions.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/commissions.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/contact.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/contact.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/cookie_policy.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cookie_policy.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/login_dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/login_dashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/manage_gallery.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/manage_gallery.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/privacy_policy.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/upload.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/upload.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,18 +48,19 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;Python.app.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/popdeveloper/personal_project/selenike-art/static&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;debugger.dataViews.python.type.renderers&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Python.app.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "develop",
+    "last_opened_file_path": "/home/popdeveloper/personal_project/selenike-art/static/css",
+    "settings.editor.selected.configurable": "debugger.dataViews.python.type.renderers"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/static/css" />
       <recent name="$PROJECT_DIR$/static" />
       <recent name="$PROJECT_DIR$/static/img" />
     </key>
@@ -146,7 +160,31 @@
       <option name="project" value="LOCAL" />
       <updated>1729156401721</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="committato nuovo testo adattato al SEO">
+      <option name="closed" value="true" />
+      <created>1729201479403</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1729201479403</updated>
+    </task>
+    <task id="LOCAL-00011" summary="nuove immagini ottimizzate">
+      <option name="closed" value="true" />
+      <created>1729202053313</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1729202053313</updated>
+    </task>
+    <task id="LOCAL-00012" summary="modifiche conversione webp">
+      <option name="closed" value="true" />
+      <created>1729202883529</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1729202883529</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -159,7 +197,10 @@
     <MESSAGE value="fix per primo deploy gunicorn 4" />
     <MESSAGE value="fix per primo deploy gunicorn 5" />
     <MESSAGE value="compleata gestione immagini sul cloud e messa in sicurezza delle chiavi" />
-    <option name="LAST_COMMIT_MESSAGE" value="compleata gestione immagini sul cloud e messa in sicurezza delle chiavi" />
+    <MESSAGE value="committato nuovo testo adattato al SEO" />
+    <MESSAGE value="nuove immagini ottimizzate" />
+    <MESSAGE value="modifiche conversione webp" />
+    <option name="LAST_COMMIT_MESSAGE" value="modifiche conversione webp" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

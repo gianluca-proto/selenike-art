@@ -9,38 +9,11 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" rel="stylesheet">
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/styles-min.css') }}" rel="stylesheet">
   <style>
 {% block head %}
 
-  .img-gallery img {
-      max-width: 300px; /* Larghezza massima dell'immagine */
-      max-height: 300px; /* Altezza massima dell'immagine */
-      width: auto;  /* Mantiene l'immagine responsiva */
-      height: auto; /* Mantiene l'immagine responsiva */
-      object-fit: contain; /* Mantiene le proporzioni dell'immagine senza tagliarla */
-      margin-bottom: 10px; /* Spazio sotto l'immagine */
-      display: block; /* Evita problemi di allineamento */
-  }
-  .img-gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Crea una griglia responsive */
-      gap: 10px; /* Spazio tra le immagini */
-  }
-  .img-manage {
-    text-align: center;
-  }
-  .img-controls {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-  }
 
-
-  .http-200 { background-color: #d4edda; color: #155724; } /* verde */
-  .http-404 { background-color: #f8d7da; color: #721c24; } /* rosso */
-  .http-500 { background-color: #f1c40f; color: #ffffff; } /* giallo */
-  .http-other { background-color: #d6dbdf; color: #515a5a; } /* grigio */
 </style>
 {% endblock %}
 </style>
@@ -264,7 +237,15 @@ function moveImage(selectElement) {
 }
 
 
-
+   fetch('https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=YOUR_WEBSITE_URL&key=YOUR_API_KEY')
+        .then(response => response.json())
+        .then(data => {
+            const performanceScore = data.lighthouseResult.categories.performance.score * 100;
+            document.getElementById('performance-score').innerText = 'Performance Score: ' + performanceScore;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 
 
 

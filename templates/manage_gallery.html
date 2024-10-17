@@ -1,70 +1,37 @@
 {% extends 'base_dashboard.html' %}
 
-{% block head %}
-<style>
-  .img-gallery {
-    margin-top: 20px;
-  }
-  .category-section {
-    background-color: #f7f7f7; /* Colore di sfondo leggero per ogni sezione di categoria */
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 30px; /* Spazio tra le categorie */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Ombra leggera per un effetto di profondità */
-  }
-  .card-img-top {
-    height: 200px; /* Altezza fissa per tutte le immagini per consistenza */
-    object-fit: cover; /* Assicura che le immagini coprano tutto lo spazio disponibile senza deformarsi */
-  }
-  .img-manage .card {
-    margin-bottom: 20px; /* Spazio tra le carte */
-  }
-  .img-controls {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 10px;
-  }
-</style>
-{% endblock %}
-
 {% block content %}
 <div class="container mt-5 img-gallery">
-  {% for category, image_files in images.items() %}
+    {% for category, image_files in images.items() %}
     <div class="category-section">
-      <h3>{{ category | capitalize }}</h3>
-      <div class="row">
-        {% for image in image_files %}
-          <div class="col-md-3 mb-4">
-            <div class="img-manage card">
-              <img src="{{ image['url'] }}" alt="{{ image['filename'] }}" class="card-img-top img-fluid">
-              <div class="card-body">
-                <div class="img-controls">
-                  <button onclick="deleteImage('{{ category }}', '{{ image.filename }}')" class="btn btn-danger">Delete</button>
-
-
-                  <select class="form-control"
-        data-category="{{ category }}"
-        data-filename="{{ image.filename }}"
-        data-public-id="{{ image.filename }}"
-        onchange="moveImage(this)">
-  <option value="">Move to...</option>
-  {% for cat in categories %}
-    {% if cat != category %}
-      <option value="{{ cat }}">{{ cat | capitalize }}</option>
-    {% endif %}
-  {% endfor %}
-</select>
-
-
+        <h3>{{ category | capitalize }}</h3>
+        <div class="row">
+            {% for image in image_files %}
+            <div class="col-md-3 mb-4">
+                <div class="img-manage card">
+                    <img src="{{ image['url'] }}" alt="{{ image['filename'] }}" class="card-img-top img-fluid">
+                    <div class="card-body">
+                        <div class="img-controls">
+                            <button onclick="deleteImage('{{ category }}', '{{ image.filename }}')" class="btn btn-danger">Delete</button>
+                            <select class="form-control"
+                                    data-category="{{ category }}"
+                                    data-filename="{{ image.filename }}"
+                                    data-public-id="{{ image.filename }}"
+                                    onchange="moveImage(this)">
+                                <option value="">Move to...</option>
+                                {% for cat in categories %}
+                                {% if cat != category %}
+                                <option value="{{ cat }}">{{ cat | capitalize }}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
-        {% endfor %}
-      </div>
+            {% endfor %}
+        </div>
     </div>
-  {% endfor %}
+    {% endfor %}
 </div>
-
 {% endblock %}
