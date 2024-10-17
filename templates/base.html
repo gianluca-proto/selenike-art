@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-        <script type="text/javascript">
+    <script type="text/javascript">
     var _iub = _iub || [];
     _iub.csConfiguration = {"askConsentAtCookiePolicyUpdate":true,
     "cookiePolicyInOtherWindow":true,
@@ -40,30 +40,30 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet">
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        var navbar = document.querySelector('.navbar');
-        var stickyTrigger = document.querySelector('.logo-img').offsetHeight;
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var navbar = document.querySelector('.navbar');
+            var stickyTrigger = document.querySelector('.logo-img').offsetHeight;
 
-        window.addEventListener('scroll', function() {
-            if (window.pageYOffset > stickyTrigger) {
-                navbar.classList.add('sticky');
-            } else {
-                navbar.classList.remove('sticky');
-            }
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > stickyTrigger) {
+                    navbar.classList.add('sticky');
+                } else {
+                    navbar.classList.remove('sticky');
+                }
+            });
         });
-    });
-</script>
-<style>
-    .sticky {
-        position: fixed;
-        top: 0;
-        width: 100%;
-        z-index: 1030; /* più alto rispetto ad altri elementi della pagina */
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* aggiunge un'ombra per elevare visivamente la navbar */
-        transition: all 0.3s; /* Transizione fluida quando diventa sticky */
-    }
-</style>
+    </script>
+    <style>
+        .sticky {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1030; /* più alto rispetto ad altri elementi della pagina */
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* aggiunge un'ombra per elevare visivamente la navbar */
+            transition: all 0.3s; /* Transizione fluida quando diventa sticky */
+        }
+    </style>
 
 
 </head>
@@ -184,26 +184,25 @@
             </div>
         </div>
         <!-- Modal Informativa Privacy -->
-<div class="modal fade" id="privacyModal" tabindex="-1" role="dialog" aria-labelledby="privacyModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="privacyModalLabel">Informativa sulla Privacy</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Qui puoi inserire il testo dell'informativa sulla privacy o un link al documento completo.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
-                <button type="button" class="btn btn-primary">Accetto</button>
+        <div class="modal fade" id="privacyModal" tabindex="-1" role="dialog" aria-labelledby="privacyModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="privacyModalLabel">Informativa sulla Privacy</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        Qui puoi inserire il testo dell'informativa sulla privacy o un link al documento completo.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+                        <button type="button" class="btn btn-primary">Accetto</button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-
     </footer>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -231,16 +230,15 @@
     </script>
     <script>
         function filterGallery(category) {
-    var items = document.getElementsByClassName('gallery-item');
-    for (var i = 0; i < items.length; i++) {
-        if (category === 'all' || items[i].classList.contains(category)) {
-            items[i].style.display = 'block';
-        } else {
-            items[i].style.display = 'none';
+            var items = document.getElementsByClassName('gallery-item');
+            for (var i = 0; i < items.length; i++) {
+                if (category === 'all' || items[i].classList.contains(category)) {
+                    items[i].style.display = 'block';
+                } else {
+                    items[i].style.display = 'none';
+                }
+            }
         }
-    }
-}
-
 
         function acceptCookies() {
             document.getElementById('cookie-banner').style.display = 'none';
@@ -250,7 +248,6 @@
         if (localStorage.getItem('cookiesAccepted') === 'true') {
             document.getElementById('cookie-banner').style.display = 'none';
         }
-
 
         filterGallery('all'); // Show all items by default
     </script>

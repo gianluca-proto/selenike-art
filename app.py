@@ -140,21 +140,10 @@ def contact():
     return render_template('contact.html')
 
 
-
-def get_images_from_folder(folder, category):
-    image_list = []
-    for filename in os.listdir(folder):
-        if filename.endswith(('.png', '.jpg', '.jpeg', '.gif')):
-            image_path = os.path.join('img/gallery', category, filename)
-            image_list.append({'filename': image_path, 'category': category})
-    return image_list
-
-
 @app.route('/art-gallery')
 def art_gallery():
     categories = ['animals', 'comics', 'illustrations']
     images = []
-
     for category in categories:
         res = cloudinary.api.resources(
             type='upload',
