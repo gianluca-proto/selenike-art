@@ -4,22 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14253df0-ae5a-481e-8a12-af9d47af9467" name="Changes" comment="modifiche conversione webp">
-      <change afterPath="$PROJECT_DIR$/static/css/styles-min.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/js/funzioni.js" afterDir="false" />
+    <list default="true" id="14253df0-ae5a-481e-8a12-af9d47af9467" name="Changes" comment="riorganizzazione codice">
+      <change afterPath="$PROJECT_DIR$/static/js/funzioni-dashboard-min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/js/funzioni-dashboard.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/static/js/funzioni-min.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/css/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/admin.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/base_dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base_dashboard.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/commissions.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/commissions.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/contact.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/contact.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/cookie_policy.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/cookie_policy.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/login_dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/login_dashboard.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/manage_gallery.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/manage_gallery.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/privacy_policy.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/upload.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/upload.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,12 +45,13 @@
     "Python.app.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "develop",
-    "last_opened_file_path": "/home/popdeveloper/personal_project/selenike-art/static/css",
+    "last_opened_file_path": "/home/popdeveloper/personal_project/selenike-art/static/js",
     "settings.editor.selected.configurable": "debugger.dataViews.python.type.renderers"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/static/js" />
       <recent name="$PROJECT_DIR$/static/css" />
       <recent name="$PROJECT_DIR$/static" />
       <recent name="$PROJECT_DIR$/static/img" />
@@ -184,7 +176,15 @@
       <option name="project" value="LOCAL" />
       <updated>1729202883529</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="riorganizzazione codice">
+      <option name="closed" value="true" />
+      <created>1729205469617</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1729205469617</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -200,7 +200,8 @@
     <MESSAGE value="committato nuovo testo adattato al SEO" />
     <MESSAGE value="nuove immagini ottimizzate" />
     <MESSAGE value="modifiche conversione webp" />
-    <option name="LAST_COMMIT_MESSAGE" value="modifiche conversione webp" />
+    <MESSAGE value="riorganizzazione codice" />
+    <option name="LAST_COMMIT_MESSAGE" value="riorganizzazione codice" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

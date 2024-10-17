@@ -10,13 +10,7 @@
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/styles-min.css') }}" rel="stylesheet">
-  <style>
-{% block head %}
 
-
-</style>
-{% endblock %}
-</style>
 </head>
 <!-- Banner dei Cookie -->
 <div id="cookie-banner" style="position: fixed; bottom: 0; width: 100%; background-color: black; color: white; text-align: center; padding: 10px; z-index: 1000;">
@@ -132,125 +126,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"></script>
-    <script>
-    $(document).ready(function(){
-    $(".alert").delay(5000).slideUp(200, function() {
-        $(this).alert('close');
-    });
-    $(document).on('click', '[data-toggle="lightbox"]', function(event) {
-        event.preventDefault();
-        $(this).ekkoLightbox();
-    });
-
-    document.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
-    }, false);
-
-    $('img').on('dragstart', function(event) { event.preventDefault(); });
-});
-
-function filterGallery(category) {
-    var items = document.getElementsByClassName('gallery-item');
-    Array.from(items).forEach(item => {
-        item.classList.remove('show');
-        if (category === 'all' || item.classList.contains(category)) {
-            item.classList.add('show');
-        }
-    });
-}
-
-function acceptCookies() {
-    localStorage.setItem('cookiesAccepted', 'true');
-    document.getElementById('cookie-banner').style.display = 'none';
-}
-
-window.onload = function() {
-    if (localStorage.getItem('cookiesAccepted') === 'true') {
-        document.getElementById('cookie-banner').style.display = 'none';
-    }
-}
-
-function deleteImage(category, filename) {
-    const public_id = `${filename}`;  // Costruisci il public_id come necessario
-    if (confirm('Are you sure you want to delete this image?')) {
-        fetch(`/delete-image/${encodeURIComponent(public_id)}`, { method: 'POST' })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if(data.success) {
-                alert('Image deleted successfully');
-                window.location.reload();
-            } else {
-                alert('Error deleting image: ' + data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error deleting image: ' + error.message);
-        });
-    }
-}
-
-
-
-
-function moveImage(selectElement) {
-    var fullPath = selectElement.dataset.filename; // per esempio: 'img/gallery/altro/akgnwxfboga87wvakiji'
-    var parts = fullPath.split('/'); // Dividi la stringa in parti lungo ogni '/'
-    var filename = parts.pop(); // Prende l'ultimo elemento dell'array, cioè il nome del file
-
-    var src_category = selectElement.dataset.category; // 'altro'
-    var dest_category = selectElement.value; // 'animals'
-
-    var src_public_id = `img/gallery/${src_category}/${filename}`;
-    var dest_public_id = `img/gallery/${dest_category}/${filename}`;
-
-    fetch('/move-image', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `src_public_id=${encodeURIComponent(src_public_id)}&dest_public_id=${encodeURIComponent(dest_public_id)}`
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP status ${response.status}`);
-        }
-        return response.json();
-    })
-    .then(data => {
-        if(data.success) {
-            alert('Image moved successfully');
-            location.reload();
-        } else {
-            alert('Error moving image: ' + data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error moving image: ' + error.message);
-    });
-}
-
-
-   fetch('https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=YOUR_WEBSITE_URL&key=YOUR_API_KEY')
-        .then(response => response.json())
-        .then(data => {
-            const performanceScore = data.lighthouseResult.categories.performance.score * 100;
-            document.getElementById('performance-score').innerText = 'Performance Score: ' + performanceScore;
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-
-
-
-
-
-    </script>
+    <script src="{{ url_for('static', filename='js/funzioni-dashboard.js') }}"></script>
 </body>
 </html>
