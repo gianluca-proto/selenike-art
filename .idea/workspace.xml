@@ -4,15 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14253df0-ae5a-481e-8a12-af9d47af9467" name="Changes" comment="fix per primo deploy gunicorn 5">
+    <list default="true" id="14253df0-ae5a-481e-8a12-af9d47af9467" name="Changes" comment="compleata gestione immagini sul cloud e messa in sicurezza delle chiavi">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/css/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/admin.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base_dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base_dashboard.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/gallery.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/gallery.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/manage_gallery.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/manage_gallery.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -144,7 +138,15 @@
       <option name="project" value="LOCAL" />
       <updated>1728986509576</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="compleata gestione immagini sul cloud e messa in sicurezza delle chiavi">
+      <option name="closed" value="true" />
+      <created>1729156401721</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1729156401721</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -156,7 +158,8 @@
     <MESSAGE value="fix per primo deploy gunicorn 3" />
     <MESSAGE value="fix per primo deploy gunicorn 4" />
     <MESSAGE value="fix per primo deploy gunicorn 5" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix per primo deploy gunicorn 5" />
+    <MESSAGE value="compleata gestione immagini sul cloud e messa in sicurezza delle chiavi" />
+    <option name="LAST_COMMIT_MESSAGE" value="compleata gestione immagini sul cloud e messa in sicurezza delle chiavi" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
