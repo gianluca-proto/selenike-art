@@ -1,12 +1,13 @@
 Babel==2.15.0
 bidict==0.23.1
 blinker==1.8.2
+certifi==2024.8.30
 click==8.1.7
+cloudinary==1.41.0
 Flask==3.0.3
 flask-babel==4.0.0
 Flask-Mail==0.10.0
 Flask-SocketIO==5.3.6
-Flask-WTF==1.2.1
 h11==0.14.0
 itsdangerous==2.2.0
 Jinja2==3.1.4
@@ -16,10 +17,8 @@ python-engineio==4.9.1
 python-socketio==5.11.3
 pytz==2024.1
 simple-websocket==1.0.0
+six==1.16.0
 socketio==0.2.1
+urllib3==2.2.3
 Werkzeug==3.0.3
 wsproto==1.2.0
-gunicorn==23.0.0
-
-requests~=2.32.3
-WTForms~=3.1.2
