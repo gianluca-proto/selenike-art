@@ -8,11 +8,13 @@ Flask==3.0.3
 flask-babel==4.0.0
 Flask-Mail==0.10.0
 Flask-SocketIO==5.3.6
+gunicorn==23.0.0
 h11==0.14.0
 itsdangerous==2.2.0
 Jinja2==3.1.4
 MarkupSafe==2.1.5
 netifaces==0.10.6
+packaging==24.1
 python-engineio==4.9.1
 python-socketio==5.11.3
 pytz==2024.1
