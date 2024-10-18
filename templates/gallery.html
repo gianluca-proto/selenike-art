@@ -15,7 +15,7 @@
     <div class="row">
         {% for image in images %}
         <div class="col-md-3 mb-4 gallery-item {{ image.category }} show">
-            <a href="{{ image.url }}" data-toggle="lightbox" data-gallery="gallery" class="col-md-4" loading="lazy">
+            <a href="{{ image.url }}" data-toggle="lightbox" data-gallery="gallery" class="col-md-4" loading="eager">
                 <img src="{{ image.url }}" class="img-fluid rounded">
             </a>
         </div>

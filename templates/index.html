@@ -12,7 +12,7 @@
         <div class="carousel-inner">
             {% for image_url in carousel_images %}
             <div class="carousel-item {{ 'active' if loop.first }}">
-                <img src="{{ image_url }}" class="d-block w-100" alt="Slide {{ loop.index }}" style="height: 400px; object-fit: cover;" loading="lazy">
+                <img src="{{ image_url }}" class="d-block w-100" alt="Slide {{ loop.index }}" style="height: 400px; object-fit: cover;" loading="eager">
             </div>
             {% endfor %}
         </div>
