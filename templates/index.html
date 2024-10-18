@@ -10,9 +10,16 @@
             {% endfor %}
         </ol>
         <div class="carousel-inner">
-            {% for image_url in carousel_images %}
+            {% for image in carousel_images %}
             <div class="carousel-item {{ 'active' if loop.first }}">
-                <img src="{{ image_url }}" class="d-block w-100" alt="Slide {{ loop.index }}" style="height: 400px; object-fit: cover;" loading="eager">
+                <img src="{{ image.url }}"
+                     srcset="{{ image.url_mobile }} 480w, {{ image.url_tablet }} 768w, {{ image.url_desktop }} 1200w"
+                     sizes="(max-width: 480px) 480px,
+                            (max-width: 768px) 768px,
+                            1200px"
+                     class="d-block w-100"
+                     alt="Slide {{ loop.index }}"
+                     style="height: 400px; object-fit: cover;">
             </div>
             {% endfor %}
         </div>

@@ -17,6 +17,7 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 from cloudinary.api import resources_by_tag, delete_resources_by_tag, resources
+from cloudinary.utils import cloudinary_url
 
 cloudinary.config(
   cloud_name = os.getenv('CLOUD_NAME'),
@@ -89,12 +90,29 @@ def login_required(f):
 @app.route('/')
 def home():
     try:
+        # Recupera le risorse da Cloudinary
         response = cloudinary.api.resources(
             type='upload',
             prefix='img/banner/',
             max_results=10
         )
-        images = [img['secure_url'] for img in response.get('resources', [])]
+
+        # Prepara le immagini per il responsivo
+        images = []
+        for img in response.get('resources', []):
+            image_versions = {
+                'url_mobile':
+                    cloudinary_url(img['public_id'], width=480, crop="scale")[
+                        0],
+                'url_tablet':
+                    cloudinary_url(img['public_id'], width=768, crop="scale")[
+                        0],
+                'url_desktop':
+                    cloudinary_url(img['public_id'], width=1200, crop="scale")[
+                        0]
+            }
+            images.append(image_versions)
+
         app.logger.info(
             f"Complete response: {response}")  # Log the complete response
         if not images:
