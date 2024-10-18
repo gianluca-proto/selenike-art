@@ -88,7 +88,22 @@ def login_required(f):
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    try:
+        response = cloudinary.api.resources(
+            type='upload',
+            prefix='img/banner/',
+            max_results=10
+        )
+        images = [img['secure_url'] for img in response.get('resources', [])]
+        app.logger.info(
+            f"Complete response: {response}")  # Log the complete response
+        if not images:
+            app.logger.info("No images found under the specified prefix.")
+    except Exception as e:
+        app.logger.error(f"Failed to load images from Cloudinary: {str(e)}")
+        images = []
+
+    return render_template('index.html', carousel_images=images)
 
 
 @app.route('/commissions')
