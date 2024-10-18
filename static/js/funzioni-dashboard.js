@@ -89,7 +89,6 @@ function moveImage(selectElement) {
     })
     .then(data => {
         if(data.success) {
-            alert('Image moved successfully');
             location.reload();
         } else {
             alert('Error moving image: ' + data.message);
@@ -101,12 +100,3 @@ function moveImage(selectElement) {
     });
 }
 
-fetch('https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=YOUR_WEBSITE_URL&key=YOUR_API_KEY')
-    .then(response => response.json())
-    .then(data => {
-        const performanceScore = data.lighthouseResult.categories.performance.score * 100;
-        document.getElementById('performance-score').innerText = 'Performance Score: ' + performanceScore;
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });

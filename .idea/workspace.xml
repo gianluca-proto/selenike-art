@@ -4,9 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14253df0-ae5a-481e-8a12-af9d47af9467" name="Changes" comment="riorganizzazione codice 2">
+    <list default="true" id="14253df0-ae5a-481e-8a12-af9d47af9467" name="Changes" comment="prove banner 2">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/styles-min.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/styles-min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/funzioni-dashboard-min.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/funzioni-dashboard-min.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/funzioni-dashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/funzioni-dashboard.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/admin.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/base_dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base_dashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/manage_gallery.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/manage_gallery.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,16 +43,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "Python.app.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "develop",
-    "last_opened_file_path": "/home/popdeveloper/personal_project/selenike-art/static/js",
-    "settings.editor.selected.configurable": "debugger.dataViews.python.type.renderers"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;Python.app.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/popdeveloper/personal_project/selenike-art/static/js&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;debugger.dataViews.python.type.renderers&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/static/js" />
@@ -188,8 +196,82 @@
       <option name="project" value="LOCAL" />
       <updated>1729205968303</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="riorganizzazione codice 3">
+      <option name="closed" value="true" />
+      <created>1729206049812</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1729206049812</updated>
+    </task>
+    <task id="LOCAL-00016" summary="riorganizzazione codice 4">
+      <option name="closed" value="true" />
+      <created>1729237237480</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1729237237481</updated>
+    </task>
+    <task id="LOCAL-00017" summary="immagini banner caricate dal cloud">
+      <option name="closed" value="true" />
+      <created>1729248430954</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1729248430954</updated>
+    </task>
+    <task id="LOCAL-00018" summary="aggiunto lazy alle immagini">
+      <option name="closed" value="true" />
+      <created>1729249129913</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1729249129913</updated>
+    </task>
+    <task id="LOCAL-00019" summary="aggiunto eager alle immagini">
+      <option name="closed" value="true" />
+      <created>1729250006260</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1729250006260</updated>
+    </task>
+    <task id="LOCAL-00020" summary="prova senza iubenda">
+      <option name="closed" value="true" />
+      <created>1729250626866</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1729250626866</updated>
+    </task>
+    <task id="LOCAL-00021" summary="prove banner">
+      <option name="closed" value="true" />
+      <created>1729259471369</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1729259471369</updated>
+    </task>
+    <task id="LOCAL-00022" summary="prove banner 2">
+      <option name="closed" value="true" />
+      <created>1729260294044</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1729260294044</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ID_ORDER">
+      <list>
+        <option value="Default.Root" />
+        <option value="Default.Author" />
+        <option value="Default.Date" />
+        <option value="Default.Subject" />
+      </list>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="fix(2) - aggiustamenti grafici" />
@@ -206,44 +288,52 @@
     <MESSAGE value="modifiche conversione webp" />
     <MESSAGE value="riorganizzazione codice" />
     <MESSAGE value="riorganizzazione codice 2" />
-    <option name="LAST_COMMIT_MESSAGE" value="riorganizzazione codice 2" />
+    <MESSAGE value="riorganizzazione codice 3" />
+    <MESSAGE value="riorganizzazione codice 4" />
+    <MESSAGE value="immagini banner caricate dal cloud" />
+    <MESSAGE value="aggiunto lazy alle immagini" />
+    <MESSAGE value="aggiunto eager alle immagini" />
+    <MESSAGE value="prova senza iubenda" />
+    <MESSAGE value="prove banner" />
+    <MESSAGE value="prove banner 2" />
+    <option name="LAST_COMMIT_MESSAGE" value="prove banner 2" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app.py</url>
-          <line>144</line>
+          <line>158</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app.py</url>
-          <line>141</line>
+          <line>155</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app.py</url>
-          <line>186</line>
+          <line>200</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app.py</url>
-          <line>105</line>
+          <line>119</line>
           <option name="timeStamp" value="6" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app.py</url>
-          <line>253</line>
+          <line>264</line>
           <option name="timeStamp" value="8" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app.py</url>
-          <line>267</line>
+          <line>277</line>
           <option name="timeStamp" value="9" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app.py</url>
-          <line>155</line>
+          <line>169</line>
           <option name="timeStamp" value="12" />
         </line-breakpoint>
       </breakpoints>

@@ -3,7 +3,6 @@ import os
 import shutil
 from functools import wraps
 from logging.handlers import RotatingFileHandler
-
 import requests
 from flask import Flask, render_template, request, redirect, flash, url_for, \
     session, jsonify
@@ -219,7 +218,6 @@ def upload_image():
     if not session.get('admin_logged_in'):
         flash('Per favore, effettua il login per accedere a questa pagina.', 'warning')
         return redirect(url_for('admin_login'))
-
     form = UploadForm()
     if form.validate_on_submit():
         file_to_upload = form.image.data
@@ -249,8 +247,6 @@ def manage_gallery():
         else:
             print(f"No images found in category: {category}")
             images[category] = []
-
-    print(images)  # Stampa per debugging
     return render_template('manage_gallery.html', images=images, categories=categories)
 
 @app.route('/delete-image/<path:public_id>', methods=['POST'])
@@ -271,7 +267,6 @@ def delete_image(public_id):
 def move_image():
     src_public_id = request.form.get('src_public_id')
     dest_public_id = request.form.get('dest_public_id')
-
     try:
         response = cloudinary.uploader.rename(src_public_id, dest_public_id)
         if 'error' in response:

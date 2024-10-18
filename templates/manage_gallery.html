@@ -2,16 +2,16 @@
 
 {% block content %}
 <div class="container mt-5 img-gallery">
-    {% for category, image_files in images.items() %}
-    <div class="category-section">
-        <h3>{{ category | capitalize }}</h3>
-        <div class="row">
-            {% for image in image_files %}
-            <div class="col-md-3 mb-4">
-                <div class="img-manage card">
-                    <img src="{{ image['url'] }}" alt="{{ image['filename'] }}" class="card-img-top img-fluid">
-                    <div class="card-body">
-                        <div class="img-controls">
+    <div class="row">
+        {% for category, image_files in images.items() %}
+        <div class="col-12">
+            <h3>{{ category | capitalize }}</h3>
+            <div class="row">
+                {% for image in image_files %}
+                <div class="col-md-4 col-lg-3 mb-4">
+                    <div class="card img-manage">
+                        <img src="{{ image['url'] }}" alt="{{ image['filename'] }}" class="card-img-top">
+                        <div class="card-body">
                             <button onclick="deleteImage('{{ category }}', '{{ image.filename }}')" class="btn btn-danger">Delete</button>
                             <select class="form-control"
                                     data-category="{{ category }}"
@@ -28,10 +28,10 @@
                         </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
 {% endblock %}
