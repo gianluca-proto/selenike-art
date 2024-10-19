@@ -14,7 +14,7 @@
             <div class="carousel-item {{ 'active' if loop.first }}">
                 <img src="{{ desktop_image }}" srcset="{{ mobile_image }} 600w, {{ desktop_image }} 1200w"
                      sizes="(max-width: 768px) 600px, 100vw"
-                     class="d-block w-100" alt="Slide {{ loop.index }}" style="height: 400px; object-fit: cover;">
+                     class="d-block w-100 lazyload" alt="Slide {{ loop.index }}" style="height: 400px; object-fit: cover;">
             </div>
             {% endfor %}
         </div>
@@ -49,13 +49,13 @@
             <div id="eroticiCarousel" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img src="{{ url_for('static', filename='img/gallery/animals/Cat2.jpeg') }}" class="d-block w-100" alt="Animale1">
+                        <img src="{{ url_for('static', filename='img/gallery/animals/Cat2.jpeg') }}" class="d-block w-100 lazyload" alt="Animale1">
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='img/gallery/animals/Cat2.jpeg') }}" class="d-block w-100" alt="Animale2">
+                        <img src="{{ url_for('static', filename='img/gallery/animals/Cat2.jpeg') }}" class="d-block w-100 lazyload" alt="Animale2">
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='img/gallery/animals/Leo.jpg') }}" class="d-block w-100" alt="Animale3">
+                        <img src="{{ url_for('static', filename='img/gallery/animals/Leo.jpg') }}" class="d-block w-100 lazyload" alt="Animale3">
                     </div>
                 </div>
                 <a class="carousel-control-prev" href="#eroticiCarousel" role="button" data-slide="prev">
@@ -80,13 +80,13 @@
             <div id="animaliCarousel" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img src="{{ url_for('static', filename='img/gallery/animals/Cat2.jpeg') }}" class="d-block w-100" alt="Animale1">
+                        <img src="{{ url_for('static', filename='img/gallery/animals/Cat2.jpeg') }}" class="d-block w-100 lazyload" alt="Animale1">
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='img/gallery/animals/Cat2.jpeg') }}" class="d-block w-100" alt="Animale2">
+                        <img src="{{ url_for('static', filename='img/gallery/animals/Cat2.jpeg') }}" class="d-block w-100 lazyload" alt="Animale2">
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='img/gallery/animals/Leo.jpg') }}" class="d-block w-100" alt="Animale3">
+                        <img src="{{ url_for('static', filename='img/gallery/animals/Leo.jpg') }}" class="d-block w-100 lazyload" alt="Animale3">
                     </div>
                 </div>
                 <a class="carousel-control-prev" href="#animaliCarousel" role="button" data-slide="prev">
@@ -111,13 +111,13 @@
             <div id="fumettoCarousel" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img src="{{ url_for('static', filename='img/gallery/animals/Cat2.jpeg') }}" class="d-block w-100" alt="Animale1">
+                        <img src="{{ url_for('static', filename='img/gallery/animals/Cat2.jpeg') }}" class="d-block w-100 lazyload" alt="Animale1">
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='img/gallery/animals/Cat2.jpeg') }}" class="d-block w-100" alt="Animale2">
+                        <img src="{{ url_for('static', filename='img/gallery/animals/Cat2.jpeg') }}" class="d-block w-100 lazyload" alt="Animale2">
                     </div>
                     <div class="carousel-item">
-                        <img src="{{ url_for('static', filename='img/gallery/animals/Leo.jpg') }}" class="d-block w-100" alt="Animale3">
+                        <img src="{{ url_for('static', filename='img/gallery/animals/Leo.jpg') }}" class="d-block w-100 lazyload" alt="Animale3">
                     </div>
                 </div>
                 <a class="carousel-control-prev" href="#fumettoCarousel" role="button" data-slide="prev">
@@ -141,13 +141,13 @@
                 <div id="illustrazioniCarousel" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner">
                         <div class="carousel-item active">
-                            <img src="{{ url_for('static', filename='img/gallery/animals/Cat2.jpeg') }}" class="d-block w-100" alt="Animale1">
+                            <img src="{{ url_for('static', filename='img/gallery/animals/Cat2.jpeg') }}" class="d-block w-100 lazyload" alt="Animale1">
                         </div>
                         <div class="carousel-item">
-                            <img src="{{ url_for('static', filename='img/gallery/animals/Cat2.jpeg') }}" class="d-block w-100" alt="Animale2">
+                            <img src="{{ url_for('static', filename='img/gallery/animals/Cat2.jpeg') }}" class="d-block w-100 lazyload" alt="Animale2">
                         </div>
                         <div class="carousel-item">
-                            <img src="{{ url_for('static', filename='img/gallery/animals/Leo.jpg') }}" class="d-block w-100" alt="Animale3">
+                            <img src="{{ url_for('static', filename='img/gallery/animals/Leo.jpg') }}" class="d-block w-100 lazyload" alt="Animale3">
                         </div>
                     </div>
                     <a class="carousel-control-prev" href="#fumettoCarousel" role="button" data-slide="prev">
