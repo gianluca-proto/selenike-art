@@ -27,6 +27,8 @@ app = Flask(__name__)
 app.secret_key = os.getenv('APP_SECRET_KEY')  # Necessario per visualizzare messaggi di conferma
 app.config['PRODUCTION'] = False  # Imposta a True in produzione
 app.config['RECAPTCHA_SECRET_KEY'] = os.getenv('RECAPTCHA_SECRET_KEY')
+# Aggiungi zip all'environment Jinja
+app.jinja_env.globals.update(zip=zip)
 
 # Configurazione del logger
 logging.basicConfig(level=logging.INFO)
@@ -88,21 +90,31 @@ def login_required(f):
 @app.route('/')
 def home():
     try:
-        response = cloudinary.api.resources(
+        # Carica immagini per desktop
+        response_desktop = cloudinary.api.resources(
             type='upload',
             prefix='img/banner/',
             max_results=10
         )
-        images = [img['secure_url'] for img in response.get('resources', [])]
-        app.logger.info(
-            f"Complete response: {response}")  # Log the complete response
-        if not images:
-            app.logger.info("No images found under the specified prefix.")
+        desktop_images = [img['secure_url'] for img in response_desktop.get('resources', [])]
+
+        # Carica immagini per mobile
+        response_mobile = cloudinary.api.resources(
+            type='upload',
+            prefix='img/banner_mobile/',
+            max_results=10
+        )
+        mobile_images = [img['secure_url'] for img in response_mobile.get('resources', [])]
+
+        app.logger.info(f"Desktop images loaded: {desktop_images}")
+        app.logger.info(f"Mobile images loaded: {mobile_images}")
     except Exception as e:
         app.logger.error(f"Failed to load images from Cloudinary: {str(e)}")
-        images = []
+        desktop_images = []
+        mobile_images = []
 
-    return render_template('index.html', carousel_images=images)
+    return render_template('index.html', carousel_images_desktop=desktop_images, carousel_images_mobile=mobile_images)
+
 
 
 @app.route('/commissions')

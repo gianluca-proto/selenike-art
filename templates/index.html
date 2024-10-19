@@ -5,14 +5,16 @@
 <div class="container-fluid px-0">
     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
-            {% for i in range(carousel_images|length) %}
+            {% for i in range(carousel_images_desktop|length) %}
             <li data-target="#carouselExampleIndicators" data-slide-to="{{ i }}" class="{{ 'active' if loop.first }}"></li>
             {% endfor %}
         </ol>
         <div class="carousel-inner">
-            {% for image_url in carousel_images %}
+            {% for desktop_image, mobile_image in zip(carousel_images_desktop, carousel_images_mobile) %}
             <div class="carousel-item {{ 'active' if loop.first }}">
-                <img src="{{ image_url }}" class="d-block w-100" alt="Slide {{ loop.index }}" style="height: 400px; object-fit: cover;">
+                <img src="{{ desktop_image }}" srcset="{{ mobile_image }} 600w, {{ desktop_image }} 1200w"
+                     sizes="(max-width: 768px) 600px, 100vw"
+                     class="d-block w-100" alt="Slide {{ loop.index }}" style="height: 400px; object-fit: cover;">
             </div>
             {% endfor %}
         </div>
