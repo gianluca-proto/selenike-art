@@ -88,34 +88,40 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+def get_resources(tipo, prefix):
+    response_desktop = cloudinary.api.resources(
+        type=tipo,
+        prefix=prefix,
+        max_results=10
+    )
+    return response_desktop
 
 @app.route('/')
 def home():
     try:
         # Carica immagini per desktop
-        response_desktop = cloudinary.api.resources(
-            type='upload',
-            prefix='img/banner/',
-            max_results=10
-        )
+        response_desktop = get_resources('upload', 'img/banner/')
         desktop_images = [img['secure_url'] for img in response_desktop.get('resources', [])]
 
         # Carica immagini per mobile
-        response_mobile = cloudinary.api.resources(
-            type='upload',
-            prefix='img/banner_mobile/',
-            max_results=10
-        )
+        response_mobile = get_resources('upload', 'img/banner_mobile/')
         mobile_images = [img['secure_url'] for img in response_mobile.get('resources', [])]
 
+        response_carousel_animal = get_resources('upload', 'img/carousel_animal/')
+        carousel_animal_images = [img['secure_url'] for img in response_carousel_animal.get('resources', [])]
         app.logger.info(f"Desktop images loaded: {desktop_images}")
         app.logger.info(f"Mobile images loaded: {mobile_images}")
+        app.logger.info(f"Carousel Animal images loaded: {carousel_animal_images}")
     except Exception as e:
         app.logger.error(f"Failed to load images from Cloudinary: {str(e)}")
         desktop_images = []
         mobile_images = []
+        carousel_animal_images = []
 
-    return render_template('index.html', carousel_images_desktop=desktop_images, carousel_images_mobile=mobile_images)
+    return render_template('index.html',
+                           carousel_images_desktop=desktop_images,
+                           carousel_images_mobile=mobile_images,
+                           carousel_animal_images=carousel_animal_images)
 
 
 
