@@ -16,6 +16,7 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 from cloudinary.api import resources_by_tag, delete_resources_by_tag, resources
+from flask_compress import Compress
 
 cloudinary.config(
   cloud_name = os.getenv('CLOUD_NAME'),
@@ -24,6 +25,7 @@ cloudinary.config(
 )
 
 app = Flask(__name__)
+Compress(app)
 app.secret_key = os.getenv('APP_SECRET_KEY')  # Necessario per visualizzare messaggi di conferma
 app.config['PRODUCTION'] = False  # Imposta a True in produzione
 app.config['RECAPTCHA_SECRET_KEY'] = os.getenv('RECAPTCHA_SECRET_KEY')
