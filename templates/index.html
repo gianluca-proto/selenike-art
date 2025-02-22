@@ -14,7 +14,7 @@
             <div class="carousel-item {{ 'active' if loop.first }}">
                 <img src="{{ desktop_image }}" srcset="{{ mobile_image }} 600w, {{ desktop_image }} 1200w"
                      sizes="(max-width: 768px) 600px, 100vw"
-                     class="d-block w-100" alt="Slide {{ loop.index }}" style="height: 400px; object-fit: cover;">
+                     class="d-block w-100 lazyload" alt="Slide {{ loop.index }}" style="height: 400px; object-fit: cover;">
             </div>
             {% endfor %}
         </div>
@@ -45,54 +45,74 @@
             <h2 class="lobster-font">Disegni Erotici</h2>
             <p>Esplorate la mia collezione di disegni erotici, opere d'arte che celebrano la sensualità e l'intimità con uno stile audace e raffinato. Ideali per chi cerca un tocco di provocazione e sensualità per gli spazi personali, o un regalo sorprendente e originale. La discrezione è garantita, destinati a un pubblico adulto.</p>
         </div>
-       <div class="col-md-6">
-    <div id="eroticiCarousel" class="carousel slide" data-ride="carousel">
-        <div class="carousel-inner">
-            {% for image in carousel_animal_images %}
-            <div class="carousel-item {{ 'active' if loop.first }}">
-                <img src="{{ image }}" class="d-block w-100 lazyload" alt="Animale{{ loop.index }}" style="height: 400px; width: auto;">
+        <div class="col-md-6">
+            <div id="eroticiCarousel" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    {% set num_images = carousel_erotic_images|length %}
+                    {% for i in range(0, num_images, 3) %}
+                    <div class="carousel-item {{ 'active' if loop.first }}">
+                        <div class="row">
+                            {% for j in range(3) %}
+                            {% if i + j < num_images %}
+                            <div class="col-md-4">
+                                <img src="{{ carousel_erotic_images[i + j] }}" class="d-block w-100" alt="Erotico{{ i + j }}" style="height: 250px; object-fit: cover;">
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <a class="carousel-control-prev" href="#eroticiCarousel" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#eroticiCarousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
             </div>
-            {% endfor %}
         </div>
-        <a class="carousel-control-prev" href="#eroticiCarousel" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#eroticiCarousel" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </a>
     </div>
-</div>
 
-    </div>
+
+
+
 
     <!-- Disegni di Animali -->
     <div class="row mb-5">
         <div class="col-md-6">
+            <div id="animaliCarousel" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    {% set num_images = carousel_animal_images|length %}
+                    {% for i in range(0, num_images, 3) %}
+                    <div class="carousel-item {{ 'active' if loop.first }}">
+                        <div class="row">
+                            {% for j in range(3) %}
+                            {% if i + j < num_images %}
+                            <div class="col-md-4">
+                                <img src="{{ carousel_animal_images[i + j] }}" class="d-block w-100" alt="Animale{{ i + j }}" style="height: 250px; object-fit: cover;">
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <a class="carousel-control-prev" href="#animaliCarousel" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#animaliCarousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-6">
             <h2 class="lobster-font">Disegni di animali</h2>
             <p>Scoprite la mia collezione di disegni di animali, che catturano l'essenza e la personalità di creature affascinanti. Perfetti per gli amanti degli animali che vogliono decorare la propria casa o ufficio con opere ispirate alla natura. Dalle dolci figure domestiche alle specie esotiche, troverete l'animale che rispecchia il vostro spirito.</p>
         </div>
-       <div class="col-md-6">
-    <div id="animaliCarousel" class="carousel slide" data-ride="carousel">
-        <div class="carousel-inner">
-            {% for image in carousel_animal_images %}
-            <div class="carousel-item {{ 'active' if loop.first }}">
-                <img src="{{ image }}" class="d-block w-100 lazyload" alt="Animale{{ loop.index }}" style="height: 400px; width: auto;">
-            </div>
-            {% endfor %}
-        </div>
-        <a class="carousel-control-prev" href="#animaliCarousel" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#animaliCarousel" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </a>
-    </div>
-</div>
-
     </div>
 
     <!-- Tavole da fumetto -->
@@ -101,55 +121,73 @@
             <h2 class="lobster-font">Tavole da fumetto</h2>
             <p>Dai un'occhiata alle mie tavole da fumetto, che includono sia narrativa originale che fan art per Topolino. Un mix perfetto di suspense, narrazione e arte visiva, ideali per appassionati di fumetti, graphic novel e collezionisti alla ricerca di originalità. Immergetevi in un mondo di avventure, eroi e cattivi con le mie creazioni.</p>
         </div>
-     <div class="col-md-6">
-    <div id="fumettiCarousel" class="carousel slide" data-ride="carousel">
-        <div class="carousel-inner">
-            {% for image in carousel_animal_images %}
-            <div class="carousel-item {{ 'active' if loop.first }}">
-                <img src="{{ image }}" class="d-block w-100 lazyload" alt="Animale{{ loop.index }}" style="height: 400px; width: auto;">
+        <div class="col-md-6">
+            <div id="fumettiCarousel" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    {% set num_images = carousel_animal_images|length %}
+                    {% for i in range(0, num_images, 3) %}
+                    <div class="carousel-item {{ 'active' if loop.first }}">
+                        <div class="row">
+                            {% for j in range(3) %}
+                            {% if i + j < num_images %}
+                            <div class="col-md-4">
+                                <img src="{{ carousel_animal_images[i + j] }}" class="d-block w-100" alt="Erotico{{ i + j }}" style="height: 250px; object-fit: cover;">
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <a class="carousel-control-prev" href="#fumettiCarousel" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#fumettiCarousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
             </div>
-            {% endfor %}
         </div>
-        <a class="carousel-control-prev" href="#fumettiCarousel" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#fumettiCarousel" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </a>
+
+    </div>
+
+    <!-- Tavole da fumetto -->
+    <div class="row mb-5">
+
+        <div class="col-md-6">
+            <div id="personalizzateCarousel" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    {% set num_images = carousel_animal_images|length %}
+                    {% for i in range(0, num_images, 3) %}
+                    <div class="carousel-item {{ 'active' if loop.first }}">
+                        <div class="row">
+                            {% for j in range(3) %}
+                            {% if i + j < num_images %}
+                            <div class="col-md-4">
+                                <img src="{{ carousel_animal_images[i + j] }}" class="d-block w-100" alt="Erotico{{ i + j }}" style="height: 250px; object-fit: cover;">
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <a class="carousel-control-prev" href="#personalizzateCarousel" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#personalizzateCarousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h2 class="lobster-font">Opere Personalizzate</h2>
+            <p>Offro la creazione di disegni dettagliati e realistici, perfetti per catturare l'essenza di qualsiasi soggetto, da ritratti individuali a familiari, fino agli amati animali domestici. Specializzata anche nel design personalizzato per biglietti di auguri e inviti per eventi speciali, garantisco un'attenzione minuziosa ai dettagli e una passione per l'arte che trasforma ogni pezzo in un'opera unica.</p>
+        </div>
     </div>
 </div>
-
-        </div>
-
-        <!-- Tavole da fumetto -->
-        <div class="row mb-5">
-            <div class="col-md-6">
-                <h2 class="lobster-font">Opere Personalizzate</h2>
-                <p>Offro la creazione di disegni dettagliati e realistici, perfetti per catturare l'essenza di qualsiasi soggetto, da ritratti individuali a familiari, fino agli amati animali domestici. Specializzata anche nel design personalizzato per biglietti di auguri e inviti per eventi speciali, garantisco un'attenzione minuziosa ai dettagli e una passione per l'arte che trasforma ogni pezzo in un'opera unica.</p>
-            </div>
-          <div class="col-md-6">
-    <div id="personalizzateCarousel" class="carousel slide" data-ride="carousel">
-        <div class="carousel-inner">
-            {% for image in carousel_animal_images %}
-            <div class="carousel-item {{ 'active' if loop.first }}">
-                <img src="{{ image }}" class="d-block w-100 lazyload" alt="Animale{{ loop.index }}" style="height: 400px; width: auto;">
-            </div>
-            {% endfor %}
-        </div>
-        <a class="carousel-control-prev" href="#personalizzateCarousel" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#personalizzateCarousel" role="button" data-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
-        </a>
-    </div>
-</div>
-
-        </div>
-    </div>
 </div>
 {% endblock %}

@@ -4,6 +4,7 @@
 <div class="container my-4">
     <h1 class="text-center mb-4 lobster-font">Art Gallery</h1>
     <p>Se siete interessati a uno dei miei disegni, sia cartacei che digitali, potete scrivere nella sezione Contattaci del sito.</p>
+
     <!-- Gallery Filter -->
     <div class="gallery-filter text-center mb-4">
         <button class="btn btn-primary" onclick="filterGallery('all')">All</button>
@@ -12,14 +13,36 @@
         <button class="btn btn-primary" onclick="filterGallery('illustrations')">Illustrations</button>
     </div>
 
-    <div class="row">
-        {% for image in images %}
-        <div class="col-md-3 mb-4 gallery-item {{ image.category }} show">
-            <a href="{{ image.url }}" data-toggle="lightbox" data-gallery="gallery" class="col-md-4" loading="eager">
-                <img src="{{ image.url }}" class="img-fluid rounded">
-            </a>
+    <div class="container mt-4">
+        <div class="row g-0 justify-content-center">
+
+            {% for image in images %}
+            <div class="col-12 col-md-3 col-lg-2 px-0 gallery-item {{ image.category }} show">
+
+                <a href="#" onclick="openImageModal(event, '{{ image.url }}')">
+                    <img src="{{ image.url }}" class="img-fluid rounded shadow-lg img-hover gallery-img" loading="lazy" alt="Opera d'arte">
+                </a>
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
+    </div>
+
+
+    <!-- Modale per Ingrandire le Immagini -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-fullscreen">
+            <div class="modal-content bg-transparent border-0">
+                <div class="modal-body p-0 d-flex align-items-center justify-content-center">
+                    <button class="btn btn-dark position-absolute start-0 top-50 translate-middle-y" onclick="prevImage()">
+                        <i class="fas fa-chevron-left fa-2x"></i>
+                    </button>
+                    <img id="modalImage" class="img-fluid rounded shadow-lg" style="max-height: 90vh; width: auto;">
+                    <button class="btn btn-dark position-absolute end-0 top-50 translate-middle-y" onclick="nextImage()">
+                        <i class="fas fa-chevron-right fa-2x"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

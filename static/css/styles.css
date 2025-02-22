@@ -20,6 +20,9 @@ body {
     width: 100%;
     margin: 0;
     padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 .nav-link {
@@ -334,3 +337,33 @@ img {
 .card a:hover {
     text-decoration: underline;
 }
+
+/* Sfondo trasparente nel modale */
+.modal-content {
+    background: transparent !important;
+    border: none;
+}
+
+/* Pulsanti di navigazione ai lati dell'immagine */
+.modal-body .btn-dark {
+    background: rgba(0, 0, 0, 0.5); /* Sfondo semi-trasparente */
+    border: none;
+    padding: 10px 15px;
+    border-radius: 50%;
+    transition: all 0.3s ease-in-out;
+}
+
+.modal-body .btn-dark:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+/* Nasconde i bordi della modale */
+.modal-dialog {
+    max-width: 100%;
+    margin: 0;
+}
+
+.modal-fullscreen {
+    min-height: 100vh;
+}
+

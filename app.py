@@ -19,9 +19,9 @@ from cloudinary.api import resources_by_tag, delete_resources_by_tag, resources
 from flask_compress import Compress
 
 cloudinary.config(
-  cloud_name = os.getenv('CLOUD_NAME'),
-  api_key = os.getenv('CLOUD_API_KEY'),
-  api_secret = os.getenv('CLOUD_API_SECRET')
+    cloud_name = os.getenv('CLOUD_NAME'),
+    api_key = os.getenv('CLOUD_API_KEY'),
+    api_secret = os.getenv('CLOUD_API_SECRET')
 )
 
 app = Flask(__name__)
@@ -109,6 +109,9 @@ def home():
 
         response_carousel_animal = get_resources('upload', 'img/carousel_animal/')
         carousel_animal_images = [img['secure_url'] for img in response_carousel_animal.get('resources', [])]
+
+        response_carousel_erotic = get_resources('upload','img/carousel_erotic/')
+        carousel_erotic_images = [img['secure_url'] for img in response_carousel_erotic.get('resources',[])]
         app.logger.info(f"Desktop images loaded: {desktop_images}")
         app.logger.info(f"Mobile images loaded: {mobile_images}")
         app.logger.info(f"Carousel Animal images loaded: {carousel_animal_images}")
@@ -117,11 +120,12 @@ def home():
         desktop_images = []
         mobile_images = []
         carousel_animal_images = []
-
+        carousel_erotic_images = []
     return render_template('index.html',
                            carousel_images_desktop=desktop_images,
                            carousel_images_mobile=mobile_images,
-                           carousel_animal_images=carousel_animal_images)
+                           carousel_animal_images=carousel_animal_images,
+                           carousel_erotic_images=carousel_erotic_images)
 
 
 

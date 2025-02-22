@@ -4,17 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14253df0-ae5a-481e-8a12-af9d47af9467" name="Changes" comment="prove banner 2">
+    <list default="true" id="14253df0-ae5a-481e-8a12-af9d47af9467" name="Changes" comment="fix carousel vari">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/css/styles-min.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/styles-min.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/css/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/funzioni-dashboard-min.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/funzioni-dashboard-min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/funzioni-dashboard.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/funzioni-dashboard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/admin.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/banner/Banner1-mobile.webp" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/banner/Banner1-mobile.webp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/banner/Banner3-mobile.webp" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/banner/Banner3-mobile.webp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/funzioni.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/funzioni.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/base_dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base_dashboard.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/manage_gallery.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/manage_gallery.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/gallery.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/gallery.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,22 +44,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;Python.app.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/popdeveloper/personal_project/selenike-art/static/js&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;debugger.dataViews.python.type.renderers&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Python.app.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "develop",
+    "last_opened_file_path": "/home/popdeveloper/personal_project/selenike-art/static/img",
+    "settings.editor.selected.configurable": "debugger.dataViews.python.type.renderers"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/static/img" />
       <recent name="$PROJECT_DIR$/static/js" />
       <recent name="$PROJECT_DIR$/static/css" />
       <recent name="$PROJECT_DIR$/static" />
-      <recent name="$PROJECT_DIR$/static/img" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/static/img" />
@@ -71,7 +73,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-0e3be3396995-c546a90a8094-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-242.23339.19" />
+        <option value="bundled-python-sdk-1b1018131e27-aa17d162503b-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-243.22562.180" />
       </set>
     </attachedChunks>
   </component>
@@ -83,22 +85,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1722120043842</updated>
-    </task>
-    <task id="LOCAL-00001" summary="fix per primo deploy">
-      <option name="closed" value="true" />
-      <created>1728981563491</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1728981563491</updated>
-    </task>
-    <task id="LOCAL-00002" summary="fix per primo deploy req">
-      <option name="closed" value="true" />
-      <created>1728981871588</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1728981871588</updated>
     </task>
     <task id="LOCAL-00003" summary="fix per primo deploy gunicorn">
       <option name="closed" value="true" />
@@ -260,7 +246,239 @@
       <option name="project" value="LOCAL" />
       <updated>1729260294044</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="sistemazioni layout vari e file css e js">
+      <option name="closed" value="true" />
+      <created>1729289334267</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1729289334267</updated>
+    </task>
+    <task id="LOCAL-00024" summary="aggiunti banner mobile">
+      <option name="closed" value="true" />
+      <created>1729332012836</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1729332012836</updated>
+    </task>
+    <task id="LOCAL-00025" summary="aggiunta meta description">
+      <option name="closed" value="true" />
+      <created>1729333169744</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1729333169744</updated>
+    </task>
+    <task id="LOCAL-00026" summary="sistemazione temporanea immagini prima pagina">
+      <option name="closed" value="true" />
+      <created>1729333432660</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1729333432660</updated>
+    </task>
+    <task id="LOCAL-00027" summary="rimosso recaptcha dalla base">
+      <option name="closed" value="true" />
+      <created>1729358129279</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1729358129279</updated>
+    </task>
+    <task id="LOCAL-00028" summary="aggiunto lazyload per cercare di risolvere le prestazioni della index.html">
+      <option name="closed" value="true" />
+      <created>1729365604321</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1729365604321</updated>
+    </task>
+    <task id="LOCAL-00029" summary="prova async js">
+      <option name="closed" value="true" />
+      <created>1729366370435</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1729366370435</updated>
+    </task>
+    <task id="LOCAL-00030" summary="prova compress">
+      <option name="closed" value="true" />
+      <created>1729366853933</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1729366853933</updated>
+    </task>
+    <task id="LOCAL-00031" summary="refactor homepage">
+      <option name="closed" value="true" />
+      <created>1729373034760</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1729373034760</updated>
+    </task>
+    <task id="LOCAL-00032" summary="refactor homepage aggiunto preload ai css">
+      <option name="closed" value="true" />
+      <created>1729373572216</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1729373572216</updated>
+    </task>
+    <task id="LOCAL-00033" summary="refactor homepage aggiunto defer 2645790.js">
+      <option name="closed" value="true" />
+      <created>1729373909463</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1729373909463</updated>
+    </task>
+    <task id="LOCAL-00034" summary="refactor homepage eliminato defer 2645790.js">
+      <option name="closed" value="true" />
+      <created>1729374189133</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1729374189133</updated>
+    </task>
+    <task id="LOCAL-00035" summary="eliminato iubenda temporaneamente">
+      <option name="closed" value="true" />
+      <created>1729374605861</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1729374605861</updated>
+    </task>
+    <task id="LOCAL-00036" summary="dimensioni fisse immagini prima pagina">
+      <option name="closed" value="true" />
+      <created>1729376207786</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1729376207786</updated>
+    </task>
+    <task id="LOCAL-00037" summary="sistemazione index.html">
+      <option name="closed" value="true" />
+      <created>1729376771247</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1729376771247</updated>
+    </task>
+    <task id="LOCAL-00038" summary="ridimensione logo">
+      <option name="closed" value="true" />
+      <created>1729414298417</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1729414298417</updated>
+    </task>
+    <task id="LOCAL-00039" summary="ridimensione logo 2">
+      <option name="closed" value="true" />
+      <created>1729414756731</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1729414756731</updated>
+    </task>
+    <task id="LOCAL-00040" summary="ridimensione immagini">
+      <option name="closed" value="true" />
+      <created>1729457692091</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1729457692091</updated>
+    </task>
+    <task id="LOCAL-00041" summary="eliminato preload styles.css">
+      <option name="closed" value="true" />
+      <created>1729457922913</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1729457922913</updated>
+    </task>
+    <task id="LOCAL-00042" summary="eliminato preload styles.css 2">
+      <option name="closed" value="true" />
+      <created>1729457971350</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1729457971350</updated>
+    </task>
+    <task id="LOCAL-00043" summary="immagini ottimizzate">
+      <option name="closed" value="true" />
+      <created>1729458097818</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1729458097818</updated>
+    </task>
+    <task id="LOCAL-00044" summary="immagini index ottimizzate">
+      <option name="closed" value="true" />
+      <created>1729502982714</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1729502982714</updated>
+    </task>
+    <task id="LOCAL-00045" summary="immagini index ottimizzate 2">
+      <option name="closed" value="true" />
+      <created>1729503372065</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1729503372065</updated>
+    </task>
+    <task id="LOCAL-00046" summary="immagini banner ridimen">
+      <option name="closed" value="true" />
+      <created>1729517433807</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1729517433807</updated>
+    </task>
+    <task id="LOCAL-00047" summary="sistemati css base.html">
+      <option name="closed" value="true" />
+      <created>1729542688611</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1729542688611</updated>
+    </task>
+    <task id="LOCAL-00048" summary="ripristinati css base.html">
+      <option name="closed" value="true" />
+      <created>1729543187162</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1729543187162</updated>
+    </task>
+    <task id="LOCAL-00049" summary="ripristinati css base.html aggiunti">
+      <option name="closed" value="true" />
+      <created>1729543392621</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1729543392621</updated>
+    </task>
+    <task id="LOCAL-00050" summary="ripristinati css base.html eliminati ennesima prova">
+      <option name="closed" value="true" />
+      <created>1729543577781</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1729543577782</updated>
+    </task>
+    <task id="LOCAL-00051" summary="fix carousel vari">
+      <option name="closed" value="true" />
+      <created>1729591467410</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1729591467410</updated>
+    </task>
+    <option name="localTasksCounter" value="52" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -273,68 +491,92 @@
       </list>
     </option>
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fix(2) - aggiustamenti grafici" />
-    <MESSAGE value="fix per primo deploy" />
-    <MESSAGE value="fix per primo deploy req" />
-    <MESSAGE value="fix per primo deploy gunicorn" />
-    <MESSAGE value="fix per primo deploy gunicorn 2" />
-    <MESSAGE value="fix per primo deploy gunicorn 3" />
-    <MESSAGE value="fix per primo deploy gunicorn 4" />
-    <MESSAGE value="fix per primo deploy gunicorn 5" />
-    <MESSAGE value="compleata gestione immagini sul cloud e messa in sicurezza delle chiavi" />
-    <MESSAGE value="committato nuovo testo adattato al SEO" />
-    <MESSAGE value="nuove immagini ottimizzate" />
-    <MESSAGE value="modifiche conversione webp" />
-    <MESSAGE value="riorganizzazione codice" />
-    <MESSAGE value="riorganizzazione codice 2" />
-    <MESSAGE value="riorganizzazione codice 3" />
-    <MESSAGE value="riorganizzazione codice 4" />
-    <MESSAGE value="immagini banner caricate dal cloud" />
-    <MESSAGE value="aggiunto lazy alle immagini" />
-    <MESSAGE value="aggiunto eager alle immagini" />
-    <MESSAGE value="prova senza iubenda" />
-    <MESSAGE value="prove banner" />
-    <MESSAGE value="prove banner 2" />
-    <option name="LAST_COMMIT_MESSAGE" value="prove banner 2" />
+    <MESSAGE value="rimosso recaptcha dalla base" />
+    <MESSAGE value="aggiunto lazyload per cercare di risolvere le prestazioni della index.html" />
+    <MESSAGE value="prova async js" />
+    <MESSAGE value="prova compress" />
+    <MESSAGE value="refactor homepage" />
+    <MESSAGE value="refactor homepage aggiunto preload ai css" />
+    <MESSAGE value="refactor homepage aggiunto defer 2645790.js" />
+    <MESSAGE value="refactor homepage eliminato defer 2645790.js" />
+    <MESSAGE value="eliminato iubenda temporaneamente" />
+    <MESSAGE value="dimensioni fisse immagini prima pagina" />
+    <MESSAGE value="sistemazione index.html" />
+    <MESSAGE value="ridimensione logo" />
+    <MESSAGE value="ridimensione logo 2" />
+    <MESSAGE value="ridimensione immagini" />
+    <MESSAGE value="eliminato preload styles.css" />
+    <MESSAGE value="eliminato preload styles.css 2" />
+    <MESSAGE value="immagini ottimizzate" />
+    <MESSAGE value="immagini index ottimizzate" />
+    <MESSAGE value="immagini index ottimizzate 2" />
+    <MESSAGE value="immagini banner ridimen" />
+    <MESSAGE value="sistemati css base.html" />
+    <MESSAGE value="ripristinati css base.html" />
+    <MESSAGE value="ripristinati css base.html aggiunti" />
+    <MESSAGE value="ripristinati css base.html eliminati ennesima prova" />
+    <MESSAGE value="fix carousel vari" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix carousel vari" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app.py</url>
-          <line>158</line>
+          <line>182</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app.py</url>
-          <line>155</line>
+          <line>179</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app.py</url>
-          <line>200</line>
+          <line>224</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app.py</url>
-          <line>119</line>
+          <line>143</line>
           <option name="timeStamp" value="6" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app.py</url>
-          <line>264</line>
+          <line>288</line>
           <option name="timeStamp" value="8" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app.py</url>
-          <line>277</line>
+          <line>301</line>
           <option name="timeStamp" value="9" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app.py</url>
-          <line>169</line>
+          <line>193</line>
           <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/app.py</url>
+          <line>102</line>
+          <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/app.py</url>
+          <line>114</line>
+          <option name="timeStamp" value="16" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
