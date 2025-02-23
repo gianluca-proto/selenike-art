@@ -112,6 +112,16 @@ def home():
 
         response_carousel_erotic = get_resources('upload','img/carousel_erotic/')
         carousel_erotic_images = [img['secure_url'] for img in response_carousel_erotic.get('resources',[])]
+
+        response_carousel_comics = get_resources('upload','img/carousel_comics/')
+        carousel_comics_images = [img['secure_url'] for img in response_carousel_comics.get('resources',[])]
+
+        response_carousel_customized = get_resources('upload',
+                                                 'img/carousel_customized/')
+        carousel_customized_images = [img['secure_url'] for img in
+                                  response_carousel_customized.get('resources',
+                                                               [])]
+
         app.logger.info(f"Desktop images loaded: {desktop_images}")
         app.logger.info(f"Mobile images loaded: {mobile_images}")
         app.logger.info(f"Carousel Animal images loaded: {carousel_animal_images}")
@@ -121,11 +131,15 @@ def home():
         mobile_images = []
         carousel_animal_images = []
         carousel_erotic_images = []
+        carousel_comics_images = []
+        carousel_customized_images = []
     return render_template('index.html',
                            carousel_images_desktop=desktop_images,
                            carousel_images_mobile=mobile_images,
                            carousel_animal_images=carousel_animal_images,
-                           carousel_erotic_images=carousel_erotic_images)
+                           carousel_erotic_images=carousel_erotic_images,
+                           carousel_comics_images=carousel_comics_images,
+                           carousel_customized_images=carousel_customized_images)
 
 
 

@@ -25,14 +25,65 @@ body {
     z-index: 1000;
 }
 
+
+
+
 .nav-link {
-    color: #41c4ef !important;
-    text-align: center;
+    position: relative;
+    color: #41c4ef !important; /* Assicura che il colore azzurro sia prioritario */
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-shadow: 0 0 8px #ff69b4; /* Ombra rosa intorno al testo */
+    transition: color 0.3s ease; /* Transizione fluida per il cambio di colore */
 }
 
 .nav-link:hover {
-    color: #FFF !important;
+    color: #FFF !important; /* Cambia il colore del testo in bianco e forza la priorità */
 }
+
+@media (max-width: 767.98px) {
+    .navbar-collapse {
+        text-align: center;
+    }
+
+    .navbar-nav {
+        float: none;
+        display: inline-block;
+    }
+
+    .navbar-nav .nav-item {
+        display: inline-block;
+    }
+
+    .navbar-nav .nav-link {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+}
+
+
+@media (max-width: 1024px) {
+    .navbar-collapse {
+        text-align: center;
+    }
+
+    .navbar-nav {
+        float: none;
+        display: inline-block;
+        width: 100%; /* Assicurati che occupino l'intera larghezza per il centratura corretta */
+    }
+
+    .navbar-nav .nav-item {
+        display: inline-block;
+    }
+
+    .navbar-nav .nav-link {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+}
+
+
 
 .social-icon {
     font-size: 32px;
@@ -207,9 +258,31 @@ img {
     pointer-events: all;
 }
 
-.gallery-filter {
-    margin-bottom: 20px;
+/* Stile generale dei bottoni */
+.gallery-filter .btn {
+    background-color: #6f42c1; /* Colore viola della navbar */
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    font-size: 16px;
+    border-radius: 50px; /* Forma arrotondata */
+    box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease-in-out;
+    margin: 5px;
 }
+
+/* Effetto hover */
+.gallery-filter .btn:hover {
+    background-color: #5a32a3; /* Viola più scuro */
+    transform: translateY(-2px); /* Effetto leggero di sollevamento */
+}
+
+/* Effetto attivo/selezionato */
+.gallery-filter .btn.active {
+    background-color: #4c2885; /* Viola più scuro quando selezionato */
+    box-shadow: inset 2px 2px 8px rgba(0, 0, 0, 0.2);
+}
+
 
 .gallery-filter button {
     margin-right: 10px;
@@ -425,4 +498,138 @@ img {
 }
 
 
+.swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.swiper-container {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden; /* Evita che le immagini escano dai limiti */
+    padding: 10px 0;
+}
+
+
+/* Contenitore Swiper: leggermente più stretto per far spazio alle frecce */
+.swiper-container {
+    width: 90%; /* Riduci leggermente per lasciare spazio alle frecce */
+    margin: auto; /* Mantieni centrato */
+    padding: 10px 0;
+}
+
+/* Dimensioni delle immagini per lasciare spazio alle frecce */
+.swiper-slide img {
+    width: 95%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+
+
+/* Riduzione della dimensione delle frecce */
+.swiper-button-prev,
+.swiper-button-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px; /* CAMBIA QUESTO per ridurre la dimensione */
+    height: 30px; /* CAMBIA QUESTO per ridurre la dimensione */
+    background-color: #6f42c1; /* Bollino viola */
+    border-radius: 50%;
+    opacity:50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Aumenta la visibilità e lo spessore della freccia */
+.swiper-button-prev::after,
+.swiper-button-next::after {
+    font-size: 16px; /* Ingrandisce la freccia */
+    color: white; /* Colore della freccia */
+    text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5); /* Effetto di spessore */
+}
+
+
+
+/* Sposta le frecce leggermente più interne */
+.swiper-button-prev {
+    left: -5px; /* Più vicino all'immagine */
+}
+
+.swiper-button-next {
+    right: -5px;
+}
+
+/* Posiziona i pallini sotto il contenitore Swiper */
+.swiper-pagination {
+    position: relative !important; /* Rimuove il posizionamento assoluto */
+    bottom: -20px; /* Sposta più in basso sotto le immagini */
+    text-align: center;
+    width: 100%;
+    margin-top: 10px; /* Distanza dalle immagini */
+}
+
+/* Personalizza i pallini */
+.swiper-pagination-bullet {
+    background-color: #6f42c1 !important; /* Colore viola della navbar */
+    width: 10px; /* Dimensione */
+    height: 10px;
+    opacity: 0.3;
+}
+
+.swiper-pagination-bullet-active {
+    opacity: 0.9;
+}
+
+/* Stile generale del modal per centrare l'immagine e oscurare il background */
+.modal-open .modal {
+    background-color: rgba(0, 0, 0, 0.75); /* Oscura il background per mettere in risalto l'immagine */
+}
+
+.modal-dialog {
+    max-width: 100%; /* Imposta la larghezza massima */
+    margin: 0 auto; /* Centra il modal orizzontalmente */
+    height: 100%; /* Assicura che il modal prenda l'altezza intera della viewport */
+    display: flex;
+    align-items: center; /* Centra verticalmente il contenuto del modal */
+    justify-content: center;
+}
+
+.modal-content {
+    width: auto; /* Permette al contenuto di adattarsi alla dimensione dell'immagine */
+    height: auto; /* Altezza auto per adattarsi al contenuto */
+    background: transparent; /* Rendi lo sfondo del contenuto trasparente */
+    border: none; /* Nessun bordo per il contenuto del modal */
+}
+
+/* Stili per l'immagine all'interno del modal */
+#modalImage {
+    max-height: 90vh; /* Imposta un'altezza massima per assicurare che non esca dalla viewport */
+    max-width: 90vw; /* Larghezza massima per evitare overflow orizzontale */
+}
+
+/* Frecce di navigazione */
+.btn-dark {
+    position: fixed; /* Posizione fissa rispetto alla viewport */
+    top: 50%; /* Centra verticalmente */
+    z-index: 1051; /* Assicurati che siano visibili sopra l'immagine e il modal */
+    transform: translateY(-50%);
+}
+
+.btn-dark.start-0 {
+    left: 10px; /* Distanza dal lato sinistro della viewport */
+}
+
+.btn-dark.end-0 {
+    right: 10px; /* Distanza dal lato destro della viewport */
+}
+
+.btn-dark:hover {
+    background-color: rgba(0, 0, 0, 0.8); /* Effetto di scurimento al passaggio del mouse */
+}
 

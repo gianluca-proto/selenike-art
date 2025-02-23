@@ -97,37 +97,117 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-    let carousels = document.querySelectorAll(".carousel");
+    let swipers = document.querySelectorAll(".swiper-container");
 
-    carousels.forEach(carousel => {
-        let carouselInner = carousel.querySelector(".carousel-inner");
-        let items = Array.from(carouselInner.children);
-
-        if (items.length > 3) {
-            // **Cloniamo le prime 3 immagini e le aggiungiamo alla fine**
-            items.slice(0, 3).forEach(item => {
-                let clone = item.cloneNode(true);
-                clone.classList.remove("active");
-                carouselInner.appendChild(clone);
-            });
-
-            // **Loop infinito senza scatti**
-            carousel.addEventListener("slid.bs.carousel", function () {
-                let activeItem = carouselInner.querySelector(".carousel-item.active");
-                let activeIndex = [...carouselInner.children].indexOf(activeItem);
-
-                if (activeIndex >= items.length) {
-                    setTimeout(() => {
-                        $(carousel).carousel(0);
-                    }, 500);
+    swipers.forEach(swiperEl => {
+        new Swiper(swiperEl, {
+            slidesPerView: 1,
+            spaceBetween: 10,
+            loop: true,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
+            speed: 1000,
+            navigation: {
+                nextEl: swiperEl.querySelector('.swiper-button-next'),
+                prevEl: swiperEl.querySelector('.swiper-button-prev'),
+            },
+            pagination: {
+                el: swiperEl.querySelector('.swiper-pagination'),
+                clickable: true,
+            },
+            breakpoints: {
+                768: {
+                    slidesPerView: 3,
+                    slidesPerGroup: 1
                 }
-            });
-
-            // **Auto-play infinito senza blocchi**
-            $(carousel).carousel({
-                interval: 3000, // Cambia immagine ogni 3 secondi
-                wrap: false
-            });
-        }
+            }
+        });
     });
 });
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    let swipers = document.querySelectorAll(".swiper-container");
+
+    swipers.forEach(swiperEl => {
+        new Swiper(swiperEl, {
+            slidesPerView: 1,
+            spaceBetween: 10,
+            loop: true,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
+            speed: 1000,
+            navigation: {
+                nextEl: swiperEl.querySelector('.swiper-button-next'),
+                prevEl: swiperEl.querySelector('.swiper-button-prev'),
+            },
+            pagination: {
+                el: swiperEl.querySelector('.swiper-pagination'),
+                clickable: true,
+            },
+            breakpoints: {
+                768: {
+                    slidesPerView: 3,
+                    slidesPerGroup: 1
+                }
+            }
+        });
+    });
+});
+
+let images = [];
+let currentIndex = 0;
+
+function openImageModal(event, imageSrc) {
+    event.preventDefault(); // Evita il comportamento predefinito dei link
+
+    let modalElement = document.getElementById("imageModal");
+    let modalImage = document.getElementById("modalImage");
+
+    if (!modalElement || !modalImage) {
+        console.error("Modal or image element not found!");
+        return;
+    }
+
+    let modal = new bootstrap.Modal(modalElement);
+
+    // Trova tutte le immagini sia dello Swiper sia della galleria
+    let galleryImages = document.querySelectorAll('.gallery-item img, .swiper-slide img');
+    images = Array.from(galleryImages).map(img => img.src);
+
+    // Trova l'indice dell'immagine cliccata
+    currentIndex = images.indexOf(imageSrc);
+
+    if (currentIndex === -1) {
+        console.error("Image not found in the list.");
+        return;
+    }
+
+    // Imposta la sorgente dell'immagine nel modale
+    modalImage.src = imageSrc;
+    modal.show();
+}
+// Funzione per passare all'immagine precedente
+function prevImage() {
+    if (images.length > 0) {
+        currentIndex = (currentIndex > 0) ? currentIndex - 1 : images.length - 1;
+        document.getElementById("modalImage").src = images[currentIndex];
+    }
+}
+
+// Funzione per passare all'immagine successiva
+function nextImage() {
+    if (images.length > 0) {
+        currentIndex = (currentIndex < images.length - 1) ? currentIndex + 1 : 0;
+        document.getElementById("modalImage").src = images[currentIndex];
+    }
+}
+
+
+
+

@@ -4,17 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14253df0-ae5a-481e-8a12-af9d47af9467" name="Changes" comment="fix carousel vari">
+    <list default="true" id="14253df0-ae5a-481e-8a12-af9d47af9467" name="Changes" comment="modificata prima pagina">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/css/styles-min.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/styles-min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/css/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/banner/Banner1-mobile.webp" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/banner/Banner1-mobile.webp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/banner/Banner3-mobile.webp" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/banner/Banner3-mobile.webp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/js/funzioni.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/funzioni.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base_dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base_dashboard.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/gallery.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/gallery.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -85,14 +80,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1722120043842</updated>
-    </task>
-    <task id="LOCAL-00003" summary="fix per primo deploy gunicorn">
-      <option name="closed" value="true" />
-      <created>1728982170338</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1728982170338</updated>
     </task>
     <task id="LOCAL-00004" summary="fix per primo deploy gunicorn 2">
       <option name="closed" value="true" />
@@ -478,7 +465,15 @@
       <option name="project" value="LOCAL" />
       <updated>1729591467410</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="modificata prima pagina">
+      <option name="closed" value="true" />
+      <created>1740267429548</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1740267429549</updated>
+    </task>
+    <option name="localTasksCounter" value="53" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -503,7 +498,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="rimosso recaptcha dalla base" />
     <MESSAGE value="aggiunto lazyload per cercare di risolvere le prestazioni della index.html" />
     <MESSAGE value="prova async js" />
     <MESSAGE value="prova compress" />
@@ -528,44 +522,45 @@
     <MESSAGE value="ripristinati css base.html aggiunti" />
     <MESSAGE value="ripristinati css base.html eliminati ennesima prova" />
     <MESSAGE value="fix carousel vari" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix carousel vari" />
+    <MESSAGE value="modificata prima pagina" />
+    <option name="LAST_COMMIT_MESSAGE" value="modificata prima pagina" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app.py</url>
-          <line>182</line>
+          <line>195</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app.py</url>
-          <line>179</line>
+          <line>192</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app.py</url>
-          <line>224</line>
+          <line>237</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app.py</url>
-          <line>143</line>
+          <line>156</line>
           <option name="timeStamp" value="6" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app.py</url>
-          <line>288</line>
+          <line>301</line>
           <option name="timeStamp" value="8" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app.py</url>
-          <line>301</line>
+          <line>314</line>
           <option name="timeStamp" value="9" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app.py</url>
-          <line>193</line>
+          <line>206</line>
           <option name="timeStamp" value="12" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -575,7 +570,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app.py</url>
-          <line>114</line>
+          <line>124</line>
           <option name="timeStamp" value="16" />
         </line-breakpoint>
       </breakpoints>
