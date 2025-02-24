@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     window.openImageModal = function (event, imageSrc) {
         event.preventDefault();
-        images = Array.from(document.querySelectorAll('.gallery-item img')).map(img => img.src);
+        images = Array.from(document.querySelectorAll('.swiper-slide img, .gallery-item img')).map(img => img.src);
         currentIndex = images.indexOf(imageSrc);
 
         let modalImage = document.getElementById('modalImage');
