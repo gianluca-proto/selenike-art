@@ -8,12 +8,12 @@
             <h3>{{ category | capitalize }}</h3>
             <div class="row">
                 {% for image in image_files %}
-                <div class="col-md-4 col-lg-3 mb-4">
-                    <div class="card img-manage">
-                        <img src="{{ image['url'] }}" alt="{{ image['filename'] }}" class="card-img-top">
-                        <div class="card-body">
-                            <button onclick="deleteImage('{{ category }}', '{{ image.filename }}')" class="btn btn-danger">Delete</button>
-                            <select class="form-control"
+                <div class="col-md-3 mb-4 d-flex align-items-center">
+                    <div class="card w-100 p-2" style="height: 300px; display: flex; flex-direction: column; justify-content: space-between;">
+                        <img src="{{ image['url'] }}" alt="{{ image['filename'] }}" class="img-thumbnail" style="width: 100%; height: 200px; object-fit: cover;">
+                        <div class="mt-2 d-flex justify-content-between">
+                            <button onclick="deleteImage('{{ category }}', '{{ image.filename }}')" class="btn btn-danger btn-sm">Delete</button>
+                            <select class="form-control form-control-sm w-auto"
                                     data-category="{{ category }}"
                                     data-filename="{{ image.filename }}"
                                     data-public-id="{{ image.filename }}"

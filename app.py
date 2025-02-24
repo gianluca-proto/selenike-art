@@ -249,29 +249,55 @@ def admin_logout():
 class UploadForm(FlaskForm):
     image = FileField('Image File', validators=[DataRequired()])
 
-# Rotta per il caricamento delle immagini (protetta)
+
 @app.route('/admin/upload', methods=['GET', 'POST'])
 @login_required
-def upload_image():
+def upload_images():
     if not session.get('admin_logged_in'):
         flash('Per favore, effettua il login per accedere a questa pagina.', 'warning')
         return redirect(url_for('admin_login'))
+
     form = UploadForm()
-    if form.validate_on_submit():
-        file_to_upload = form.image.data
-        filename = secure_filename(file_to_upload.filename)
-        # Carica l'immagine su Cloudinary
-        upload_result = cloudinary.uploader.upload(
-            file_to_upload,
-            folder='img/gallery/altro',
-            format='webp'
-        )
-        if upload_result.get('secure_url'):
-            flash('Immagine caricata con successo su Cloudinary!', 'success')
-            return redirect(url_for('upload_image'))
+
+    if request.method == 'POST':
+        files = request.files.getlist('images')  # Prendi tutti i file
+
+        if not files or all(f.filename == '' for f in files):
+            flash('⚠ Nessun file ricevuto dal client!', 'danger')
+            app.logger.warning("Nessun file selezionato nel form!")
+            return redirect(url_for('upload_images'))
+
+        uploaded_files = []
+        for file_to_upload in files:
+            if file_to_upload.filename == '':
+                continue  # Salta file vuoti
+
+            filename = secure_filename(file_to_upload.filename)
+            app.logger.info(f"🔄 Uploading file: {filename}")
+
+            try:
+                upload_result = cloudinary.uploader.upload(
+                    file_to_upload,
+                    folder='img/gallery/altro',
+                    format='webp'
+                )
+                if upload_result.get('secure_url'):
+                    uploaded_files.append(upload_result.get('secure_url'))
+                    app.logger.info(f"✅ File caricato con successo: {upload_result.get('secure_url')}")
+            except Exception as e:
+                app.logger.error(f"❌ Errore upload {filename}: {str(e)}")
+                flash(f'Errore durante il caricamento di {filename}: {str(e)}', 'danger')
+
+        if uploaded_files:
+            flash(f'{len(uploaded_files)} immagini caricate con successo!', 'success')
         else:
-            flash('Caricamento non riuscito.', 'danger')
+            flash('❌ Nessuna immagine caricata!', 'danger')
+
+        return redirect(url_for('upload_images'))
+
     return render_template('upload.html', form=form)
+
+
 
 @app.route('/manage-gallery')
 def manage_gallery():
