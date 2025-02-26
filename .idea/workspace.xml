@@ -4,22 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14253df0-ae5a-481e-8a12-af9d47af9467" name="Changes" comment="sistemata parte dashboard admin">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/selenike-art.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/selenike-art.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/css/styles-min.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/styles-min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/funzioni.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/funzioni.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/admin.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/admin_security.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin_security.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base_dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base_dashboard.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/commissions.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/commissions.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/contact.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/contact.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/login_dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/login_dashboard.html" afterDir="false" />
-    </list>
+    <list default="true" id="14253df0-ae5a-481e-8a12-af9d47af9467" name="Changes" comment="implementata sicurezza sito" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -88,14 +73,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1722120043842</updated>
-    </task>
-    <task id="LOCAL-00006" summary="fix per primo deploy gunicorn 4">
-      <option name="closed" value="true" />
-      <created>1728983897634</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1728983897634</updated>
     </task>
     <task id="LOCAL-00007" summary="fix per primo deploy gunicorn 5">
       <option name="closed" value="true" />
@@ -481,7 +458,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740411298013</updated>
     </task>
-    <option name="localTasksCounter" value="55" />
+    <task id="LOCAL-00055" summary="implementata sicurezza sito">
+      <option name="closed" value="true" />
+      <created>1740566096214</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1740566096214</updated>
+    </task>
+    <option name="localTasksCounter" value="56" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -506,7 +491,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="prova compress" />
     <MESSAGE value="refactor homepage" />
     <MESSAGE value="refactor homepage aggiunto preload ai css" />
     <MESSAGE value="refactor homepage aggiunto defer 2645790.js" />
@@ -531,6 +515,7 @@
     <MESSAGE value="modificata prima pagina" />
     <MESSAGE value="fix funzioni.js" />
     <MESSAGE value="sistemata parte dashboard admin" />
-    <option name="LAST_COMMIT_MESSAGE" value="sistemata parte dashboard admin" />
+    <MESSAGE value="implementata sicurezza sito" />
+    <option name="LAST_COMMIT_MESSAGE" value="implementata sicurezza sito" />
   </component>
 </project>
