@@ -54,18 +54,40 @@ document.addEventListener("DOMContentLoaded", function () {
     let images = [];
     let currentIndex = 0;
 
-    window.openImageModal = function (event, imageSrc) {
-        event.preventDefault();
-        images = Array.from(document.querySelectorAll('.swiper-slide img, .gallery-item img')).map(img => img.src);
-        currentIndex = images.indexOf(imageSrc);
+ window.openImageModal = function (event, imageSrc) {
+    event.preventDefault();
 
-        let modalImage = document.getElementById('modalImage');
-        if (modalImage) {
-            modalImage.src = imageSrc;
-            let modal = new bootstrap.Modal(document.getElementById('imageModal'));
-            modal.show();
-        }
-    };
+    let modalElement = document.getElementById("imageModal");
+    let modalImage = document.getElementById("modalImage");
+
+    if (!modalElement || !modalImage) {
+        console.error("⚠️ Modale o immagine non trovati!");
+        return;
+    }
+
+    // Controlla se Bootstrap è disponibile prima di creare il modale
+    if (typeof bootstrap === "undefined") {
+        console.error("⚠️ Bootstrap non è caricato! Verifica che sia incluso prima di funzioni.js.");
+        return;
+    }
+
+    // Trova tutte le immagini nella galleria e nello Swiper
+    let galleryImages = document.querySelectorAll('.swiper-slide img, .gallery-item img');
+    images = Array.from(galleryImages).map(img => img.src);
+
+    // Trova l'indice dell'immagine cliccata
+    currentIndex = images.indexOf(imageSrc);
+
+    if (currentIndex === -1) {
+        console.error("⚠️ Immagine non trovata nella lista.");
+        return;
+    }
+
+    let modal = bootstrap.Modal.getOrCreateInstance(modalElement);
+    modalImage.src = imageSrc;
+    modal.show();
+};
+
 
     window.prevImage = function () {
         if (images.length > 0) {
@@ -128,38 +150,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-
-document.addEventListener("DOMContentLoaded", function () {
-    let swipers = document.querySelectorAll(".swiper-container");
-
-    swipers.forEach(swiperEl => {
-        new Swiper(swiperEl, {
-            slidesPerView: 1,
-            spaceBetween: 10,
-            loop: true,
-            autoplay: {
-                delay: 3000,
-                disableOnInteraction: false,
-            },
-            speed: 1000,
-            navigation: {
-                nextEl: swiperEl.querySelector('.swiper-button-next'),
-                prevEl: swiperEl.querySelector('.swiper-button-prev'),
-            },
-            pagination: {
-                el: swiperEl.querySelector('.swiper-pagination'),
-                clickable: true,
-            },
-            breakpoints: {
-                768: {
-                    slidesPerView: 3,
-                    slidesPerGroup: 1
-                }
-            }
-        });
-    });
-});
-
 let images = [];
 let currentIndex = 0;
 
@@ -209,5 +199,35 @@ function nextImage() {
 }
 
 
+document.addEventListener("DOMContentLoaded", function () {
+    let swipers = document.querySelectorAll(".swiper-container");
+
+    swipers.forEach(swiperEl => {
+        new Swiper(swiperEl, {
+            slidesPerView: 1,
+            spaceBetween: 10,
+            loop: true,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
+            speed: 1000,
+            navigation: {
+                nextEl: swiperEl.querySelector('.swiper-button-next'),
+                prevEl: swiperEl.querySelector('.swiper-button-prev'),
+            },
+            pagination: {
+                el: swiperEl.querySelector('.swiper-pagination'),
+                clickable: true,
+            },
+            breakpoints: {
+                768: {
+                    slidesPerView: 3,
+                    slidesPerGroup: 1
+                }
+            }
+        });
+    });
+});
 
 

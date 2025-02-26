@@ -15,9 +15,24 @@
                     <label for="password">Password</label>
                     {{ form.password(class="form-control") }}
                 </div>
+
+                <!-- reCAPTCHA Token -->
+                <input type="hidden" id="recaptchaResponse" name="recaptcha_response">
+
                 <button type="submit" class="btn btn-primary w-100 mt-3">Login</button>
             </form>
         </div>
     </div>
 </div>
+
+<!-- Google reCAPTCHA v3 -->
+<script src="https://www.google.com/recaptcha/api.js?render={{ recaptcha_site_key }}"></script>
+
+<script>
+grecaptcha.ready(function() {
+    grecaptcha.execute('{{ app.config["RECAPTCHA_SITE_KEY"] }}', {action: 'login'}).then(function(token) {
+        document.getElementById('recaptchaResponse').value = token;
+    });
+});
+</script>
 {% endblock %}

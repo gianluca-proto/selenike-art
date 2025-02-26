@@ -14,47 +14,41 @@
     {% endwith %}
     <div class="row">
         <div class="col-lg-6 col-md-12">
-            <form method="POST" action="/contact">
-                <div class="form-group">
-                    <label for="name">Il tuo nome</label>
-                    <input type="text" class="form-control" id="name" name="name" placeholder="Il tuo nome" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">La tua email</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="La tua email" required>
-                </div>
-                <div class="form-group">
-                    <label for="subject">Oggetto</label>
-                    <input type="text" class="form-control" id="subject" name="subject" placeholder="Oggetto" required>
-                </div>
-                <div class="form-group">
-                    <label for="drawingType">Tipo Disegno</label>
-                    <select class="form-control" id="drawingType" name="drawingType" required>
-                        <option>Digitale</option>
-                        <option>Cartaceo</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="format">Formato</label>
-                    <select class="form-control" id="format" name="format" required>
-                        <option>A3: 29,7 x 42,0 cm</option>
-                        <option>A4: 21,0 x 29,7 cm</option>
-                        <option>A5: 14,8 x 21,0 cm</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="message">Il tuo messaggio</label>
-                    <textarea class="form-control" id="message" name="message" rows="5" placeholder="Il tuo messaggio" required></textarea>
-                </div>
-                 <div class="form-group">
-                    <input type="checkbox" id="privacy-consent" name="privacy-consent" required>
-                    <label for="privacy-consent">Accetto la <a href="/privacy-policy">Politica sulla Privacy</a></label>
-                 </div>
-                <input type="hidden" id="recaptchaResponse" name="recaptcha_response">
 
-                <button type="submit" class="btn btn-primary">Invia</button>
+            <form method="POST">
+    {{ form.hidden_tag() }}  <!-- ✅ Questo ora funzionerà -->
+    <div class="form-group">
+        <label for="name">Il tuo nome</label>
+        {{ form.name(class="form-control") }}
+    </div>
+    <div class="form-group">
+        <label for="email">La tua email</label>
+        {{ form.email(class="form-control") }}
+    </div>
+    <div class="form-group">
+        <label for="subject">Oggetto</label>
+        {{ form.subject(class="form-control") }}
+    </div>
+    <div class="form-group">
+        <label for="drawingType">Tipo Disegno</label>
+        {{ form.drawingType(class="form-control") }}
+    </div>
+    <div class="form-group">
+        <label for="format">Formato</label>
+        {{ form.format(class="form-control") }}
+    </div>
+    <div class="form-group">
+        <label for="message">Il tuo messaggio</label>
+        {{ form.message(class="form-control") }}
+    </div>
+    <div class="form-group">
+        <input type="checkbox" id="privacy-consent" name="privacy-consent" required>
+        <label for="privacy-consent">Accetto la <a href="/privacy-policy">Politica sulla Privacy</a></label>
+    </div>
+    <input type="hidden" id="recaptchaResponse" name="recaptcha_response">
+    <button type="submit" class="btn btn-primary">Invia</button>
+</form>
 
-            </form>
         </div>
 
         <script src="https://www.google.com/recaptcha/api.js?render=6LfRNVMgAAAAAG-4j_sBpFtjnERUpbtuQWC7r6zG"></script>

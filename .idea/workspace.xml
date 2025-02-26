@@ -4,12 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14253df0-ae5a-481e-8a12-af9d47af9467" name="Changes" comment="fix funzioni.js">
+    <list default="true" id="14253df0-ae5a-481e-8a12-af9d47af9467" name="Changes" comment="sistemata parte dashboard admin">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/selenike-art.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/selenike-art.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/funzioni-dashboard-min.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/funzioni-dashboard-min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/manage_gallery.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/manage_gallery.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/upload.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/upload.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/css/styles-min.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/styles-min.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/js/funzioni.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/funzioni.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/admin.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/admin_security.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/admin_security.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base_dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base_dashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/commissions.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/commissions.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/contact.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/contact.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/login_dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/login_dashboard.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,7 +55,7 @@
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
     &quot;last_opened_file_path&quot;: &quot;/home/popdeveloper/personal_project/selenike-art/static/img&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;debugger.dataViews.python.type.renderers&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
 }</component>
   <component name="RecentsManager">
@@ -79,14 +88,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1722120043842</updated>
-    </task>
-    <task id="LOCAL-00005" summary="fix per primo deploy gunicorn 3">
-      <option name="closed" value="true" />
-      <created>1728982644829</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1728982644829</updated>
     </task>
     <task id="LOCAL-00006" summary="fix per primo deploy gunicorn 4">
       <option name="closed" value="true" />
@@ -472,7 +473,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740407848514</updated>
     </task>
-    <option name="localTasksCounter" value="54" />
+    <task id="LOCAL-00054" summary="sistemata parte dashboard admin">
+      <option name="closed" value="true" />
+      <created>1740411298013</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1740411298013</updated>
+    </task>
+    <option name="localTasksCounter" value="55" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -497,7 +506,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="prova async js" />
     <MESSAGE value="prova compress" />
     <MESSAGE value="refactor homepage" />
     <MESSAGE value="refactor homepage aggiunto preload ai css" />
@@ -522,6 +530,7 @@
     <MESSAGE value="fix carousel vari" />
     <MESSAGE value="modificata prima pagina" />
     <MESSAGE value="fix funzioni.js" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix funzioni.js" />
+    <MESSAGE value="sistemata parte dashboard admin" />
+    <option name="LAST_COMMIT_MESSAGE" value="sistemata parte dashboard admin" />
   </component>
 </project>

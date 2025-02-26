@@ -530,40 +530,79 @@ img {
 
 
 
-/* Riduzione della dimensione delle frecce */
+/* Stile delle frecce Swiper */
 .swiper-button-prev,
 .swiper-button-next {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 30px; /* CAMBIA QUESTO per ridurre la dimensione */
-    height: 30px; /* CAMBIA QUESTO per ridurre la dimensione */
-    background-color: #6f42c1; /* Bollino viola */
+    width: 20px; /* Aumenta la dimensione */
+    height: 20px;
+    background-color: rgba(111, 66, 193, 0.8); /* Bollino viola semi-trasparente */
     border-radius: 50%;
-    opacity:50%;
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+    font-size: 6px;
+    color: #41c4ef !important;
 }
 
-/* Aumenta la visibilità e lo spessore della freccia */
+
+/* Rimuove il testo predefinito delle frecce Swiper */
 .swiper-button-prev::after,
 .swiper-button-next::after {
-    font-size: 16px; /* Ingrandisce la freccia */
-    color: white; /* Colore della freccia */
-    text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.5); /* Effetto di spessore */
+    content: none !important; /* Rimuove qualsiasi contenuto automatico */
+    display: none !important;
 }
 
 
 
-/* Sposta le frecce leggermente più interne */
+/* Stile di base delle frecce */
+.swiper-button-prev,
+.swiper-button-next {
+    width: 25px; /* Ridotta dimensione */
+    height: 25px;
+    background-color: rgba(111, 66, 193, 0.8); /* Colore viola con opacità */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.3s ease-in-out, background 0.3s ease-in-out; /* Effetto di transizione */
+}
+
+/* Cambia l'opacità al passaggio del mouse */
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+    opacity: 0.5; /* Riduce l'opacità per l'effetto sbiadito */
+    background-color: rgba(111, 66, 193, 0.6); /* Rende il colore più trasparente */
+}
+
+/* Personalizza l'icona all'interno delle frecce */
+.swiper-button-prev i,
+.swiper-button-next i {
+    font-size: 12px; /* Rimpicciolisci l'icona */
+    color: white;
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Sbiadisce anche l'icona al passaggio del mouse */
+.swiper-button-prev:hover i,
+.swiper-button-next:hover i {
+    opacity: 0.5; /* Effetto sbiadito anche per l'icona */
+}
+
+
+/* Posizionamento delle frecce */
 .swiper-button-prev {
-    left: -5px; /* Più vicino all'immagine */
+    left: 2px;
 }
 
 .swiper-button-next {
-    right: -5px;
+    right: 2px;
 }
+
 
 /* Posiziona i pallini sotto il contenitore Swiper */
 .swiper-pagination {
