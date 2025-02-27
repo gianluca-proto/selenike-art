@@ -5,6 +5,16 @@
     <div class="row justify-content-center">
         <div class="col-md-4">
             <h2 class="text-center mb-4">Login Amministratore</h2>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="alert alert-danger">
+                {% for category, message in messages %}
+                {{ message }}
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+
             <form method="POST">
                 {{ form.hidden_tag() }}
                 <div class="form-group">
@@ -29,10 +39,25 @@
 <script src="https://www.google.com/recaptcha/api.js?render={{ recaptcha_site_key }}"></script>
 
 <script>
-grecaptcha.ready(function() {
-    grecaptcha.execute('{{ app.config["RECAPTCHA_SITE_KEY"] }}', {action: 'login'}).then(function(token) {
-        document.getElementById('recaptchaResponse').value = token;
+document.addEventListener("DOMContentLoaded", function() {
+    grecaptcha.ready(function() {
+        grecaptcha.execute('{{ recaptcha_site_key }}', {action: 'contact'}).then(function(token) {
+            console.log("Generated reCAPTCHA token:", token);
+            document.getElementById('recaptchaResponse').value = token;
+        }).catch(function(error) {
+            console.error("reCAPTCHA error:", error);
+        });
+    });
+
+    document.querySelector("form").addEventListener("submit", function(event) {
+        if (document.getElementById('recaptchaResponse').value === "") {
+            event.preventDefault();  // Blocca l'invio
+            alert("Attendi che il reCAPTCHA venga generato prima di inviare il form!");
+        }
     });
 });
 </script>
+
+
+
 {% endblock %}

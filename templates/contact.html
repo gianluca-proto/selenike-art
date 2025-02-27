@@ -4,68 +4,85 @@
 <div class="container my-4">
     <h1 class="text-center mb-4 lobster-font">Contattaci</h1>
     {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div class="alert alert-success">
-                {% for category, message in messages %}
-                    {{ message }}
-                {% endfor %}
-            </div>
-        {% endif %}
+    {% if messages %}
+    <div class="alert alert-success">
+        {% for category, message in messages %}
+        {{ message }}
+        {% endfor %}
+    </div>
+    {% endif %}
     {% endwith %}
     <div class="row">
         <div class="col-lg-6 col-md-12">
-
             <form method="POST">
-    {{ form.hidden_tag() }}  <!-- ✅ Questo ora funzionerà -->
-    <div class="form-group">
-        <label for="name">Il tuo nome</label>
-        {{ form.name(class="form-control") }}
-    </div>
-    <div class="form-group">
-        <label for="email">La tua email</label>
-        {{ form.email(class="form-control") }}
-    </div>
-    <div class="form-group">
-        <label for="subject">Oggetto</label>
-        {{ form.subject(class="form-control") }}
-    </div>
-    <div class="form-group">
-        <label for="drawingType">Tipo Disegno</label>
-        {{ form.drawingType(class="form-control") }}
-    </div>
-    <div class="form-group">
-        <label for="format">Formato</label>
-        {{ form.format(class="form-control") }}
-    </div>
-    <div class="form-group">
-        <label for="message">Il tuo messaggio</label>
-        {{ form.message(class="form-control") }}
-    </div>
-    <div class="form-group">
-        <input type="checkbox" id="privacy-consent" name="privacy-consent" required>
-        <label for="privacy-consent">Accetto la <a href="/privacy-policy">Politica sulla Privacy</a></label>
-    </div>
-    <input type="hidden" id="recaptchaResponse" name="recaptcha_response">
-    <button type="submit" class="btn btn-primary">Invia</button>
-</form>
-
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    <label for="name">Il tuo nome</label>
+                    {{ form.name(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    <label for="email">La tua email</label>
+                    {{ form.email(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    <label for="subject">Oggetto</label>
+                    {{ form.subject(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    <label for="drawingType">Tipo Disegno</label>
+                    {{ form.drawingType(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    <label for="format">Formato</label>
+                    {{ form.format(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    <label for="message">Il tuo messaggio</label>
+                    {{ form.message(class="form-control") }}
+                </div>
+                <div class="form-group">
+                    <input type="checkbox" id="privacy-consent" name="privacy-consent" required>
+                    <label for="privacy-consent">Accetto la <a href="/privacy-policy">Politica sulla Privacy</a></label>
+                </div>
+                <button type="submit" class="btn btn-primary">Invia</button>
+            </form>
         </div>
 
-        <script src="https://www.google.com/recaptcha/api.js?render=6LfRNVMgAAAAAG-4j_sBpFtjnERUpbtuQWC7r6zG"></script>
+        <!-- Google reCAPTCHA v3 -->
+        <script src="https://www.google.com/recaptcha/api.js?render={{ recaptcha_site_key }}"></script>
 
-<script>
-grecaptcha.ready(function() {
-    grecaptcha.execute('6LfRNVMgAAAAAG-4j_sBpFtjnERUpbtuQWC7r6zG', {action: 'contact'}).then(function(token) {
-        // Puoi aggiungere il token a un campo nascosto nel form o tenerlo per inviarlo con il form
-        document.getElementById('recaptchaResponse').value = token;
-    });
-});
-</script>
+        <input type="hidden" id="recaptchaResponse" name="recaptcha_response">
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                grecaptcha.ready(function() {
+                    grecaptcha.execute("{{ recaptcha_site_key }}", { action: "contact" }).then(function(token) {
+                        console.log("✅ Token generato:", token);
+                        document.getElementById("recaptchaResponse").value = token;
+                    }).catch(function(error) {
+                        console.error("❌ Errore reCAPTCHA:", error);
+                    });
+                });
+            });
+
+            document.querySelector("form").addEventListener("submit", function(event) {
+                let recaptchaField = document.getElementById("recaptchaResponse");
+                if (!recaptchaField.value) {
+                    event.preventDefault();
+                    alert("⚠️ Attendi che il reCAPTCHA venga generato prima di inviare il form!");
+                }
+            });
+        </script>
+
+
+
+
+
         <div class="col-lg-6 col-md-12 text-center">
             <img src="{{ url_for('static', filename='img/Logo-Contattaci.webp') }}" alt="Contact Image" class="img-fluid rounded">
             <div class="mt-4">
                 <p><strong>Pagina Contattaci</strong></p>
-                <p>Benvenuti nella pagina di contatto di Selenike Art! Qui potete inviare le vostre richieste per qualsiasi chiarimento riguardante i lavori di Selenike, acquisti dalla sezione Art Gallery, o per risolvere qualsiasi dubbio o domanda relativa al sito. Compilate il modulo con il vostro nome, un indirizzo email che usate regolarmente, l'oggetto e una breve descrizione della vostra richiesta.</p>
+                <p>Benvenuti nella pagina di contatto di Selenike Art! Qui potete inviare le vostre richieste per qualsiasi chiarimento riguardante i lavori di Selenike, acquisti dalla sezione Art Gallery, o per risolvere qualsiasi dubbio o domanda relativa al sito.</p>
                 <p><strong>Risposta Veloce</strong></p>
                 <p>Garantisco di ricontattarvi entro poche ore per discutere delle vostre esigenze e fornirvi tutte le informazioni necessarie.</p>
                 <p>A presto,<br>Selenike</p>
@@ -73,6 +90,4 @@ grecaptcha.ready(function() {
         </div>
     </div>
 </div>
-
-
 {% endblock %}

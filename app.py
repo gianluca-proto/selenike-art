@@ -22,19 +22,24 @@ from PIL import Image
 from flask import Flask
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-import redis
 import jwt
+import time
 from flask import make_response
+from flask import request, jsonify
+
+rate_limits = {}  # Memorizza i tentativi di accesso per IP
+
 
 app = Flask(__name__)
 
-# Configura Redis come storage backend
-redis_client = redis.Redis(host='localhost', port=6379, db=0)
 
 limiter = Limiter(
     key_func=get_remote_address,
-    storage_uri="redis://localhost:6379",
+    storage_uri="memory://"
 )
+
+limiter.init_app(app)
+
 
 class ContactForm(FlaskForm):
     name = StringField('Nome', validators=[DataRequired()])
@@ -68,9 +73,9 @@ app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 # Protezione CSRF con chiave segreta
 app.config['WTF_CSRF_SECRET_KEY'] = os.getenv('CSRF_SECRET_KEY', 'True')
 
+# Ora Flask può accedere alla variabile
+app.config['RECAPTCHA_SECRET_KEY'] = os.getenv('RECAPTCHA_SECRET_KEY', 'default_value')
 
-# Configurazione reCAPTCHA
-app.config['RECAPTCHA_SECRET_KEY'] = os.getenv('RECAPTCHA_SECRET_KEY')
 app.jinja_env.globals.update(zip=zip)
 
 # Configurazione del logger
@@ -96,26 +101,49 @@ class Admin(db.Model):
     password_hash = db.Column(db.String(256), nullable=False)
 
 
+def rate_limit(max_requests, time_window):
+    def decorator(f):
+        def wrapped(*args, **kwargs):
+            ip = request.remote_addr
+            now = time.time()
+
+            if ip not in rate_limits:
+                rate_limits[ip] = []
+
+            # Rimuove richieste vecchie
+            rate_limits[ip] = [t for t in rate_limits[ip] if
+                               now - t < time_window]
+
+            if len(rate_limits[ip]) >= max_requests:
+                return jsonify({"error": "Too many requests"}), 429
+
+            rate_limits[ip].append(now)
+            return f(*args, **kwargs)
+
+        return wrapped
+
+    return decorator
+
 # Funzione per generare un JWT
 def generate_jwt(user_id):
     expiration = datetime.utcnow() + timedelta(hours=1)  # ✅ CORRETTO
     return jwt.encode({'user_id': user_id, 'exp': expiration}, app.secret_key, algorithm='HS256')
 
 
-# Usa Redis per la blacklist dei token
+revoked_tokens = {}  # Dizionario per gestire i token revocati
+
 def revoke_token(token):
-    redis_client.setex(token, 3600, "revoked")  # Revoca il token per 1 ora
+    revoked_tokens[token] = time.time() + 3600  # Revoca il token per 1 ora
+
 
 def verify_jwt(token):
-    if not token:
-        return None
+    if not token or (token in revoked_tokens and time.time() > revoked_tokens[token]):
+        return None  # Token non valido o revocato
     try:
         payload = jwt.decode(token, app.secret_key, algorithms=['HS256'])
         return payload['user_id']
     except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
         return None
-
-
 
 
 # Decoratore per proteggere le route con JWT
@@ -142,8 +170,6 @@ def validate_image(file):
         return True
     except Exception:
         return False
-
-
 
 
 # Funzione per anonimizzare IP nei log
@@ -205,22 +231,39 @@ class UploadForm(FlaskForm):
     submit = SubmitField('Carica')
 
 
+from dotenv import load_dotenv
+
+load_dotenv()
+app.config['RECAPTCHA_SITE_KEY'] = os.getenv('RECAPTCHA_SITE_KEY')
+app.config['RECAPTCHA_SECRET_KEY'] = os.getenv('RECAPTCHA_SECRET_KEY')
+
 # Protezione CSP e headers HTTP
 @app.after_request
 def set_security_headers(response):
     response.headers['Content-Security-Policy'] = (
-        "default-src 'self'; "
-        "script-src 'self' 'unsafe-inline' https://code.jquery.com https://cdn.jsdelivr.net/npm/ https://cdnjs.cloudflare.com https://cdn.iubenda.com; "
-        "style-src 'self' 'unsafe-inline' https://stackpath.bootstrapcdn.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://fonts.googleapis.com; "
-        "img-src 'self' https://res.cloudinary.com data:; "
-        "font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com https://fonts.googleapis.com; "
-        "connect-src 'self' https://res.cloudinary.com https://fonts.googleapis.com https://fonts.gstatic.com https://cdn.jsdelivr.net;"
+        "default-src 'self' https://www.google.com https://www.gstatic.com https://www.recaptcha.net; "
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://code.jquery.com https://cdn.jsdelivr.net/npm/ "
+        "https://cdnjs.cloudflare.com https://cdn.iubenda.com https://www.google.com https://www.gstatic.com "
+        "https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/; "
+        "style-src 'self' 'unsafe-inline' https://stackpath.bootstrapcdn.com https://cdnjs.cloudflare.com "
+        "https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css https://fonts.googleapis.com https://cdn.iubenda.com; "
+        "style-src-elem 'self' https://cdn.iubenda.com https://stackpath.bootstrapcdn.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net/npm/swiper/; "
+        "img-src 'self' https://res.cloudinary.com data: https://www.google.com https://www.gstatic.com; "
+        "font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com https://fonts.googleapis.com data:; "
+        "frame-src 'self' https://www.google.com/recaptcha/ https://www.recaptcha.net/ https://www.google.com https://www.gstatic.com https://recaptcha.google.com; "
+        "connect-src 'self' https://res.cloudinary.com https://fonts.googleapis.com https://fonts.gstatic.com "
+        "https://cdn.jsdelivr.net https://www.google.com https://www.gstatic.com https://www.recaptcha.net;"
     )
 
-    response.headers['X-Frame-Options'] = 'DENY'
+    response.headers['X-Frame-Options'] = 'SAMEORIGIN'
     response.headers['X-Content-Type-Options'] = 'nosniff'
     response.headers['X-XSS-Protection'] = '1; mode=block'
     return response
+
+
+
+
+
 
 def get_resources(tipo, prefix):
     response_desktop = cloudinary.api.resources(
@@ -323,22 +366,43 @@ def about():
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
     form = ContactForm()
+    recaptcha_response = None  # ✅ Inizializza la variabile
 
     if request.method == 'POST' and form.validate_on_submit():
         recaptcha_response = request.form.get('recaptcha_response')
+
+        # 🔹 Log del token ricevuto
+        app.logger.info(f"Contact - Received reCAPTCHA token: {recaptcha_response}")
+
         if not recaptcha_response:
+            app.logger.error("Contact - Nessun token reCAPTCHA ricevuto!")
             flash('Errore di verifica CAPTCHA: nessuna risposta fornita.', 'error')
             return redirect('/contact')
 
+        # 🔹 Verifica reCAPTCHA con Google
         response = requests.post(
             'https://www.google.com/recaptcha/api/siteverify',
-            data={'secret': app.config['RECAPTCHA_SECRET_KEY'], 'response': recaptcha_response}
+            data={
+                'secret': app.config.get('RECAPTCHA_SECRET_KEY', ''),  # Secret Key
+                'response': recaptcha_response
+            }
         )
         result = response.json()
-        if not result.get('success', False) or result.get('score', 0) < 0.5:
+
+        # 🔹 Log della risposta di Google
+        app.logger.info(f"Contact - Google reCAPTCHA response: {result}")
+
+        if not result.get('success', False):
+            app.logger.error(f"Contact - Errore reCAPTCHA: {result.get('error-codes')}")
+            flash(f"Errore di verifica CAPTCHA: {result.get('error-codes')}", 'error')
+            return redirect('/contact')
+
+        if result.get('score', 0) < 0.5:
+            app.logger.warning("Contact - CAPTCHA score troppo basso, possibile bot.")
             flash('Errore di verifica CAPTCHA, prova di nuovo.', 'error')
             return redirect('/contact')
 
+        # ✅ CAPTCHA SUPERATO - Processiamo il modulo
         nome = form.name.data
         email = form.email.data
         oggetto = form.subject.data
@@ -347,17 +411,20 @@ def contact():
         formato = form.format.data
         consenso = form.privacy_consent.data
 
-        # Creazione e invio dell'email
-        msg = Message(oggetto,
-                      sender=app.config['MAIL_USERNAME'],
-                      recipients=['info@selenikeart.com'],
-                      body=f"Da: {nome} <{email}>\n\nTipo Disegno: {tipo_disegno}\nFormato: {formato}\n\n{messaggio}")
+        # 🔹 Creazione e invio dell'email
+        msg = Message(
+            oggetto,
+            sender=app.config['MAIL_USERNAME'],
+            recipients=['info@selenikeart.com'],
+            body=f"Da: {nome} <{email}>\n\nTipo Disegno: {tipo_disegno}\nFormato: {formato}\n\n{messaggio}"
+        )
         mail.send(msg)
 
         flash('Messaggio inviato con successo!', 'success')
         return redirect('/contact')
 
-    return render_template('contact.html', form=form)
+    return render_template('contact.html', form=form, recaptcha_site_key=app.config.get('RECAPTCHA_SITE_KEY', ''))
+
 
 
 
@@ -384,7 +451,7 @@ def art_gallery():
 
 
 
-
+@limiter.limit("5 per minute")  # 5 tentativi al minuto
 @app.route('/admin')
 @jwt_required
 def admin_dashboard():
@@ -459,6 +526,7 @@ def jwt_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+@limiter.limit("5 per minute")
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
     form = LoginForm()
@@ -466,15 +534,38 @@ def admin_login():
     if request.method == 'POST' and form.validate_on_submit():
         recaptcha_response = request.form.get('recaptcha_response')
 
+        # 🔹 Log del token ricevuto
+        app.logger.info(f"Login - Received reCAPTCHA token: {recaptcha_response}")
+
+        if not recaptcha_response:
+            app.logger.error("Login - Nessun token reCAPTCHA ricevuto!")
+            flash('Errore CAPTCHA: nessuna risposta fornita.', 'danger')
+            return redirect(url_for('admin_login'))
+
+        # 🔹 Verifica reCAPTCHA con Google
         response = requests.post(
             'https://www.google.com/recaptcha/api/siteverify',
-            data={'secret': app.config['RECAPTCHA_SECRET_KEY'], 'response': recaptcha_response}
-        ).json()
+            data={
+                'secret': app.config.get('RECAPTCHA_SECRET_KEY', ''),  # Secret Key
+                'response': recaptcha_response
+            }
+        )
+        result = response.json()
 
-        if not response.get('success', False) or response.get('score', 0) < 0.5:
+        # 🔹 Log della risposta di Google
+        app.logger.info(f"Login - Google reCAPTCHA response: {result}")
+
+        if not result.get('success', False):
+            app.logger.error(f"Login - Errore reCAPTCHA: {result.get('error-codes')}")
+            flash(f"Errore CAPTCHA: {result.get('error-codes')}", 'danger')
+            return redirect(url_for('admin_login'))
+
+        if result.get('score', 0) < 0.5:
+            app.logger.warning("Login - CAPTCHA score troppo basso, possibile bot.")
             flash('Errore CAPTCHA. Sei sicuro di non essere un bot?', 'danger')
             return redirect(url_for('admin_login'))
 
+        # ✅ CAPTCHA SUPERATO - Processiamo il login
         admin = Admin.query.filter_by(username=form.username.data).first()
         if admin and check_password_hash(admin.password_hash, form.password.data):
             access_token = generate_access_token(admin.id)
@@ -487,7 +578,8 @@ def admin_login():
 
         flash('Credenziali non valide.', 'danger')
 
-    return render_template('login_dashboard.html', form=form, recaptcha_site_key=app.config['RECAPTCHA_SITE_KEY'])
+    return render_template('login_dashboard.html', form=form, recaptcha_site_key=app.config.get('RECAPTCHA_SITE_KEY', ''))
+
 
 
 @app.route('/admin/refresh-token', methods=['POST'])
@@ -527,9 +619,10 @@ def admin_logout():
 
 
 
+@limiter.limit("2 per minute")  # Massimo 2 upload al minuto
 @app.route('/admin/upload', methods=['GET', 'POST'])
-@jwt_required  # 🔹 Sostituito con JWT per proteggere la rotta
-@csrf.exempt  # CSRF è gestito da Flask-WTF
+@jwt_required
+@csrf.exempt
 def upload_image():
     form = UploadForm()
     if form.validate_on_submit():
@@ -565,6 +658,7 @@ def manage_gallery():
             images[category] = []
     return render_template('manage_gallery.html', images=images, categories=categories)
 
+@limiter.limit("5 per minute")  # Protegge da abusi nella cancellazione
 @app.route('/delete-image/<path:public_id>', methods=['POST'])
 @jwt_required
 @csrf.exempt
