@@ -3,16 +3,7 @@
 {% block content %}
 <div class="container my-4">
     <h1 class="text-center mb-4 lobster-font">Contattaci</h1>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    <div class="alert alert-success">
-        {% for category, message in messages %}
-        {{ message }}
-        {% endfor %}
-    </div>
-    {% endif %}
-    {% endwith %}
-    <div class="row">
+
         <div class="col-lg-6 col-md-12">
             <form method="POST">
                 {{ form.hidden_tag() }}
@@ -41,18 +32,17 @@
                     {{ form.message(class="form-control") }}
                 </div>
                 <div class="form-group">
-                    <input type="checkbox" id="privacy-consent" name="privacy-consent" required>
-                    <label for="privacy-consent">Accetto la <a href="/privacy-policy">Politica sulla Privacy</a></label>
+                    <input type="checkbox" id="privacy_consent" name="privacy_consent" required>
+
+                    <label for="privacy_consent">Accetto la <a href="/privacy-policy">Politica sulla Privacy</a></label>
                 </div>
+                <input type="hidden" id="recaptchaResponse" name="recaptcha_response" title="reCAPTCHA response">
                 <button type="submit" class="btn btn-primary">Invia</button>
             </form>
         </div>
 
         <!-- Google reCAPTCHA v3 -->
         <script src="https://www.google.com/recaptcha/api.js?render={{ recaptcha_site_key }}"></script>
-
-        <input type="hidden" id="recaptchaResponse" name="recaptcha_response">
-
         <script>
             document.addEventListener("DOMContentLoaded", function() {
                 grecaptcha.ready(function() {
@@ -65,6 +55,7 @@
                 });
             });
 
+            // Evita che il form venga inviato se il token non è presente
             document.querySelector("form").addEventListener("submit", function(event) {
                 let recaptchaField = document.getElementById("recaptchaResponse");
                 if (!recaptchaField.value) {
@@ -73,6 +64,8 @@
                 }
             });
         </script>
+
+
 
 
 

@@ -26,9 +26,7 @@
                     {{ form.password(class="form-control") }}
                 </div>
 
-                <!-- reCAPTCHA Token -->
-                <input type="hidden" id="recaptchaResponse" name="recaptcha_response">
-
+                <input type="hidden" id="recaptchaResponse" name="recaptcha_response" title="reCAPTCHA response">
                 <button type="submit" class="btn btn-primary w-100 mt-3">Login</button>
             </form>
         </div>
@@ -38,24 +36,29 @@
 <!-- Google reCAPTCHA v3 -->
 <script src="https://www.google.com/recaptcha/api.js?render={{ recaptcha_site_key }}"></script>
 
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    grecaptcha.ready(function() {
-        grecaptcha.execute('{{ recaptcha_site_key }}', {action: 'contact'}).then(function(token) {
-            console.log("Generated reCAPTCHA token:", token);
-            document.getElementById('recaptchaResponse').value = token;
-        }).catch(function(error) {
-            console.error("reCAPTCHA error:", error);
-        });
-    });
 
-    document.querySelector("form").addEventListener("submit", function(event) {
-        if (document.getElementById('recaptchaResponse').value === "") {
-            event.preventDefault();  // Blocca l'invio
-            alert("Attendi che il reCAPTCHA venga generato prima di inviare il form!");
-        }
-    });
-});
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+      grecaptcha.ready(function() {
+          grecaptcha.execute("{{ recaptcha_site_key }}", { action: "login" }).then(function(token) {
+              console.log("✅ Token generato:", token);
+              document.getElementById("recaptchaResponse").value = token;
+          }).catch(function(error) {
+              console.error("❌ Errore reCAPTCHA:", error);
+          });
+      });
+  });
+
+  // Blocco invio se il token non è presente
+  document.querySelector("form").addEventListener("submit", function(event) {
+      let recaptchaField = document.getElementById("recaptchaResponse");
+      if (!recaptchaField.value) {
+          event.preventDefault();
+          alert("⚠️ Attendi che il reCAPTCHA venga generato prima di inviare il form!");
+      }
+  });
+
 </script>
 
 

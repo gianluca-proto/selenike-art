@@ -244,13 +244,14 @@ def set_security_headers(response):
         "default-src 'self' https://www.google.com https://www.gstatic.com https://www.recaptcha.net; "
         "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://code.jquery.com https://cdn.jsdelivr.net/npm/ "
         "https://cdnjs.cloudflare.com https://cdn.iubenda.com https://www.google.com https://www.gstatic.com "
-        "https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/; "
+        "https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ https://www.gstatic.com/recaptcha/; "
         "style-src 'self' 'unsafe-inline' https://stackpath.bootstrapcdn.com https://cdnjs.cloudflare.com "
         "https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css https://fonts.googleapis.com https://cdn.iubenda.com; "
-        "style-src-elem 'self' https://cdn.iubenda.com https://stackpath.bootstrapcdn.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net/npm/swiper/; "
+        "style-src-elem 'self' 'unsafe-inline' https://cdn.iubenda.com https://stackpath.bootstrapcdn.com "
+        "https://cdnjs.cloudflare.com https://cdn.jsdelivr.net/npm/swiper/; "
         "img-src 'self' https://res.cloudinary.com data: https://www.google.com https://www.gstatic.com; "
-        "font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com https://fonts.googleapis.com data:; "
-        "frame-src 'self' https://www.google.com/recaptcha/ https://www.recaptcha.net/ https://www.google.com https://www.gstatic.com https://recaptcha.google.com; "
+        "font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com https://fonts.googleapis.com data: blob: application/font-woff application/font-woff2; "
+        "frame-src 'self' https://www.google.com/recaptcha/ https://www.recaptcha.net/ https://www.gstatic.com/recaptcha/ https://www.google.com; "
         "connect-src 'self' https://res.cloudinary.com https://fonts.googleapis.com https://fonts.gstatic.com "
         "https://cdn.jsdelivr.net https://www.google.com https://www.gstatic.com https://www.recaptcha.net;"
     )
@@ -366,7 +367,12 @@ def about():
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
     form = ContactForm()
+    for field in form:
+        app.logger.info(
+            f"🔍 {field.name} -> {field.data}, valid? {field.validate(form)}")
+
     recaptcha_response = None  # ✅ Inizializza la variabile
+
 
     if request.method == 'POST' and form.validate_on_submit():
         recaptcha_response = request.form.get('recaptcha_response')
