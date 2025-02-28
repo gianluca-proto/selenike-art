@@ -4,7 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14253df0-ae5a-481e-8a12-af9d47af9467" name="Changes" comment="implementata sicurezza sito" />
+    <list default="true" id="14253df0-ae5a-481e-8a12-af9d47af9467" name="Changes" comment="resolve recaptcha">
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/banner/Banner1-mobile.webp" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/banner/Banner1-mobile.webp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/img/banner/Banner1.webp" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/banner/Banner1.webp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base_dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base_dashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/contact.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/contact.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -32,17 +42,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;Python.app.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/popdeveloper/personal_project/selenike-art/static/img&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Python.app.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "develop",
+    "last_opened_file_path": "/home/popdeveloper/personal_project/selenike-art/static/img",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/static/img" />
@@ -73,102 +83,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1722120043842</updated>
-    </task>
-    <task id="LOCAL-00007" summary="fix per primo deploy gunicorn 5">
-      <option name="closed" value="true" />
-      <created>1728984277374</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1728984277374</updated>
-    </task>
-    <task id="LOCAL-00008" summary="fix per primo deploy gunicorn 5">
-      <option name="closed" value="true" />
-      <created>1728986509576</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1728986509576</updated>
-    </task>
-    <task id="LOCAL-00009" summary="compleata gestione immagini sul cloud e messa in sicurezza delle chiavi">
-      <option name="closed" value="true" />
-      <created>1729156401721</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1729156401721</updated>
-    </task>
-    <task id="LOCAL-00010" summary="committato nuovo testo adattato al SEO">
-      <option name="closed" value="true" />
-      <created>1729201479403</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1729201479403</updated>
-    </task>
-    <task id="LOCAL-00011" summary="nuove immagini ottimizzate">
-      <option name="closed" value="true" />
-      <created>1729202053313</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1729202053313</updated>
-    </task>
-    <task id="LOCAL-00012" summary="modifiche conversione webp">
-      <option name="closed" value="true" />
-      <created>1729202883529</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1729202883529</updated>
-    </task>
-    <task id="LOCAL-00013" summary="riorganizzazione codice">
-      <option name="closed" value="true" />
-      <created>1729205469617</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1729205469617</updated>
-    </task>
-    <task id="LOCAL-00014" summary="riorganizzazione codice 2">
-      <option name="closed" value="true" />
-      <created>1729205968303</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1729205968303</updated>
-    </task>
-    <task id="LOCAL-00015" summary="riorganizzazione codice 3">
-      <option name="closed" value="true" />
-      <created>1729206049812</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1729206049812</updated>
-    </task>
-    <task id="LOCAL-00016" summary="riorganizzazione codice 4">
-      <option name="closed" value="true" />
-      <created>1729237237480</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1729237237481</updated>
-    </task>
-    <task id="LOCAL-00017" summary="immagini banner caricate dal cloud">
-      <option name="closed" value="true" />
-      <created>1729248430954</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1729248430954</updated>
-    </task>
-    <task id="LOCAL-00018" summary="aggiunto lazy alle immagini">
-      <option name="closed" value="true" />
-      <created>1729249129913</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1729249129913</updated>
     </task>
     <task id="LOCAL-00019" summary="aggiunto eager alle immagini">
       <option name="closed" value="true" />
@@ -466,7 +380,103 @@
       <option name="project" value="LOCAL" />
       <updated>1740566096214</updated>
     </task>
-    <option name="localTasksCounter" value="56" />
+    <task id="LOCAL-00056" summary="implementata sicurezza sito 2">
+      <option name="closed" value="true" />
+      <created>1740566240844</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1740566240844</updated>
+    </task>
+    <task id="LOCAL-00057" summary="aggiunta pillow">
+      <option name="closed" value="true" />
+      <created>1740566435813</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1740566435813</updated>
+    </task>
+    <task id="LOCAL-00058" summary="fix requ">
+      <option name="closed" value="true" />
+      <created>1740566998695</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1740566998695</updated>
+    </task>
+    <task id="LOCAL-00059" summary="remove redis">
+      <option name="closed" value="true" />
+      <created>1740567210036</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1740567210036</updated>
+    </task>
+    <task id="LOCAL-00060" summary="add redis">
+      <option name="closed" value="true" />
+      <created>1740608080380</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1740608080380</updated>
+    </task>
+    <task id="LOCAL-00061" summary="upgrade redis">
+      <option name="closed" value="true" />
+      <created>1740608262001</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1740608262001</updated>
+    </task>
+    <task id="LOCAL-00062" summary="upgrade redis 2">
+      <option name="closed" value="true" />
+      <created>1740614674853</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1740614674854</updated>
+    </task>
+    <task id="LOCAL-00063" summary="downgrade python">
+      <option name="closed" value="true" />
+      <created>1740615066552</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1740615066552</updated>
+    </task>
+    <task id="LOCAL-00064" summary="downgrade python">
+      <option name="closed" value="true" />
+      <created>1740647130802</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1740647130802</updated>
+    </task>
+    <task id="LOCAL-00065" summary="upgrade redis">
+      <option name="closed" value="true" />
+      <created>1740647345798</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1740647345798</updated>
+    </task>
+    <task id="LOCAL-00066" summary="add recaptcha">
+      <option name="closed" value="true" />
+      <created>1740697652875</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1740697652875</updated>
+    </task>
+    <task id="LOCAL-00067" summary="resolve recaptcha">
+      <option name="closed" value="true" />
+      <created>1740736446616</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1740736446616</updated>
+    </task>
+    <option name="localTasksCounter" value="68" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -491,16 +501,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="refactor homepage" />
-    <MESSAGE value="refactor homepage aggiunto preload ai css" />
-    <MESSAGE value="refactor homepage aggiunto defer 2645790.js" />
-    <MESSAGE value="refactor homepage eliminato defer 2645790.js" />
-    <MESSAGE value="eliminato iubenda temporaneamente" />
-    <MESSAGE value="dimensioni fisse immagini prima pagina" />
-    <MESSAGE value="sistemazione index.html" />
-    <MESSAGE value="ridimensione logo" />
-    <MESSAGE value="ridimensione logo 2" />
-    <MESSAGE value="ridimensione immagini" />
     <MESSAGE value="eliminato preload styles.css" />
     <MESSAGE value="eliminato preload styles.css 2" />
     <MESSAGE value="immagini ottimizzate" />
@@ -516,6 +516,32 @@
     <MESSAGE value="fix funzioni.js" />
     <MESSAGE value="sistemata parte dashboard admin" />
     <MESSAGE value="implementata sicurezza sito" />
-    <option name="LAST_COMMIT_MESSAGE" value="implementata sicurezza sito" />
+    <MESSAGE value="implementata sicurezza sito 2" />
+    <MESSAGE value="aggiunta pillow" />
+    <MESSAGE value="fix requ" />
+    <MESSAGE value="remove redis" />
+    <MESSAGE value="add redis" />
+    <MESSAGE value="upgrade redis 2" />
+    <MESSAGE value="downgrade python" />
+    <MESSAGE value="upgrade redis" />
+    <MESSAGE value="add recaptcha" />
+    <MESSAGE value="resolve recaptcha" />
+    <option name="LAST_COMMIT_MESSAGE" value="resolve recaptcha" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/app.py</url>
+          <line>374</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/app.py</url>
+          <line>545</line>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

@@ -4,6 +4,7 @@
 <div class="container my-4">
     <h1 class="text-center mb-4 lobster-font">Contattaci</h1>
 
+    <div class="row">
         <div class="col-lg-6 col-md-12">
             <form method="POST">
                 {{ form.hidden_tag() }}
@@ -33,7 +34,6 @@
                 </div>
                 <div class="form-group">
                     <input type="checkbox" id="privacy_consent" name="privacy_consent" required>
-
                     <label for="privacy_consent">Accetto la <a href="/privacy-policy">Politica sulla Privacy</a></label>
                 </div>
                 <input type="hidden" id="recaptchaResponse" name="recaptcha_response" title="reCAPTCHA response">
@@ -41,38 +41,8 @@
             </form>
         </div>
 
-        <!-- Google reCAPTCHA v3 -->
-        <script src="https://www.google.com/recaptcha/api.js?render={{ recaptcha_site_key }}"></script>
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                grecaptcha.ready(function() {
-                    grecaptcha.execute("{{ recaptcha_site_key }}", { action: "contact" }).then(function(token) {
-                        console.log("✅ Token generato:", token);
-                        document.getElementById("recaptchaResponse").value = token;
-                    }).catch(function(error) {
-                        console.error("❌ Errore reCAPTCHA:", error);
-                    });
-                });
-            });
-
-            // Evita che il form venga inviato se il token non è presente
-            document.querySelector("form").addEventListener("submit", function(event) {
-                let recaptchaField = document.getElementById("recaptchaResponse");
-                if (!recaptchaField.value) {
-                    event.preventDefault();
-                    alert("⚠️ Attendi che il reCAPTCHA venga generato prima di inviare il form!");
-                }
-            });
-        </script>
-
-
-
-
-
-
-
         <div class="col-lg-6 col-md-12 text-center">
-            <img src="{{ url_for('static', filename='img/Logo-Contattaci.webp') }}" alt="Contact Image" class="img-fluid rounded">
+            <img src="{{ url_for('static', filename='img/Logo2.png') }}" alt="Contact Image" class="img-fluid rounded">
             <div class="mt-4">
                 <p><strong>Pagina Contattaci</strong></p>
                 <p>Benvenuti nella pagina di contatto di Selenike Art! Qui potete inviare le vostre richieste per qualsiasi chiarimento riguardante i lavori di Selenike, acquisti dalla sezione Art Gallery, o per risolvere qualsiasi dubbio o domanda relativa al sito.</p>
@@ -82,5 +52,31 @@
             </div>
         </div>
     </div>
+</div>
+
+
+<!-- Google reCAPTCHA v3 -->
+<script src="https://www.google.com/recaptcha/api.js?render={{ recaptcha_site_key }}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        grecaptcha.ready(function() {
+            grecaptcha.execute("{{ recaptcha_site_key }}", { action: "contact" }).then(function(token) {
+                console.log("✅ Token generato:", token);
+                document.getElementById("recaptchaResponse").value = token;
+            }).catch(function(error) {
+                console.error("❌ Errore reCAPTCHA:", error);
+            });
+        });
+    });
+
+    // Evita che il form venga inviato se il token non è presente
+    document.querySelector("form").addEventListener("submit", function(event) {
+        let recaptchaField = document.getElementById("recaptchaResponse");
+        if (!recaptchaField.value) {
+            event.preventDefault();
+            alert("⚠️ Attendi che il reCAPTCHA venga generato prima di inviare il form!");
+        }
+    });
+</script>
 </div>
 {% endblock %}

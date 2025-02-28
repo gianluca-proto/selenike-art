@@ -26,6 +26,8 @@ import jwt
 import time
 from flask import make_response
 from flask import request, jsonify
+from flask_migrate import Migrate
+
 
 rate_limits = {}  # Memorizza i tentativi di accesso per IP
 
@@ -91,9 +93,13 @@ limiter.init_app(app)  # Inizializza Flask-Limiter con l'app
 
 from flask_sqlalchemy import SQLAlchemy
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'  # Database locale
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
+    'DATABASE_URL', 'postgresql://selenike_user:password123@localhost/selenike_art'
+)
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 class Admin(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -210,7 +216,7 @@ def initialize_admin():
             db.session.commit()
             app.logger.warning(f"Admin creato con password: {default_password}")
 
-initialize_admin()
+#initialize_admin()
 
 
 
@@ -295,10 +301,10 @@ def home():
         carousel_comics_images = [img['secure_url'] for img in response_carousel_comics.get('resources',[])]
 
         response_carousel_customized = get_resources('upload',
-                                                 'img/carousel_customized/')
+                                                     'img/carousel_customized/')
         carousel_customized_images = [img['secure_url'] for img in
-                                  response_carousel_customized.get('resources',
-                                                               [])]
+                                      response_carousel_customized.get('resources',
+                                                                       [])]
 
         app.logger.info(f"Desktop images loaded: {desktop_images}")
         app.logger.info(f"Mobile images loaded: {mobile_images}")
