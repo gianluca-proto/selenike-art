@@ -92,10 +92,24 @@ limiter = Limiter(key_func=get_remote_address)  # Rimuovi "app"
 limiter.init_app(app)  # Inizializza Flask-Limiter con l'app
 
 from flask_sqlalchemy import SQLAlchemy
+# Prendi l'URL del database dall'ambiente
+DATABASE_URL = os.getenv('DATABASE_URL')
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
-    'DATABASE_URL', 'postgresql://selenike_user:password123@localhost/selenike_art'
-)
+# Se non trova la variabile, usa il database locale
+if not DATABASE_URL:
+    DATABASE_URL = os.getenv('DATABASE_URL_LOCAL')
+    print("⚠️ DATABASE_URL non trovato, uso PostgreSQL locale")
+
+# Se ancora non è definito, usa un database locale come fallback
+if not DATABASE_URL:
+    DATABASE_URL = "postgresql://selenike_user:password123@localhost/selenike_art"
+    print("⚠️ DATABASE_URL non trovato, uso PostgreSQL locale")
+
+# Corregge il formato dell'URL se viene da Heroku
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
