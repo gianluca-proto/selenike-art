@@ -18,7 +18,9 @@ from flask_compress import Compress
 from wtforms import TextAreaField, EmailField
 from datetime import timedelta
 from PIL import Image
-
+from argon2 import PasswordHasher
+from argon2.exceptions import VerifyMismatchError
+from flask import request, redirect, url_for, flash, render_template, make_response
 from flask import Flask
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -552,6 +554,12 @@ def jwt_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+
+
+# Inizializza Argon2
+ph = PasswordHasher()
+
+
 @limiter.limit("5 per minute")
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
@@ -560,7 +568,7 @@ def admin_login():
     if request.method == 'POST' and form.validate_on_submit():
         recaptcha_response = request.form.get('recaptcha_response')
 
-        # 🔹 Log del token ricevuto
+        # 🔹 Log del token reCAPTCHA
         app.logger.info(f"Login - Received reCAPTCHA token: {recaptcha_response}")
 
         if not recaptcha_response:
@@ -591,16 +599,26 @@ def admin_login():
             flash('Errore CAPTCHA. Sei sicuro di non essere un bot?', 'danger')
             return redirect(url_for('admin_login'))
 
-        # ✅ CAPTCHA SUPERATO - Processiamo il login
+        # ✅ CAPTCHA SUPERATO - Controlliamo il database
         admin = Admin.query.filter_by(username=form.username.data).first()
-        if admin and check_password_hash(admin.password_hash, form.password.data):
-            access_token = generate_access_token(admin.id)
-            refresh_token = generate_refresh_token(admin.id)
 
-            response = make_response(redirect(url_for('admin_dashboard')))
-            response.set_cookie('auth_token', access_token, httponly=True, secure=True, samesite='Strict')
-            response.set_cookie('refresh_token', refresh_token, httponly=True, secure=True, samesite='Strict')
-            return response
+        if admin:
+            try:
+                # 🔹 Verifica della password con Argon2
+                if ph.verify(admin.password_hash, form.password.data):
+                    access_token = generate_access_token(admin.id)
+                    refresh_token = generate_refresh_token(admin.id)
+
+                    response = make_response(redirect(url_for('admin_dashboard')))
+                    response.set_cookie('auth_token', access_token, httponly=True, secure=True, samesite='Strict')
+                    response.set_cookie('refresh_token', refresh_token, httponly=True, secure=True, samesite='Strict')
+                    return response
+            except VerifyMismatchError:
+                app.logger.warning("Login - Password errata per l'utente {}".format(form.username.data))
+                flash('Credenziali non valide.', 'danger')
+
+        else:
+            app.logger.warning("Login - Tentativo di accesso con utente inesistente: {}".format(form.username.data))
 
         flash('Credenziali non valide.', 'danger')
 
