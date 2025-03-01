@@ -34,7 +34,7 @@
     <div class="row mt-5">
         <div class="col-lg-6 col-md-12 mb-4">
             <h3 class="mb-4">Modulo di Contatto</h3>
-            <form method="POST" action="{{ url_for('commissions') }}">
+            <form method="POST" action="{{ url_for('main.commissions') }}">
                 {{ form.hidden_tag() }}  <!-- Protezione CSRF -->
                 <div class="form-row">
                     <div class="form-group col-md-6">

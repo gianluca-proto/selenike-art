@@ -1,0 +1,61 @@
+# Creazione della struttura del progetto
+selenike_art/
+│── app.py                    # Entry point dell'applicazione
+│── config.py                  # Configurazione dell'app Flask
+│── requirements.txt            # Dipendenze del progetto
+│── .env                        # Variabili d'ambiente (non da commitare)
+│
+├── models/                     # Moduli per il database
+│   ├── __init__.py             # Inizializzazione del database
+│   ├── admin.py                # Modello Admin
+│   ├── refresh_token.py        # Modello per il refresh token
+│
+├── routes/                     # Moduli per le route
+│   ├── __init__.py             # Inizializzazione delle route
+│   ├── main.py                 # Route pubbliche (home, about, contact, ecc.)
+│   ├── admin.py                # Route per il pannello admin
+│   ├── gallery.py              # Route per la gestione della galleria
+│   ├── security.py             # Route per la sicurezza e i log
+│
+├── services/                   # Funzioni di supporto e servizi
+│   ├── __init__.py             # Inizializzazione dei servizi
+│   ├── auth.py                 # Gestione autenticazione JWT
+│   ├── cloudinary_service.py   # Servizi per Cloudinary
+│   ├── email_service.py        # Funzioni per l'invio delle email
+│   ├── security_service.py     # Funzioni di sicurezza
+│
+├── forms/                      # Definizione dei form con Flask-WTF
+│   ├── __init__.py             # Inizializzazione dei form
+│   ├── login_form.py           # Form di login
+│   ├── upload_form.py          # Form di upload immagini
+│   ├── commission_form.py      # Form per le commissioni
+│   ├── contact_form.py         # Form di contatto
+│
+├── templates/                  # Template HTML
+│   ├── base.html               # Layout di base
+│   ├── base_dashboard.html     # Layout della dashboard admin
+│   ├── index.html              # Pagina principale
+│   ├── about.html              # Pagina "Chi siamo"
+│   ├── contact.html            # Pagina contatti
+│   ├── gallery.html            # Pagina della galleria
+│   ├── commissions.html        # Pagina delle commissioni
+│   ├── admin/                  # Template per l'admin
+│   │   ├── login_dashboard.html
+│   │   ├── admin_dashboard.html
+│   │   ├── manage_gallery.html
+│   │   ├── security_dashboard.html
+│   │   ├── upload.html
+│
+├── static/                     # File statici (CSS, JS, immagini)
+│   ├── css/
+│   │   ├── styles.css
+│   ├── js/
+│   │   ├── funzioni.js
+│   │   ├── funzioni-dashboard.js
+│   │   ├── security.js
+│   ├── img/
+│
+├── migrations/                 # Cartella generata da Flask-Migrate
+│
+└── logs/                       # Cartella per i log
+    ├── access.log

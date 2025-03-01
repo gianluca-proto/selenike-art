@@ -59,19 +59,19 @@
         <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
             <ul class="navbar-nav lobster-font-menu">
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Homepage</a>
+                    <a class="nav-link" href="{{ url_for('main.home') }}">Homepage</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/art-gallery">Art Gallery</a>
+                    <a class="nav-link" href="{{ url_for('gallery.art_gallery') }}">Art Gallery</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/commissions">Commissions</a>
+                    <a class="nav-link" href="{{ url_for('main.commissions') }}">Commissions</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/about">Selenike</a>
+                    <a class="nav-link" href="{{ url_for('main.about') }}">Selenike</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/contact">Contattaci</a>
+                    <a class="nav-link" href="{{ url_for('main.contact') }}">Contattaci</a>
                 </li>
             </ul>
         </div>
