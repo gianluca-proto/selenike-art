@@ -4,15 +4,17 @@ from flask import Blueprint, render_template, request, redirect, flash, url_for,
 from forms.login_form import LoginForm
 from models.admin import Admin, db
 from models.refresh_token import RefreshToken
-from services.security_service import limiter
+from services.security_service import limiter, is_account_locked
 from services.auth import verify_jwt, jwt_required, generate_access_token, \
     generate_refresh_token
 from flask import current_app as app
 import requests  # Assicurati che sia importato in alto nel file
+from datetime import datetime, timedelta
 
 bp = Blueprint('admin', __name__, url_prefix='/admin')  # ✅ Blueprint Admin
 # Inizializza Argon2
 ph = PasswordHasher()
+FAILED_LOGINS = {}
 
 @bp.route('/')
 @limiter.limit("5 per minute")  # 5 tentativi al minuto
@@ -30,6 +32,13 @@ def admin_dashboard():
 @bp.route('/login', methods=['GET', 'POST'])
 def admin_login():
     form = LoginForm()
+    ip = request.remote_addr  # 🔹 Recupera l'IP dell'utente
+
+    # 🔹 Controlla se l'IP è bloccato
+    locked, message = is_account_locked(ip)
+    if locked:
+        flash(message, 'danger')
+        return redirect(url_for('admin.admin_login'))
 
     if request.method == 'POST' and form.validate_on_submit():
         recaptcha_response = request.form.get('recaptcha_response')
@@ -87,6 +96,13 @@ def admin_login():
             app.logger.warning("Login - Tentativo di accesso con utente inesistente: {}".format(form.username.data))
 
         flash('Credenziali non valide.', 'danger')
+    else:
+        # 🔹 Registra il tentativo fallito
+        if ip not in FAILED_LOGINS:
+            FAILED_LOGINS[ip] = (1, datetime.now())
+        else:
+            attempts, _ = FAILED_LOGINS[ip]
+            FAILED_LOGINS[ip] = (attempts + 1, datetime.now())
 
     return render_template('admin/login_dashboard.html', form=form, recaptcha_site_key=app.config.get('RECAPTCHA_SITE_KEY', ''))
 

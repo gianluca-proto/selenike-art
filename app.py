@@ -1,15 +1,29 @@
 import logging
 import os
-from flask import Flask
+from flask import Flask, request
 from config import Config
 from routes import main, admin, gallery, security  # ✅ Importa solo i Blueprint giusti
 from models import db  # ✅ Importa il database dal modello giusto
 from services.email_service import init_mail
-from services.security_service import init_limiter
+from services.security_service import init_limiter, anonymize_ip
 from flask_migrate import Migrate
-from flask_mail import Mail
 from flask_wtf.csrf import CSRFProtect
 from flask_compress import Compress
+import os
+from dotenv import load_dotenv
+
+# Carica il file .env
+load_dotenv()
+
+import requests
+
+def get_server_ip():
+    response = requests.get("https://ifconfig.me")
+    return response.text
+
+
+print(f"🌐 IP pubblico del server Heroku: {get_server_ip()}")
+
 
 
 # Creazione dell'app Flask
@@ -26,6 +40,36 @@ init_mail(app)  # Inizializza Flask-Mail
 init_limiter(app)  # Inizializza Flask-Limiter
 csrf = CSRFProtect(app)
 Compress(app)
+
+# Protezione CSP e headers HTTP
+@app.after_request
+def set_security_headers(response):
+    response.headers['Content-Security-Policy'] = (
+        "default-src 'self' https://www.google.com https://www.gstatic.com https://www.recaptcha.net; "
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://code.jquery.com https://cdn.jsdelivr.net/npm/ "
+        "https://cdnjs.cloudflare.com https://cdn.iubenda.com https://www.google.com https://www.gstatic.com "
+        "https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ https://www.gstatic.com/recaptcha/; "
+        "style-src 'self' 'unsafe-inline' https://stackpath.bootstrapcdn.com https://cdnjs.cloudflare.com "
+        "https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css https://fonts.googleapis.com https://cdn.iubenda.com; "
+        "style-src-elem 'self' 'unsafe-inline' https://cdn.iubenda.com https://stackpath.bootstrapcdn.com "
+        "https://cdnjs.cloudflare.com https://cdn.jsdelivr.net/npm/swiper/; "
+        "img-src 'self' https://res.cloudinary.com data: https://www.google.com https://www.gstatic.com; "
+        "font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com https://fonts.googleapis.com data: blob: application/font-woff application/font-woff2; "
+        "frame-src 'self' https://www.google.com/recaptcha/ https://www.recaptcha.net/ https://www.gstatic.com/recaptcha/ https://www.google.com; "
+        "connect-src 'self' https://res.cloudinary.com https://fonts.googleapis.com https://fonts.gstatic.com "
+        "https://cdn.jsdelivr.net https://www.google.com https://www.gstatic.com https://www.recaptcha.net;"
+    )
+    response.headers['X-Frame-Options'] = 'SAMEORIGIN'
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-XSS-Protection'] = '1; mode=block'
+    return response  # ⛔ Qui può essere `None` causando l'errore!
+
+
+@app.after_request
+def log_request(response):
+    anon_ip = anonymize_ip(request.remote_addr)
+    app.logger.info(f"IP: {anon_ip} - Request: {request.method} {request.path} - Response: {response.status_code}")
+    return response
 
 # ✅ Registra i Blueprint
 app.register_blueprint(main.bp)      # Route principali

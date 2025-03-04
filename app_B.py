@@ -237,7 +237,7 @@ def initialize_admin():
 
 
 
-# Configurazione del percorso per il caricamento delle immagini
+# Configurazione del percorso per il caricamento delle immagini  -- RIVEDERE
 gallery_upload_folder = os.path.join('static', 'img', 'gallery/altro')
 if not os.path.exists(gallery_upload_folder):
     os.makedirs(gallery_upload_folder)

@@ -38,65 +38,157 @@ window.onload = function() {
     }
 }
 
+function getCSRFToken() {
+    return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+}
+
 function deleteImage(category, filename) {
     const public_id = `${filename}`;
-    if (confirm('Are you sure you want to delete this image?')) {
-        fetch(`/delete-image/${encodeURIComponent(public_id)}`, { method: 'POST' })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if(data.success) {
-                alert('Image deleted successfully');
-                window.location.reload();
-            } else {
-                alert('Error deleting image: ' + data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error deleting image: ' + error.message);
-        });
-    }
-}
 
-function moveImage(selectElement) {
-    var fullPath = selectElement.dataset.filename;
-    var parts = fullPath.split('/');
-    var filename = parts.pop();
-
-    var src_category = selectElement.dataset.category;
-    var dest_category = selectElement.value;
-
-    var src_public_id = `img/gallery/${src_category}/${filename}`;
-    var dest_public_id = `img/gallery/${dest_category}/${filename}`;
-
-    fetch('/move-image', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: `src_public_id=${encodeURIComponent(src_public_id)}&dest_public_id=${encodeURIComponent(dest_public_id)}`
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`HTTP status ${response.status}`);
+    Swal.fire({
+        title: "Sei sicuro?",
+        text: "Questa azione è irreversibile!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Sì, elimina!",
+        cancelButtonText: "Annulla"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`/delete-image/${encodeURIComponent(public_id)}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCSRFToken()
+                }
+            })
+            .then(response => {
+                console.log("📡 Risposta ricevuta:", response);
+                if (!response.ok) {
+                    return response.text().then(text => { throw new Error(`Errore HTTP ${response.status}: ${text}`); });
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("✅ Risultato eliminazione:", data);
+                if (data.success) {
+                    Swal.fire({
+                        title: "Eliminata!",
+                        text: "L'immagine è stata eliminata con successo.",
+                        icon: "success",
+                        confirmButtonColor: "#3085d6"
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        title: "Errore!",
+                        text: "Non è stato possibile eliminare l'immagine.",
+                        icon: "error",
+                        confirmButtonColor: "#d33"
+                    });
+                }
+            })
+            .catch(error => {
+                console.error("❌ Errore Fetch:", error);
+                Swal.fire({
+                    title: "Errore di connessione!",
+                    text: error.message,
+                    icon: "error",
+                    confirmButtonColor: "#d33"
+                });
+            });
         }
-        return response.json();
-    })
-    .then(data => {
-        if(data.success) {
-            location.reload();
-        } else {
-            alert('Error moving image: ' + data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error moving image: ' + error.message);
     });
 }
+
+
+function moveImage(selectElement) {
+    var filename = selectElement.dataset.filename;
+    var src_category = selectElement.dataset.category.replace("img/gallery/", "");
+    var dest_category = selectElement.value;
+
+    console.log("🔍 Debug: filename:", filename);
+    console.log("🔍 Debug: src_category:", src_category);
+    console.log("🔍 Debug: dest_category:", dest_category);
+
+    var src_public_id = `${filename}`;
+    var dest_public_id = `img/gallery/${dest_category}/${filename}`;
+
+    console.log("📂 src_public_id:", src_public_id);
+    console.log("📂 dest_public_id:", dest_public_id);
+
+    if (src_public_id === dest_public_id) {
+        Swal.fire({
+            title: "⚠️ Attenzione!",
+            text: "L'immagine è già in questa categoria!",
+            icon: "warning",
+            confirmButtonColor: "#3085d6"
+        });
+        return;
+    }
+
+    Swal.fire({
+        title: "Sicuro di voler spostare l'immagine?",
+        text: `L'immagine verrà spostata da ${src_category} a ${dest_category}.`,
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#28a745",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sì, sposta!",
+        cancelButtonText: "Annulla"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch('/move-image', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCSRFToken()
+                },
+                body: JSON.stringify({
+                    src_public_id: src_public_id,
+                    dest_public_id: dest_public_id
+                })
+            })
+            .then(response => {
+                console.log("📡 Risposta ricevuta:", response);
+                if (!response.ok) {
+                    return response.text().then(text => { throw new Error(`Errore HTTP ${response.status}: ${text}`); });
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("✅ Risultato spostamento:", data);
+                if (data.success) {
+                    Swal.fire({
+                        title: "Spostato!",
+                        text: "L'immagine è stata spostata con successo.",
+                        icon: "success",
+                        confirmButtonColor: "#3085d6"
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        title: "Errore!",
+                        text: "Non è stato possibile spostare l'immagine.",
+                        icon: "error",
+                        confirmButtonColor: "#d33"
+                    });
+                }
+            })
+            .catch(error => {
+                console.error("❌ Errore Fetch:", error);
+                Swal.fire({
+                    title: "Errore di connessione!",
+                    text: error.message,
+                    icon: "error",
+                    confirmButtonColor: "#d33"
+                });
+            });
+        }
+    });
+}
+
 

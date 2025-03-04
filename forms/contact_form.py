@@ -9,4 +9,5 @@ class ContactForm(FlaskForm):
     drawingType = StringField('Tipo Disegno', validators=[DataRequired()])
     format = StringField('Formato', validators=[DataRequired()])  # ✅ Aggiunto
     message = TextAreaField('Messaggio', validators=[DataRequired()])
+    privacy_consent = StringField('Consenso Privacy', validators=[DataRequired()])
     submit = SubmitField('Invia')
