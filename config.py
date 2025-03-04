@@ -7,7 +7,9 @@ load_dotenv()
 
 class Config:
     SECRET_KEY = os.getenv('APP_SECRET_KEY')
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL') or "postgresql://selenike_user:password123@localhost/selenike_art"
+
+    SQLALCHEMY_DATABASE_URI = (os.getenv("DATABASE_URL", "").replace("postgres://", "postgresql://")
+                               or "postgresql://selenike_user:password123@localhost/selenike_art")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     MAIL_SERVER = os.getenv('MAIL_SERVER')
     MAIL_PORT = os.getenv('MAIL_PORT')
