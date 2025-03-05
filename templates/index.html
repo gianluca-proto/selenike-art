@@ -12,10 +12,15 @@
         <div class="carousel-inner">
             {% for desktop_image, mobile_image in zip(carousel_images_desktop, carousel_images_mobile) %}
             <div class="carousel-item {{ 'active' if loop.first }}">
-                <img src="{{ desktop_image }}" srcset="{{ mobile_image }} 600w, {{ desktop_image }} 1200w"
-                     sizes="(max-width: 768px) 600px, 100vw"
-                     class="d-block w-100 lazyload" alt="Slide {{ loop.index }}" style="height: 400px; object-fit: cover;">
+              <img src="{{ desktop_image }}"
+                   srcset="{{ mobile_image }} 600w, {{ desktop_image }} 1200w"
+                   sizes="(max-width: 768px) 600px, 100vw"
+                   class="d-block w-100 lazyload"
+                   alt="Slide {{ loop.index }}"
+                   width="1200" height="400"
+                   style="height: 400px; object-fit: cover;">
             </div>
+
             {% endfor %}
         </div>
         <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
