@@ -9,37 +9,50 @@ from services.security_service import init_limiter, anonymize_ip
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect
 from flask_compress import Compress
-import os
 from dotenv import load_dotenv
+import requests
+
+# Importa Flask-Babel
+from flask_babel import Babel, _
 
 # Carica il file .env
 load_dotenv()
-
-import requests
 
 def get_server_ip():
     response = requests.get("https://ifconfig.me")
     return response.text
 
-
 print(f"🌐 IP pubblico del server Heroku: {get_server_ip()}")
-
-
 
 # Creazione dell'app Flask
 app = Flask(__name__)
 app.config.from_object(Config)
 
-# ✅ Aggiunta della funzione zip a Jinja
+# Imposta la lingua predefinita se non definita in Config
+app.config.setdefault('BABEL_DEFAULT_LOCALE', 'it')
+# Cartella per le traduzioni (assicurati che esista e contenga i file .mo compilati)
+app.config.setdefault('BABEL_TRANSLATION_DIRECTORIES', 'translations')
+
+# Aggiunta della funzione zip a Jinja
 app.jinja_env.globals.update(zip=zip)
 
-# ✅ Inizializza i moduli
-db.init_app(app)  # ✅ Corretto, usa il database giusto
+# Inizializza i moduli
+db.init_app(app)  # ✅ Usa il database giusto
 migrate = Migrate(app, db)
-init_mail(app)  # Inizializza Flask-Mail
-init_limiter(app)  # Inizializza Flask-Limiter
+init_mail(app)    # Inizializza Flask-Mail
+init_limiter(app) # Inizializza Flask-Limiter
 csrf = CSRFProtect(app)
 Compress(app)
+
+
+
+def get_locale():
+    # Rileva la lingua preferita dall'utente, ad esempio analizzando la richiesta HTTP.
+    return request.accept_languages.best_match(['it', 'en'])
+
+# Inizializza Flask-Babel
+babel = Babel(app, locale_selector=get_locale)
+
 
 # Protezione CSP e headers HTTP
 @app.after_request
@@ -63,8 +76,7 @@ def set_security_headers(response):
     response.headers['X-Frame-Options'] = 'SAMEORIGIN'
     response.headers['X-Content-Type-Options'] = 'nosniff'
     response.headers['X-XSS-Protection'] = '1; mode=block'
-    return response  # ⛔ Qui può essere `None` causando l'errore!
-
+    return response  # Assicurati di ritornare sempre il response!
 
 @app.after_request
 def log_request(response):
@@ -72,7 +84,7 @@ def log_request(response):
     app.logger.info(f"IP: {anon_ip} - Request: {request.method} {request.path} - Response: {response.status_code}")
     return response
 
-# ✅ Registra i Blueprint
+# Registra i Blueprint
 app.register_blueprint(main.bp)      # Route principali
 app.register_blueprint(admin.bp)      # Route admin
 app.register_blueprint(gallery.bp)    # Route galleria

@@ -2,60 +2,57 @@
 
 {% block content %}
 <div class="container my-4">
-    <h1 class="text-center mb-4 lobster-font">Contattaci</h1>
+    <h1 class="text-center mb-4 lobster-font">{{ _('Contattaci') }}</h1>
 
     <div class="row">
         <div class="col-lg-6 col-md-12">
             <form method="POST">
                 {{ form.hidden_tag() }}
                 <div class="form-group">
-                    <label for="name">Il tuo nome</label>
-                    {{ form.name(class="form-control") }}
+                    <label for="name">{{ _('Il tuo nome') }}</label>
+                    {{ form.name(class="form-control", placeholder=_("Il tuo nome")) }}
                 </div>
                 <div class="form-group">
-                    <label for="email">La tua email</label>
-                    {{ form.email(class="form-control") }}
+                    <label for="email">{{ _('La tua email') }}</label>
+                    {{ form.email(class="form-control", placeholder=_("La tua email")) }}
                 </div>
                 <div class="form-group">
-                    <label for="subject">Oggetto</label>
-                    {{ form.subject(class="form-control") }}
+                    <label for="subject">{{ _('Oggetto') }}</label>
+                    {{ form.subject(class="form-control", placeholder=_("Oggetto")) }}
                 </div>
                 <div class="form-group">
-                    <label for="drawingType">Tipo Disegno</label>
+                    <label for="drawingType">{{ _('Tipo Disegno') }}</label>
                     {{ form.drawingType(class="form-control") }}
                 </div>
                 <div class="form-group">
-                    <label for="format">Formato</label>
+                    <label for="format">{{ _('Formato') }}</label>
                     {{ form.format(class="form-control") }}
                 </div>
                 <div class="form-group">
-                    <label for="message">Il tuo messaggio</label>
-                    {{ form.message(class="form-control") }}
+                    <label for="message">{{ _('Il tuo messaggio') }}</label>
+                    {{ form.message(class="form-control", placeholder=_("Il tuo messaggio")) }}
                 </div>
                 <div class="form-group">
                     <input type="checkbox" id="privacy_consent" name="privacy_consent" required>
-                    <label for="privacy_consent">Accetto la <a href="/privacy-policy">Politica sulla Privacy</a></label>
+                    <label for="privacy_consent">{{ _('Accetto la') }} <a href="/privacy-policy">{{ _('Politica sulla Privacy') }}</a></label>
                 </div>
                 <input type="hidden" id="recaptchaResponse" name="recaptcha_response" title="reCAPTCHA response">
-                <button type="submit" class="btn btn-primary">Invia</button>
+                <button type="submit" class="btn btn-primary">{{ _('Invia') }}</button>
             </form>
         </div>
 
         <div class="col-lg-6 col-md-12 text-center">
-            <img src="{{ url_for('static', filename='img/Logo2.webp') }}" alt="Contact Image" class="img-fluid rounded">
+            <img src="{{ url_for('static', filename='img/Logo2.webp') }}" alt="{{ _('Contact Image') }}" class="img-fluid rounded">
             <div class="mt-4">
-                <p><strong>Pagina Contattaci</strong></p>
-                <p>Benvenuti nella pagina di contatto di Selenike Art! Qui potete inviare le vostre richieste per qualsiasi chiarimento riguardante i lavori di Selenike, acquisti dalla sezione Art Gallery, o per risolvere qualsiasi dubbio o domanda relativa al sito.</p>
-                <p><strong>Risposta Veloce</strong></p>
-                <p>Garantisco di ricontattarvi entro poche ore per discutere delle vostre esigenze e fornirvi tutte le informazioni necessarie.</p>
-                <p>A presto,<br>Selenike</p>
+                <p>{{ _("Benvenuti nella pagina di contatto di Selenike Art! Qui potete inviare le vostre richieste per qualsiasi chiarimento riguardante i lavori di Selenike, acquisti dalla sezione Art Gallery, o per risolvere qualsiasi dubbio o domanda relativa al sito.") }}</p>
+                <p><strong>{{ _('Risposta Veloce') }}</strong></p>
+                <p>{{ _("Garantisco di ricontattarvi entro poche ore per discutere delle vostre esigenze e fornirvi tutte le informazioni necessarie.") }}</p>
+                <p>{{ _('A presto,') }}<br>Selenike</p>
             </div>
         </div>
     </div>
 </div>
 
-
-<!-- Google reCAPTCHA v3 -->
 <!-- Google reCAPTCHA v3 -->
 <script src="https://www.google.com/recaptcha/api.js?render={{ recaptcha_site_key }}"></script>
 <script>

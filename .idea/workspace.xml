@@ -4,10 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14253df0-ae5a-481e-8a12-af9d47af9467" name="Changes" comment="fix dimensioni carousel">
+    <list default="true" id="14253df0-ae5a-481e-8a12-af9d47af9467" name="Changes" comment="fix css">
+      <change afterPath="$PROJECT_DIR$/babel.cfg" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/img/Logo.webp" beforeDir="false" afterPath="$PROJECT_DIR$/static/img/Logo.webp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/about.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/about.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/commissions.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/commissions.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/contact.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/contact.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/gallery.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/gallery.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -129,30 +134,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1722120043842</updated>
-    </task>
-    <task id="LOCAL-00035" summary="eliminato iubenda temporaneamente">
-      <option name="closed" value="true" />
-      <created>1729374605861</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1729374605861</updated>
-    </task>
-    <task id="LOCAL-00036" summary="dimensioni fisse immagini prima pagina">
-      <option name="closed" value="true" />
-      <created>1729376207786</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1729376207786</updated>
-    </task>
-    <task id="LOCAL-00037" summary="sistemazione index.html">
-      <option name="closed" value="true" />
-      <created>1729376771247</created>
-      <option name="number" value="00037" />
-      <option name="presentableId" value="LOCAL-00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1729376771247</updated>
     </task>
     <task id="LOCAL-00038" summary="ridimensione logo">
       <option name="closed" value="true" />
@@ -522,7 +503,31 @@
       <option name="project" value="LOCAL" />
       <updated>1741188435908</updated>
     </task>
-    <option name="localTasksCounter" value="84" />
+    <task id="LOCAL-00084" summary="fix dimensioni logo">
+      <option name="closed" value="true" />
+      <created>1741189172510</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1741189172510</updated>
+    </task>
+    <task id="LOCAL-00085" summary="fix contact.html">
+      <option name="closed" value="true" />
+      <created>1741189491583</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1741189491583</updated>
+    </task>
+    <task id="LOCAL-00086" summary="fix css">
+      <option name="closed" value="true" />
+      <created>1741190161955</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1741190161955</updated>
+    </task>
+    <option name="localTasksCounter" value="87" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -547,9 +552,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="implementata sicurezza sito 2" />
-    <MESSAGE value="aggiunta pillow" />
-    <MESSAGE value="fix requ" />
     <MESSAGE value="remove redis" />
     <MESSAGE value="add redis" />
     <MESSAGE value="upgrade redis 2" />
@@ -572,7 +574,10 @@
     <MESSAGE value="cambiate dimensioni dinamiche immagini" />
     <MESSAGE value="cambiate dimensioni dinamiche immagini logo" />
     <MESSAGE value="fix dimensioni carousel" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix dimensioni carousel" />
+    <MESSAGE value="fix dimensioni logo" />
+    <MESSAGE value="fix contact.html" />
+    <MESSAGE value="fix css" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix css" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

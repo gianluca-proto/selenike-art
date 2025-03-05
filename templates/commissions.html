@@ -2,30 +2,30 @@
 
 {% block content %}
 <div class="container my-4">
-    <h1 class="text-center mb-4 lobster-font">Commissions</h1>
+    <h1 class="text-center mb-4 lobster-font">{{ _('Commissions') }}</h1>
     <div class="row">
         <div class="col-lg-6 col-md-12">
-            <p><strong>Commissiona un'Opera</strong></p>
-            <p>Ciao! Se sei arrivato a questa pagina, significa che sei interessato a commissionare un disegno personalizzato. Sono in grado di realizzare una vasta gamma di opere, dai ritratti a disegni di animali domestici, fino a riprodurre fedelmente una tua foto ricordo o creare una tavola da fumetto.</p>
-            <p><strong>Scegli il Formato e il Materiale</strong></p>
-            <p>Per iniziare, scegli il formato dell'opera: A3, A4, A5, digitale o cartaceo? E la tecnica di colorazione: preferisci bianco e nero o a colori? Utilizzo diverse tecniche come matite, Pantone, e altre.</p>
-            <p><strong>Esplora il Mio Stile</strong></p>
-            <p>Ti invito a visitare la sezione Art Gallery e i miei profili social su Facebook, Instagram, Patreon, Twitter e Threads per farti un'idea del mio stile artistico.</p>
-            <p><strong>Contattami</strong></p>
-            <p>Dopo aver riflettuto su come desideri sviluppare il tuo progetto, utilizza il modulo di contatto qui sotto per inviarmi la tua richiesta. ⬇⬇⬇</p>
-            <p>Ti risponderò entro poche ore per discutere ulteriormente del tuo progetto e per definire tutti i dettagli.</p>
-            <p>A presto,<br>Selenike</p>
+            <p><strong>{{ _("Commissiona un'Opera") }}</strong></p>
+            <p>{{ _("Ciao! Se sei arrivato a questa pagina, significa che sei interessato a commissionare un disegno personalizzato. Sono in grado di realizzare una vasta gamma di opere, dai ritratti a disegni di animali domestici, fino a riprodurre fedelmente una tua foto ricordo o creare una tavola da fumetto.") }}</p>
+            <p><strong>{{ _("Scegli il Formato e il Materiale") }}</strong></p>
+            <p>{{ _("Per iniziare, scegli il formato dell'opera: A3, A4, A5, digitale o cartaceo? E la tecnica di colorazione: preferisci bianco e nero o a colori? Utilizzo diverse tecniche come matite, Pantone, e altre.") }}</p>
+            <p><strong>{{ _("Esplora il Mio Stile") }}</strong></p>
+            <p>{{ _("Ti invito a visitare la sezione Art Gallery e i miei profili social su Facebook, Instagram, Patreon, Twitter e Threads per farti un'idea del mio stile artistico.") }}</p>
+            <p><strong>{{ _("Contattami") }}</strong></p>
+            <p>{{ _("Dopo aver riflettuto su come desideri sviluppare il tuo progetto, utilizza il modulo di contatto qui sotto per inviarmi la tua richiesta. ⬇⬇⬇") }}</p>
+            <p>{{ _("Ti risponderò entro poche ore per discutere ulteriormente del tuo progetto e per definire tutti i dettagli.") }}</p>
+            <p>{{ _("A presto,") }}<br>Selenike</p>
         </div>
         <div class="col-lg-6 col-md-12">
-            <h3>Listino Prezzi</h3>
+            <h3>{{ _("Listino Prezzi") }}</h3>
             <ul>
-                <li>Ritratto: 30 euro</li>
-                <li>Busto: 35 euro</li>
-                <li>Mezzo corpo: 55 euro</li>
-                <li>Corpo intero: 85 euro (se aggiungi altri personaggi, sono 15 euro in più per personaggio)</li>
-                <li>Se includi un animale domestico: 15 euro</li>
-                <li>Senza sfondo. (Se aggiungi uno sfondo, sono 25 euro in più)</li>
-                <li>Se aggiungi il colore, sono 25 euro in più in tutte le categorie</li>
+                <li>{{ _("Ritratto: 30 euro") }}</li>
+                <li>{{ _("Busto: 35 euro") }}</li>
+                <li>{{ _("Mezzo corpo: 55 euro") }}</li>
+                <li>{{ _("Corpo intero: 85 euro (se aggiungi altri personaggi, sono 15 euro in più per personaggio)") }}</li>
+                <li>{{ _("Se includi un animale domestico: 15 euro") }}</li>
+                <li>{{ _("Senza sfondo. (Se aggiungi uno sfondo, sono 25 euro in più)") }}</li>
+                <li>{{ _("Se aggiungi il colore, sono 25 euro in più in tutte le categorie") }}</li>
             </ul>
         </div>
     </div>
@@ -33,51 +33,51 @@
     <!-- Modulo di contatto -->
     <div class="row mt-5">
         <div class="col-lg-6 col-md-12 mb-4">
-            <h3 class="mb-4">Modulo di Contatto</h3>
+            <h3 class="mb-4">{{ _("Modulo di Contatto") }}</h3>
             <form method="POST" action="{{ url_for('main.commissions') }}">
                 {{ form.hidden_tag() }}  <!-- Protezione CSRF -->
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label for="name">Il tuo nome</label>
-                        {{ form.name(class="form-control", placeholder="Il tuo nome", required=True) }}
+                        <label for="name">{{ _("Il tuo nome") }}</label>
+                        {{ form.name(class="form-control", placeholder=_("Il tuo nome"), required=True) }}
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="email">La tua email</label>
-                        {{ form.email(class="form-control", placeholder="La tua email", required=True) }}
+                        <label for="email">{{ _("La tua email") }}</label>
+                        {{ form.email(class="form-control", placeholder=_("La tua email"), required=True) }}
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label for="subject">Oggetto</label>
-                        {{ form.subject(class="form-control", placeholder="Oggetto", required=True) }}
+                        <label for="subject">{{ _("Oggetto") }}</label>
+                        {{ form.subject(class="form-control", placeholder=_("Oggetto"), required=True) }}
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="drawingType">Tipo Disegno</label>
+                        <label for="drawingType">{{ _("Tipo Disegno") }}</label>
                         {{ form.drawingType(class="form-control", required=True) }}
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label for="format">Formato</label>
+                        <label for="format">{{ _("Formato") }}</label>
                         {{ form.format(class="form-control", required=True) }}
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="message">Il tuo messaggio</label>
-                    {{ form.message(class="form-control", rows=5, placeholder="Il tuo messaggio", required=True) }}
+                    <label for="message">{{ _("Il tuo messaggio") }}</label>
+                    {{ form.message(class="form-control", rows=5, placeholder=_("Il tuo messaggio"), required=True) }}
                 </div>
                 <div class="form-group">
                     <input type="checkbox" id="privacy-consent" name="privacy-consent" required>
-                    <label for="privacy-consent">Accetto la <a href="/privacy-policy">Politica sulla Privacy</a></label>
+                    <label for="privacy-consent">{{ _("Accetto la") }} <a href="/privacy-policy">{{ _("Politica sulla Privacy") }}</a></label>
                 </div>
 
                 <!-- Campo nascosto per reCAPTCHA -->
                 <input type="hidden" id="recaptchaResponse" name="recaptcha_response">
-                <button type="submit" class="btn btn-primary">Invia</button>
+                <button type="submit" class="btn btn-primary">{{ _("Invia") }}</button>
             </form>
         </div>
         <div class="col-lg-6 col-md-12 text-center">
-            <img src="{{ url_for('static', filename='img/Commissioni.jpeg') }}" alt="Commission Image" class="img-fluid rounded">
+            <img src="{{ url_for('static', filename='img/Commissioni.jpeg') }}" alt="{{ _('Commission Image') }}" class="img-fluid rounded">
         </div>
     </div>
 </div>

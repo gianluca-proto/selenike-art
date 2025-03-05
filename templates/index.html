@@ -16,20 +16,19 @@
                    srcset="{{ mobile_image }} 600w, {{ desktop_image }} 1200w"
                    sizes="(max-width: 768px) 600px, 100vw"
                    class="d-block w-100 lazyload"
-                   alt="Slide {{ loop.index }}"
+                   alt="{{ _('Slide') }} {{ loop.index }}"
                    width="1200" height="400"
                    style="height: 400px; object-fit: cover;">
             </div>
-
             {% endfor %}
         </div>
         <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
+            <span class="sr-only">{{ _('Previous') }}</span>
         </a>
         <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="sr-only">Next</span>
+            <span class="sr-only">{{ _('Next') }}</span>
         </a>
     </div>
 </div>
@@ -37,36 +36,35 @@
 <div class="container mt-5">
     <!-- Benvenuti su Selenike Art -->
     <div class="text-center mb-5">
-        <h1 class="lobster-font">Benvenuti su Selenike Art!</h1>
-        <p><strong>Benvenuti su Selenikeart.com</strong></p>
-        <p>Ciao, sono Selenike! Esplorate il mio sito per scoprire disegni su commissione, illustrazioni, fumetti, ritratti di animali e opere erotiche. Trovate opere originali in formato cartaceo e digitale nella mia <em>Art Gallery</em>, perfette per voi stessi o come regali speciali.</p>
-        <p><strong>Acquista o Commissiona</strong></p>
-        <p>Interessati a un'opera? Visitate la pagina <em>Commissions</em> per contattarmi. Grazie per essere qui e spero che le mie creazioni vi ispirino tanto quanto mi ispirano nel crearle!</p>
+        <h1 class="lobster-font">{{ _('Benvenuti su Selenike Art!') }}</h1>
+        <p><strong>{{ _('Benvenuti su Selenikeart.com') }}</strong></p>
+        <p>{{ _('Ciao, sono Selenike! Esplorate il mio sito per scoprire disegni su commissione, illustrazioni, fumetti, ritratti di animali e opere erotiche. Trovate opere originali in formato cartaceo e digitale nella mia <em>Art Gallery</em>, perfette per voi stessi o come regali speciali.') | safe }}</p>
+        <p><strong>{{ _('Acquista o Commissiona') }}</strong></p>
+        <p>{{ _('Interessati a un\'opera? Visitate la pagina <em>Commissions</em> per contattarmi. Grazie per essere qui e spero che le mie creazioni vi ispirino tanto quanto mi ispirano nel crearle!') | safe }}</p>
     </div>
 
     <!-- Sezioni con Swiper.js -->
-    {% set sections = [
-    ('Disegni Erotici', carousel_erotic_images, 'eroticiSwiper', 'Esplorate la mia collezione di disegni erotici, opere d\'arte che celebrano la sensualità e l\'intimità con uno stile audace e raffinato. Ideali per chi cerca un tocco di provocazione e sensualità per gli spazi personali, o un regalo sorprendente e originale. La discrezione è garantita, destinati a un pubblico adulto.'),
-    ('Disegni di Animali', carousel_animal_images, 'animaliSwiper', 'Scoprite la mia collezione di disegni di animali, che catturano l\'essenza e la personalità di creature affascinanti. Perfetti per gli amanti degli animali che vogliono decorare la propria casa o ufficio con opere ispirate alla natura.'),
-    ('Tavole da Fumetto', carousel_comics_images, 'fumettiSwiper', 'Dai un\'occhiata alle mie tavole da fumetto, che includono sia narrativa originale che fan art per Topolino. Un mix perfetto di suspense, narrazione e arte visiva, ideali per appassionati di fumetti, graphic novel e collezionisti alla ricerca di originalità.'),
-    ('Opere Personalizzate', carousel_customized_images, 'personalizzateSwiper', 'Offro la creazione di disegni dettagliati e realistici, perfetti per catturare l\'essenza di qualsiasi soggetto, da ritratti individuali a familiari, fino agli amati animali domestici.')
-    ] %}
+  {% set sections = [
+    ('Disegni Erotici', carousel_erotic_images, 'eroticiSwiper', _('Esplorate la mia collezione di disegni erotici, opere d\'arte che celebrano la sensualità e l\'intimità con uno stile audace e raffinato. Ideali per chi cerca un tocco di provocazione e sensualità per gli spazi personali, o un regalo sorprendente e originale. La discrezione è garantita, destinati a un pubblico adulto.')),
+    ('Disegni di Animali', carousel_animal_images, 'animaliSwiper', _('Scoprite la mia collezione di disegni di animali, che catturano l\'essenza e la personalità di creature affascinanti. Perfetti per gli amanti degli animali che vogliono decorare la propria casa o ufficio con opere ispirate alla natura.')),
+    ('Tavole da Fumetto', carousel_comics_images, 'fumettiSwiper', _('Dai un\'occhiata alle mie tavole da fumetto, che includono sia narrativa originale che fan art per Topolino. Un mix perfetto di suspense, narrazione e arte visiva, ideali per appassionati di fumetti, graphic novel e collezionisti alla ricerca di originalità.')),
+    ('Opere Personalizzate', carousel_customized_images, 'personalizzateSwiper', _('Offro la creazione di disegni dettagliati e realistici, perfetti per catturare l\'essenza di qualsiasi soggetto, da ritratti individuali a familiari, fino agli amati animali domestici.'))
+] %}
+
 
     {% for title, images, swiper_class, text in sections %}
     <div class="row mb-5">
         <div class="col-md-6">
-            <h2 class="lobster-font">{{ title }}</h2>
-            <p>{{ text }}</p>
+            <h2 class="lobster-font">{{ _(title) }}</h2>
+            <p>{{ _(text) }}</p>
         </div>
         <div class="col-md-6 position-relative">
             <div class="swiper-container">
                 <div class="swiper-wrapper">
                     {% for image in images %}
                     <div class="swiper-slide">
-                        <img src="{{ image }}" class="d-block w-100 fixed-size" alt="Opera {{ loop.index }}" onclick="openImageModal(event, this.src)">
-
+                        <img src="{{ image }}" class="d-block w-100 fixed-size" alt="{{ _('Opera') }} {{ loop.index }}" onclick="openImageModal(event, this.src)">
                     </div>
-
                     {% endfor %}
                 </div>
                 <!-- Frecce di navigazione -->
@@ -76,14 +74,12 @@
                 <div class="swiper-button-next">
                     <i class="fas fa-chevron-right fa-2x"></i>
                 </div>
-
                 <!-- Paginazione (pallini sotto) -->
                 <div class="swiper-pagination"></div>
             </div>
         </div>
     </div>
     {% endfor %}
-    <!-- Modale per ingrandire le immagini -->
     <!-- Modale per ingrandire le immagini -->
     <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-fullscreen">
@@ -100,8 +96,5 @@
             </div>
         </div>
     </div>
-
-
-
 </div>
 {% endblock %}
