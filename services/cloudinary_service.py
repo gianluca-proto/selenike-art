@@ -6,6 +6,8 @@ import cloudinary.uploader
 import cloudinary.api
 import os
 import requests
+from flask import request, jsonify
+import cloudinary.uploader
 
 from flask import flash, request, jsonify
 
@@ -76,17 +78,26 @@ def delete_image(public_id):
     return {'success': response.get('result') == 'ok'}
 
 
+
+
 def move_image():
     try:
         src_public_id = request.form.get('src_public_id')
-        dest_public_id = request.form.get('dest_public_id')
+        dest_folder = request.form.get('dest_folder')
 
-        print(f"📂 Spostamento ricevuto: {src_public_id} → {dest_public_id}")
+        print(f"📂 Spostamento ricevuto: {src_public_id} → {dest_folder}")
 
-        if not src_public_id or not dest_public_id:
+        if not src_public_id or not dest_folder:
             return jsonify({"success": False, "message": "⚠️ Parametri mancanti"}), 400
 
-        response = cloudinary.uploader.rename(src_public_id, dest_public_id)
+        # Estrarre il nome del file dall'ID pubblico
+        file_name = src_public_id.split("/")[-1]  # Ottiene solo il nome del file
+
+        # Nuovo percorso completo
+        dest_public_id = f"{dest_folder}/{file_name}"
+
+        # Spostamento con rename e `to_folder`
+        response = cloudinary.uploader.rename(src_public_id, dest_public_id, overwrite=True)
 
         if "public_id" in response:
             return jsonify({"success": True, "message": f"✅ Spostamento riuscito: {response['public_id']}!"})

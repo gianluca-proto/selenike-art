@@ -39,37 +39,40 @@
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="name">Il tuo nome</label>
-                        {{ form.name(class="form-control", placeholder="Il tuo nome") }}
+                        {{ form.name(class="form-control", placeholder="Il tuo nome", required=True) }}
                     </div>
                     <div class="form-group col-md-6">
                         <label for="email">La tua email</label>
-                        {{ form.email(class="form-control", placeholder="La tua email") }}
+                        {{ form.email(class="form-control", placeholder="La tua email", required=True) }}
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="subject">Oggetto</label>
-                        {{ form.subject(class="form-control", placeholder="Oggetto") }}
+                        {{ form.subject(class="form-control", placeholder="Oggetto", required=True) }}
                     </div>
                     <div class="form-group col-md-6">
                         <label for="drawingType">Tipo Disegno</label>
-                        {{ form.drawingType(class="form-control") }}
+                        {{ form.drawingType(class="form-control", required=True) }}
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="format">Formato</label>
-                        {{ form.format(class="form-control") }}
+                        {{ form.format(class="form-control", required=True) }}
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="message">Il tuo messaggio</label>
-                    {{ form.message(class="form-control", rows=5, placeholder="Il tuo messaggio") }}
+                    {{ form.message(class="form-control", rows=5, placeholder="Il tuo messaggio", required=True) }}
                 </div>
                 <div class="form-group">
                     <input type="checkbox" id="privacy-consent" name="privacy-consent" required>
                     <label for="privacy-consent">Accetto la <a href="/privacy-policy">Politica sulla Privacy</a></label>
                 </div>
+
+                <!-- Campo nascosto per reCAPTCHA -->
+                <input type="hidden" id="recaptchaResponse" name="recaptcha_response">
                 <button type="submit" class="btn btn-primary">Invia</button>
             </form>
         </div>
@@ -77,5 +80,35 @@
             <img src="{{ url_for('static', filename='img/Commissioni.jpeg') }}" alt="Commission Image" class="img-fluid rounded">
         </div>
     </div>
+</div>
+
+<!-- Google reCAPTCHA v3 -->
+<script src="https://www.google.com/recaptcha/api.js?render={{ recaptcha_site_key }}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        if ("{{ recaptcha_site_key }}") {
+            grecaptcha.ready(function() {
+                grecaptcha.execute("{{ recaptcha_site_key }}", { action: "commissions" }).then(function(token) {
+                    console.log("✅ Token generato:", token);
+                    document.getElementById("recaptchaResponse").value = token;
+                }).catch(function(error) {
+                    console.error("❌ Errore reCAPTCHA:", error);
+                });
+            });
+        } else {
+            console.error("❌ Errore: reCAPTCHA site key non trovata!");
+        }
+    });
+
+    // Evita che il form venga inviato se il token non è presente
+    document.querySelector("form").addEventListener("submit", function(event) {
+        let recaptchaField = document.getElementById("recaptchaResponse");
+        if (!recaptchaField.value) {
+            event.preventDefault();
+            alert("⚠️ Attendi che il reCAPTCHA venga generato prima di inviare il form!");
+        }
+    });
+</script>
+
 </div>
 {% endblock %}

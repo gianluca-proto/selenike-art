@@ -55,7 +55,8 @@ def set_security_headers(response):
         "https://cdnjs.cloudflare.com https://cdn.jsdelivr.net/npm/swiper/; "
         "img-src 'self' https://res.cloudinary.com data: https://www.google.com https://www.gstatic.com; "
         "font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com https://fonts.googleapis.com data: blob: application/font-woff application/font-woff2; "
-        "frame-src 'self' https://www.google.com/recaptcha/ https://www.recaptcha.net/ https://www.gstatic.com/recaptcha/ https://www.google.com; "
+        "frame-src 'self' https://www.google.com/recaptcha/ https://www.recaptcha.net/ https://www.gstatic.com/recaptcha/ "
+        "https://www.google.com https://www.iubenda.com; " 
         "connect-src 'self' https://res.cloudinary.com https://fonts.googleapis.com https://fonts.gstatic.com "
         "https://cdn.jsdelivr.net https://www.google.com https://www.gstatic.com https://www.recaptcha.net;"
     )

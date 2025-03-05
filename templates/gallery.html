@@ -33,16 +33,17 @@
         <div class="modal-dialog modal-lg modal-fullscreen">
             <div class="modal-content bg-transparent border-0">
                 <div class="modal-body p-0 d-flex align-items-center justify-content-center">
-                    <button class="btn btn-dark position-absolute start-0 top-50 translate-middle-y" onclick="prevImage()">
+                    <button class="btn btn-dark position-fixed start-0 top-50 translate-middle-y arrow-left" onclick="prevImage()">
                         <i class="fas fa-chevron-left fa-2x"></i>
                     </button>
                     <img id="modalImage" class="img-fluid rounded shadow-lg" style="max-height: 90vh; width: auto;">
-                    <button class="btn btn-dark position-absolute end-0 top-50 translate-middle-y" onclick="nextImage()">
+                    <button class="btn btn-dark position-fixed end-0 top-50 translate-middle-y arrow-right" onclick="nextImage()">
                         <i class="fas fa-chevron-right fa-2x"></i>
                     </button>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
 {% endblock %}

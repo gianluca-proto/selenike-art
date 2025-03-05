@@ -91,8 +91,28 @@ def contact():
 @limiter.limit("3 per minute")
 def commissions():
     form = CommissionForm()
+    recaptcha_site_key = current_app.config.get('RECAPTCHA_SITE_KEY', '')
 
     if request.method == 'POST' and form.validate_on_submit():
+        recaptcha_response = request.form.get('recaptcha_response')
+
+        if not recaptcha_response:
+            flash('Errore di verifica CAPTCHA: nessuna risposta fornita.', 'error')
+            return redirect(url_for('main.commissions'))
+
+        response = requests.post(
+            'https://www.google.com/recaptcha/api/siteverify',
+            data={
+                'secret': current_app.config.get('RECAPTCHA_SECRET_KEY', ''),
+                'response': recaptcha_response
+            }
+        )
+        result = response.json()
+
+        if not result.get('success', False):
+            flash('Errore di verifica CAPTCHA.', 'error')
+            return redirect(url_for('main.commissions'))
+
         nome = form.name.data
         email = form.email.data
         oggetto = form.subject.data
@@ -100,10 +120,9 @@ def commissions():
         formato = form.format.data
         messaggio = form.message.data
 
-        # ✅ Usa `send_email()` invece di `mail.send(msg)`
         send_email(oggetto, nome, email, messaggio)
 
         flash('Messaggio inviato con successo!', 'success')
-        return redirect(url_for('main.commissions'))  # Usa il nome del blueprint
+        return redirect(url_for('main.commissions'))
 
-    return render_template('commissions.html', form=form)
+    return render_template('commissions.html', form=form, recaptcha_site_key=recaptcha_site_key)

@@ -672,3 +672,22 @@ img {
     background-color: rgba(0, 0, 0, 0.8); /* Effetto di scurimento al passaggio del mouse */
 }
 
+.arrow-left, .arrow-right {
+    z-index: 1050; /* Assicura che siano sempre visibili sopra il modale */
+    background: rgba(0, 0, 0, 0.5); /* Sfondo semi-trasparente */
+    border: none;
+    padding: 10px;
+    transition: background 0.3s;
+}
+
+.arrow-left:hover, .arrow-right:hover {
+    background: rgba(0, 0, 0, 0.8); /* Più scuro quando si passa sopra */
+}
+
+.arrow-left {
+    left: 20px;
+}
+
+.arrow-right {
+    right: 20px;
+}
