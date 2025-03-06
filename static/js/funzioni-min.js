@@ -1,1 +1,250 @@
-document.addEventListener("DOMContentLoaded",function(){var n=document.querySelector(".navbar");if(n){var t=document.querySelector(".logo-img")?.offsetHeight||50;window.addEventListener("scroll",function(){n.classList.toggle("sticky",window.pageYOffset>t)})}if(typeof jQuery!=="undefined"){$(".alert").delay(5000).slideUp(200,function(){$(this).alert("close")})}$(document).on("click",'[data-toggle="lightbox"]',function(n){n.preventDefault(),$(this).ekkoLightbox()});document.addEventListener("contextmenu",function(n){n.preventDefault()},!1),document.querySelectorAll("img").forEach(function(n){n.addEventListener("dragstart",function(n){n.preventDefault()})}),document.querySelectorAll(".gallery-img").forEach(function(n){n.onload=function(){n.classList.add("loaded")}}),window.filterGallery=function(n){document.querySelectorAll(".gallery-item").forEach(function(t){t.style.display=("all"===n||t.classList.contains(n))?"block":"none"})},filterGallery("all");var i=[],e=0;window.openImageModal=function(n,t){n.preventDefault();var o=document.getElementById("imageModal"),r=document.getElementById("modalImage");if(!o||!r)return console.error("⚠️ Modale o immagine non trovati!"),void 0;if("undefined"==typeof bootstrap)return console.error("⚠️ Bootstrap non è caricato! Verifica che sia incluso prima di funzioni.js."),void 0;var a=document.querySelectorAll(".swiper-slide img, .gallery-item img");i=Array.from(a).map(function(n){return n.src}),e=i.indexOf(t),-1===e?console.error("⚠️ Immagine non trovata nella lista."):bootstrap.Modal.getOrCreateInstance(o).then?bootstrap.Modal.getOrCreateInstance(o).then(function(m){r.src=t,m.show()}):((m=bootstrap.Modal.getOrCreateInstance(o)).show(),r.src=t)},window.prevImage=function(){i.length>0&&(e=0<e?e-1:i.length-1,document.getElementById("modalImage").src=i[e])},window.nextImage=function(){i.length>0&&(e=e<i.length-1?e+1:0,document.getElementById("modalImage").src=i[e])};var c=document.getElementById("cookie-banner");c&&"true"===localStorage.getItem("cookiesAccepted")&&(c.style.display="none"),window.acceptCookies=function(){localStorage.setItem("cookiesAccepted","true"),c&&(c.style.display="none")}}),document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll(".swiper-container").forEach(function(n){new Swiper(n,{slidesPerView:1,spaceBetween:10,loop:!0,autoplay:{delay:3000,disableOnInteraction:!1},speed:1000,navigation:{nextEl:n.querySelector(".swiper-button-next"),prevEl:n.querySelector(".swiper-button-prev")},pagination:{el:n.querySelector(".swiper-pagination"),clickable:!0},breakpoints:{768:{slidesPerView:3,slidesPerGroup:1}}})})});var i=[],e=0;function openImageModal(n,t){n.preventDefault();var o=document.getElementById("imageModal"),r=document.getElementById("modalImage");if(!o||!r)return console.error("Modal or image element not found!"),void 0;var a=new bootstrap.Modal(o),c=document.querySelectorAll(".gallery-item img, .swiper-slide img");i=Array.from(c).map(function(n){return n.src}),e=i.indexOf(t),-1===e?console.error("Image not found in the list."): (r.src=t,a.show())}function prevImage(){i.length>0&&(e=0<e?e-1:i.length-1,document.getElementById("modalImage").src=i[e])}function nextImage(){i.length>0&&(e=e<i.length-1?e+1:0,document.getElementById("modalImage").src=i[e])}document.addEventListener("DOMContentLoaded",function(){document.querySelectorAll(".swiper-container").forEach(function(n){new Swiper(n,{slidesPerView:1,spaceBetween:10,loop:!0,autoplay:{delay:3000,disableOnInteraction:!1},speed:1000,navigation:{nextEl:n.querySelector(".swiper-button-next"),prevEl:n.querySelector(".swiper-button-prev")},pagination:{el:n.querySelector(".swiper-pagination"),clickable:!0},breakpoints:{768:{slidesPerView:3,slidesPerGroup:1}}})})});
+document.addEventListener("DOMContentLoaded", function () {
+    // 📌 Navbar Sticky
+    var navbar = document.querySelector('.navbar');
+    navbar.style.height = navbar.offsetHeight + "px";
+
+    if (navbar) {
+        let stickyTrigger = document.querySelector('.logo-img')?.offsetHeight || 50;
+        window.addEventListener('scroll', function () {
+            navbar.classList.toggle('sticky', window.pageYOffset > stickyTrigger);
+        });
+    }
+
+    // 📌 Chiudi automaticamente gli alert dopo 5 secondi
+    document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(function () {
+            document.querySelectorAll(".alert").forEach(function (alert) {
+                alert.style.transition = "opacity 0.5s";
+                alert.style.opacity = "0";
+                setTimeout(() => alert.remove(), 500);
+            });
+        }, 5000);
+    });
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const lightbox = GLightbox({
+            selector: '.lightbox'
+        });
+    });
+
+
+    // 📌 Blocca il tasto destro per impedire il salvataggio delle immagini
+    document.addEventListener('contextmenu', function (e) {
+        e.preventDefault();
+    }, false);
+
+    // 📌 Impedisce il trascinamento delle immagini
+    document.querySelectorAll('img').forEach(img => {
+        img.addEventListener('dragstart', function (event) {
+            event.preventDefault();
+        });
+    });
+
+    // 📌 Effetto fade-in per il caricamento delle immagini
+    document.querySelectorAll(".gallery-img").forEach(img => {
+        img.onload = function () {
+            img.classList.add("loaded");
+        };
+    });
+
+    // 📌 Funzione per filtrare la galleria senza ricaricare la pagina
+    window.filterGallery = function (category) {
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            item.style.display = (category === 'all' || item.classList.contains(category)) ? 'block' : 'none';
+        });
+    };
+
+    window.acceptCookies = function () {
+        localStorage.setItem("cookiesAccepted", "true");
+        let cookieBanner = document.getElementById('cookie-banner');
+        if (cookieBanner) {
+            cookieBanner.style.display = 'none';
+        }
+    };
+
+
+    // 📌 Mostra tutte le immagini di default nella galleria
+    filterGallery('all');
+
+    // 📌 Modale per visualizzare e scorrere tra le immagini
+    let images = [];
+    let currentIndex = 0;
+
+ window.openImageModal = function (event, imageSrc) {
+    event.preventDefault();
+
+    let modalElement = document.getElementById("imageModal");
+    let modalImage = document.getElementById("modalImage");
+
+    if (!modalElement || !modalImage) {
+        console.error("⚠️ Modale o immagine non trovati!");
+        return;
+    }
+
+    // Controlla se Bootstrap è disponibile prima di creare il modale
+    if (typeof bootstrap === "undefined") {
+        console.error("⚠️ Bootstrap non è caricato! Verifica che sia incluso prima di funzioni.js.");
+        return;
+    }
+
+    // Trova tutte le immagini nella galleria e nello Swiper
+    let galleryImages = document.querySelectorAll('.swiper-slide img, .gallery-item img');
+    images = Array.from(galleryImages).map(img => img.src);
+
+    // Trova l'indice dell'immagine cliccata
+    currentIndex = images.indexOf(imageSrc);
+
+    if (currentIndex === -1) {
+        console.error("⚠️ Immagine non trovata nella lista.");
+        return;
+    }
+
+    let modal = bootstrap.Modal.getOrCreateInstance(modalElement);
+    modalImage.src = imageSrc;
+    modal.show();
+};
+
+
+    window.prevImage = function () {
+        if (images.length > 0) {
+            currentIndex = (currentIndex > 0) ? currentIndex - 1 : images.length - 1;
+            document.getElementById('modalImage').src = images[currentIndex];
+        }
+    };
+
+    window.nextImage = function () {
+        if (images.length > 0) {
+            currentIndex = (currentIndex < images.length - 1) ? currentIndex + 1 : 0;
+            document.getElementById('modalImage').src = images[currentIndex];
+        }
+    };
+
+    // 📌 Banner dei Cookie: Nascondi se già accettato
+    let cookieBanner = document.getElementById('cookie-banner');
+    if (cookieBanner && localStorage.getItem('cookiesAccepted') === 'true') {
+        cookieBanner.style.display = 'none';
+    }
+
+    // 📌 Funzione globale per accettare i cookie
+    window.acceptCookies = function () {
+        localStorage.setItem('cookiesAccepted', 'true');
+        if (cookieBanner) {
+            cookieBanner.style.display = 'none';
+        }
+    };
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    let swipers = document.querySelectorAll(".swiper-container");
+
+    swipers.forEach(swiperEl => {
+        new Swiper(swiperEl, {
+            slidesPerView: 1,
+            spaceBetween: 10,
+            loop: true,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
+            speed: 1000,
+            navigation: {
+                nextEl: swiperEl.querySelector('.swiper-button-next'),
+                prevEl: swiperEl.querySelector('.swiper-button-prev'),
+            },
+            pagination: {
+                el: swiperEl.querySelector('.swiper-pagination'),
+                clickable: true,
+            },
+            breakpoints: {
+                768: {
+                    slidesPerView: 3,
+                    slidesPerGroup: 1
+                }
+            }
+        });
+    });
+});
+
+
+let images = [];
+let currentIndex = 0;
+
+function openImageModal(event, imageSrc) {
+    event.preventDefault(); // Evita il comportamento predefinito dei link
+
+    let modalElement = document.getElementById("imageModal");
+    let modalImage = document.getElementById("modalImage");
+
+    if (!modalElement || !modalImage) {
+        console.error("Modal or image element not found!");
+        return;
+    }
+
+    let modal = new bootstrap.Modal(modalElement);
+
+    // Trova tutte le immagini sia dello Swiper sia della galleria
+    let galleryImages = document.querySelectorAll('.gallery-item img, .swiper-slide img');
+    images = Array.from(galleryImages).map(img => img.src);
+
+    // Trova l'indice dell'immagine cliccata
+    currentIndex = images.indexOf(imageSrc);
+
+    if (currentIndex === -1) {
+        console.error("Image not found in the list.");
+        return;
+    }
+
+    // Imposta la sorgente dell'immagine nel modale
+    modalImage.src = imageSrc;
+    modal.show();
+}
+// Funzione per passare all'immagine precedente
+function prevImage() {
+    if (images.length > 0) {
+        currentIndex = (currentIndex > 0) ? currentIndex - 1 : images.length - 1;
+        document.getElementById("modalImage").src = images[currentIndex];
+    }
+}
+
+// Funzione per passare all'immagine successiva
+function nextImage() {
+    if (images.length > 0) {
+        currentIndex = (currentIndex < images.length - 1) ? currentIndex + 1 : 0;
+        document.getElementById("modalImage").src = images[currentIndex];
+    }
+}
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    let swipers = document.querySelectorAll(".swiper-container");
+
+    swipers.forEach(swiperEl => {
+        new Swiper(swiperEl, {
+            slidesPerView: 1,
+            spaceBetween: 10,
+            loop: true,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
+            speed: 1000,
+            navigation: {
+                nextEl: swiperEl.querySelector('.swiper-button-next'),
+                prevEl: swiperEl.querySelector('.swiper-button-prev'),
+            },
+            pagination: {
+                el: swiperEl.querySelector('.swiper-pagination'),
+                clickable: true,
+            },
+            breakpoints: {
+                768: {
+                    slidesPerView: 3,
+                    slidesPerGroup: 1
+                }
+            }
+        });
+    });
+});
+
+
