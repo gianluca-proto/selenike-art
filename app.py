@@ -11,6 +11,8 @@ from flask_wtf.csrf import CSRFProtect
 from flask_compress import Compress
 from dotenv import load_dotenv
 import requests
+from flask import Flask
+from flask_caching import Cache
 
 # Importa Flask-Babel
 from flask_babel import Babel, _
@@ -26,6 +28,15 @@ print(f"🌐 IP pubblico del server Heroku: {get_server_ip()}")
 
 # Creazione dell'app Flask
 app = Flask(__name__)
+
+
+cache = Cache(app, config={'CACHE_TYPE': 'simple'})  # Memorizza in RAM
+
+@app.after_request
+def add_header(response):
+    response.headers['Cache-Control'] = 'public, max-age=86400'  # Cache di 1 giorno
+    return response
+
 app.config.from_object(Config)
 
 # Imposta la lingua predefinita se non definita in Config
