@@ -15,7 +15,7 @@ csrf = CSRFProtect()
 
 @bp.route('/art-gallery')  # ✅ Route registrata sotto 'gallery'
 def art_gallery():
-    categories = ['animals', 'comics', 'illustrations']
+    categories = ['novita', 'commissioni', 'fanart', 'ideepersonali', 'altro']
     images = []
     for category in categories:
         res = get_resources('upload', f'img/gallery/{category}/')
@@ -116,7 +116,7 @@ def move_image():
 @bp.route('/manage-gallery')
 @jwt_required  # 🔹 Protegge la gestione della galleria con login
 def manage_gallery():
-    categories = ['animals', 'comics', 'illustrations', 'altro']
+    categories = ['novita', 'commissioni', 'fanart', 'ideepersonali', 'altro']
     images = {category: get_resources('upload', f'img/gallery/{category}/') for category in categories}
 
     return render_template('admin/manage_gallery.html', images=images, categories=categories)

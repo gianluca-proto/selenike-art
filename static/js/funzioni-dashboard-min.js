@@ -1,1 +1,194 @@
-document.addEventListener("DOMContentLoaded",function(){let e=document.querySelector(".navbar");if(e){let t=document.querySelector(".logo-img")?.offsetHeight||50;window.addEventListener("scroll",function(){e.classList.toggle("sticky",window.pageYOffset>t)})}if("undefined"!=typeof jQuery){$(".alert").delay(5e3).slideUp(200,function(){$(this).alert("close")})}$(document).on("click","[data-toggle=\"lightbox\"]",function(e){e.preventDefault(),$(this).ekkoLightbox()}),document.addEventListener("contextmenu",function(e){e.preventDefault()},!1),document.querySelectorAll("img").forEach(e=>{e.addEventListener("dragstart",function(e){e.preventDefault()})}),window.filterGallery=function(e){document.querySelectorAll(".gallery-item").forEach(t=>{t.classList.remove("show"),("all"===e||t.classList.contains(e))&&t.classList.add("show")})},window.acceptCookies=function(){localStorage.setItem("cookiesAccepted","true"),document.getElementById("cookie-banner").style.display="none"},window.onload=function(){"true"===localStorage.getItem("cookiesAccepted")&&(document.getElementById("cookie-banner").style.display="none")},window.getCSRFToken=function(){return document.querySelector("meta[name=\"csrf-token\"]").getAttribute("content")},window.deleteImage=function(e,t){const n=`${t}`;Swal.fire({title:"Sei sicuro?",text:"Questa azione è irreversibile!",icon:"warning",showCancelButton:!0,confirmButtonColor:"#d33",cancelButtonColor:"#3085d6",confirmButtonText:"Sì, elimina!",cancelButtonText:"Annulla"}).then(e=>{e.isConfirmed&&fetch(`/delete-image/${encodeURIComponent(n)}`,{method:"POST",headers:{"Content-Type":"application/json","X-CSRFToken":getCSRFToken()}}).then(e=>(console.log("📡 Risposta ricevuta:",e),e.ok?e.json():e.text().then(e=>{throw new Error(`Errore HTTP ${e.status}: ${e}`)}))).then(e=>{console.log("✅ Risultato eliminazione:",e),e.success?Swal.fire({title:"Eliminata!",text:"L'immagine è stata eliminata con successo.",icon:"success",confirmButtonColor:"#3085d6"}).then(()=>{window.location.reload()}):Swal.fire({title:"Errore!",text:"Non è stato possibile eliminare l'immagine.",icon:"error",confirmButtonColor:"#d33"})}).catch(e=>{console.error("❌ Errore Fetch:",e),Swal.fire({title:"Errore di connessione!",text:e.message,icon:"error",confirmButtonColor:"#d33"})})})},window.moveImage=function(e){var t=e.dataset.filename,n=e.dataset.category.replace("img/gallery/",""),o=e.value,l=`img/gallery/${o}/${t}`;if(console.log("🔍 Debug: filename:",t),console.log("🔍 Debug: src_category:",n),console.log("🔍 Debug: dest_category:",o),console.log("📂 src_public_id:",t),console.log("📂 dest_public_id:",l),t===l)return void Swal.fire({title:"⚠️ Attenzione!",text:"L'immagine è già in questa categoria!",icon:"warning",confirmButtonColor:"#3085d6"});Swal.fire({title:"Sicuro di voler spostare l'immagine?",text:`L'immagine verrà spostata da ${n} a ${o}.`,icon:"question",showCancelButton:!0,confirmButtonColor:"#28a745",cancelButtonColor:"#d33",confirmButtonText:"Sì, sposta!",cancelButtonText:"Annulla"}).then(e=>{e.isConfirmed&&fetch("/move-image",{method:"POST",headers:{"Content-Type":"application/json","X-CSRFToken":getCSRFToken()},body:JSON.stringify({src_public_id:t,dest_public_id:l})}).then(e=>(console.log("📡 Risposta ricevuta:",e),e.ok?e.json():e.text().then(e=>{throw new Error(`Errore HTTP ${e.status}: ${e}`)}))).then(e=>{console.log("✅ Risultato spostamento:",e),e.success?Swal.fire({title:"Spostato!",text:"L'immagine è stata spostata con successo.",icon:"success",confirmButtonColor:"#3085d6"}).then(()=>{window.location.reload()}):Swal.fire({title:"Errore!",text:"Non è stato possibile spostare l'immagine.",icon:"error",confirmButtonColor:"#d33"})}).catch(e=>{console.error("❌ Errore Fetch:",e),Swal.fire({title:"Errore di connessione!",text:e.message,icon:"error",confirmButtonColor:"#d33"})})})}}]}
+$(document).ready(function() {
+    $(".alert").delay(5000).slideUp(200, function() {
+        $(this).alert('close');
+    });
+
+    $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+        event.preventDefault();
+        $(this).ekkoLightbox();
+    });
+
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    }, false);
+
+    $('img').on('dragstart', function(event) {
+        event.preventDefault();
+    });
+});
+
+function filterGallery(category) {
+    var items = document.getElementsByClassName('gallery-item');
+    Array.from(items).forEach(item => {
+        item.classList.remove('show');
+        if (category === 'all' || item.classList.contains(category)) {
+            item.classList.add('show');
+        }
+    });
+}
+
+function acceptCookies() {
+    localStorage.setItem('cookiesAccepted', 'true');
+    document.getElementById('cookie-banner').style.display = 'none';
+}
+
+window.onload = function() {
+    if (localStorage.getItem('cookiesAccepted') === 'true') {
+        document.getElementById('cookie-banner').style.display = 'none';
+    }
+}
+
+function getCSRFToken() {
+    return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+}
+
+function deleteImage(category, filename) {
+    const public_id = `${filename}`;
+
+    Swal.fire({
+        title: "Sei sicuro?",
+        text: "Questa azione è irreversibile!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Sì, elimina!",
+        cancelButtonText: "Annulla"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(`/delete-image/${encodeURIComponent(public_id)}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCSRFToken()
+                }
+            })
+            .then(response => {
+                console.log("📡 Risposta ricevuta:", response);
+                if (!response.ok) {
+                    return response.text().then(text => { throw new Error(`Errore HTTP ${response.status}: ${text}`); });
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("✅ Risultato eliminazione:", data);
+                if (data.success) {
+                    Swal.fire({
+                        title: "Eliminata!",
+                        text: "L'immagine è stata eliminata con successo.",
+                        icon: "success",
+                        confirmButtonColor: "#3085d6"
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        title: "Errore!",
+                        text: "Non è stato possibile eliminare l'immagine.",
+                        icon: "error",
+                        confirmButtonColor: "#d33"
+                    });
+                }
+            })
+            .catch(error => {
+                console.error("❌ Errore Fetch:", error);
+                Swal.fire({
+                    title: "Errore di connessione!",
+                    text: error.message,
+                    icon: "error",
+                    confirmButtonColor: "#d33"
+                });
+            });
+        }
+    });
+}
+
+
+function moveImage(selectElement) {
+    var filename = selectElement.dataset.filename;
+    var src_category = selectElement.dataset.category.replace("img/gallery/", "");
+    var dest_category = selectElement.value;
+
+    console.log("🔍 Debug: filename:", filename);
+    console.log("🔍 Debug: src_category:", src_category);
+    console.log("🔍 Debug: dest_category:", dest_category);
+
+    var src_public_id = `${filename}`;
+    var dest_public_id = `img/gallery/${dest_category}/${filename}`;
+
+    console.log("📂 src_public_id:", src_public_id);
+    console.log("📂 dest_public_id:", dest_public_id);
+
+    if (src_public_id === dest_public_id) {
+        Swal.fire({
+            title: "⚠️ Attenzione!",
+            text: "L'immagine è già in questa categoria!",
+            icon: "warning",
+            confirmButtonColor: "#3085d6"
+        });
+        return;
+    }
+
+    Swal.fire({
+        title: "Sicuro di voler spostare l'immagine?",
+        text: `L'immagine verrà spostata da ${src_category} a ${dest_category}.`,
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#28a745",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sì, sposta!",
+        cancelButtonText: "Annulla"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch('/move-image', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCSRFToken()
+                },
+                body: JSON.stringify({
+                    src_public_id: src_public_id,
+                    dest_public_id: dest_public_id
+                })
+            })
+            .then(response => {
+                console.log("📡 Risposta ricevuta:", response);
+                if (!response.ok) {
+                    return response.text().then(text => { throw new Error(`Errore HTTP ${response.status}: ${text}`); });
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("✅ Risultato spostamento:", data);
+                if (data.success) {
+                    Swal.fire({
+                        title: "Spostato!",
+                        text: "L'immagine è stata spostata con successo.",
+                        icon: "success",
+                        confirmButtonColor: "#3085d6"
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        title: "Errore!",
+                        text: "Non è stato possibile spostare l'immagine.",
+                        icon: "error",
+                        confirmButtonColor: "#d33"
+                    });
+                }
+            })
+            .catch(error => {
+                console.error("❌ Errore Fetch:", error);
+                Swal.fire({
+                    title: "Errore di connessione!",
+                    text: error.message,
+                    icon: "error",
+                    confirmButtonColor: "#d33"
+                });
+            });
+        }
+    });
+}
+
+
