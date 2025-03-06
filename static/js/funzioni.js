@@ -9,17 +9,23 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // 📌 Chiudi automaticamente gli alert dopo 5 secondi
-    if (typeof jQuery !== "undefined") {
-        $(".alert").delay(5000).slideUp(200, function () {
-            $(this).alert('close');
-        });
-    }
-
-    // 📌 Abilita Ekko Lightbox per le immagini con data-toggle="lightbox"
-    $(document).on('click', '[data-toggle="lightbox"]', function (event) {
-        event.preventDefault();
-        $(this).ekkoLightbox();
+    document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(function () {
+            document.querySelectorAll(".alert").forEach(function (alert) {
+                alert.style.transition = "opacity 0.5s";
+                alert.style.opacity = "0";
+                setTimeout(() => alert.remove(), 500);
+            });
+        }, 5000);
     });
+
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const lightbox = GLightbox({
+            selector: '.lightbox'
+        });
+    });
+
 
     // 📌 Blocca il tasto destro per impedire il salvataggio delle immagini
     document.addEventListener('contextmenu', function (e) {
@@ -46,6 +52,15 @@ document.addEventListener("DOMContentLoaded", function () {
             item.style.display = (category === 'all' || item.classList.contains(category)) ? 'block' : 'none';
         });
     };
+
+    window.acceptCookies = function () {
+        localStorage.setItem("cookiesAccepted", "true");
+        let cookieBanner = document.getElementById('cookie-banner');
+        if (cookieBanner) {
+            cookieBanner.style.display = 'none';
+        }
+    };
+
 
     // 📌 Mostra tutte le immagini di default nella galleria
     filterGallery('all');
