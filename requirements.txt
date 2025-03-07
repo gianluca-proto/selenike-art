@@ -10,6 +10,7 @@ Booktype==1.5
 boolean.py==4.0
 Brotli==1.1.0
 CacheControl==0.14.2
+cachelib==0.13.0
 certifi==2024.8.30
 cffi==1.17.1
 charset-normalizer==3.4.0
@@ -24,6 +25,7 @@ dotenv==0.9.9
 filelock==3.17.0
 Flask==3.0.3
 flask-babel==4.0.0
+Flask-Caching==2.3.1
 Flask-Compress==1.17
 Flask-Limiter==3.10.1
 Flask-Login==0.6.3

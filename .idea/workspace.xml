@@ -4,15 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14253df0-ae5a-481e-8a12-af9d47af9467" name="Changes" comment="fix css">
-      <change afterPath="$PROJECT_DIR$/babel.cfg" afterDir="false" />
+    <list default="true" id="14253df0-ae5a-481e-8a12-af9d47af9467" name="Changes" comment="update font">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/about.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/about.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/commissions.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/commissions.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/contact.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/contact.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/gallery.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/gallery.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,6 +26,9 @@
   </component>
   <component name="GithubDefaultAccount">
     <option name="defaultAccountId" value="aa8316dd-58b1-4070-9121-723b081d4b56" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
@@ -60,17 +57,17 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "develop",
-    "last_opened_file_path": "/home/popdeveloper/personal_project/selenike-art/static/css",
+    "last_opened_file_path": "/home/popdeveloper/personal_project/selenike-art/static/fonts",
     "settings.editor.selected.configurable": "preferences.keymap"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/static/fonts" />
       <recent name="$PROJECT_DIR$/static/css" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/static/img" />
       <recent name="$PROJECT_DIR$/static/js" />
-      <recent name="$PROJECT_DIR$/static" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/templates/admin" />
@@ -134,118 +131,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1722120043842</updated>
-    </task>
-    <task id="LOCAL-00038" summary="ridimensione logo">
-      <option name="closed" value="true" />
-      <created>1729414298417</created>
-      <option name="number" value="00038" />
-      <option name="presentableId" value="LOCAL-00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1729414298417</updated>
-    </task>
-    <task id="LOCAL-00039" summary="ridimensione logo 2">
-      <option name="closed" value="true" />
-      <created>1729414756731</created>
-      <option name="number" value="00039" />
-      <option name="presentableId" value="LOCAL-00039" />
-      <option name="project" value="LOCAL" />
-      <updated>1729414756731</updated>
-    </task>
-    <task id="LOCAL-00040" summary="ridimensione immagini">
-      <option name="closed" value="true" />
-      <created>1729457692091</created>
-      <option name="number" value="00040" />
-      <option name="presentableId" value="LOCAL-00040" />
-      <option name="project" value="LOCAL" />
-      <updated>1729457692091</updated>
-    </task>
-    <task id="LOCAL-00041" summary="eliminato preload styles.css">
-      <option name="closed" value="true" />
-      <created>1729457922913</created>
-      <option name="number" value="00041" />
-      <option name="presentableId" value="LOCAL-00041" />
-      <option name="project" value="LOCAL" />
-      <updated>1729457922913</updated>
-    </task>
-    <task id="LOCAL-00042" summary="eliminato preload styles.css 2">
-      <option name="closed" value="true" />
-      <created>1729457971350</created>
-      <option name="number" value="00042" />
-      <option name="presentableId" value="LOCAL-00042" />
-      <option name="project" value="LOCAL" />
-      <updated>1729457971350</updated>
-    </task>
-    <task id="LOCAL-00043" summary="immagini ottimizzate">
-      <option name="closed" value="true" />
-      <created>1729458097818</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1729458097818</updated>
-    </task>
-    <task id="LOCAL-00044" summary="immagini index ottimizzate">
-      <option name="closed" value="true" />
-      <created>1729502982714</created>
-      <option name="number" value="00044" />
-      <option name="presentableId" value="LOCAL-00044" />
-      <option name="project" value="LOCAL" />
-      <updated>1729502982714</updated>
-    </task>
-    <task id="LOCAL-00045" summary="immagini index ottimizzate 2">
-      <option name="closed" value="true" />
-      <created>1729503372065</created>
-      <option name="number" value="00045" />
-      <option name="presentableId" value="LOCAL-00045" />
-      <option name="project" value="LOCAL" />
-      <updated>1729503372065</updated>
-    </task>
-    <task id="LOCAL-00046" summary="immagini banner ridimen">
-      <option name="closed" value="true" />
-      <created>1729517433807</created>
-      <option name="number" value="00046" />
-      <option name="presentableId" value="LOCAL-00046" />
-      <option name="project" value="LOCAL" />
-      <updated>1729517433807</updated>
-    </task>
-    <task id="LOCAL-00047" summary="sistemati css base.html">
-      <option name="closed" value="true" />
-      <created>1729542688611</created>
-      <option name="number" value="00047" />
-      <option name="presentableId" value="LOCAL-00047" />
-      <option name="project" value="LOCAL" />
-      <updated>1729542688611</updated>
-    </task>
-    <task id="LOCAL-00048" summary="ripristinati css base.html">
-      <option name="closed" value="true" />
-      <created>1729543187162</created>
-      <option name="number" value="00048" />
-      <option name="presentableId" value="LOCAL-00048" />
-      <option name="project" value="LOCAL" />
-      <updated>1729543187162</updated>
-    </task>
-    <task id="LOCAL-00049" summary="ripristinati css base.html aggiunti">
-      <option name="closed" value="true" />
-      <created>1729543392621</created>
-      <option name="number" value="00049" />
-      <option name="presentableId" value="LOCAL-00049" />
-      <option name="project" value="LOCAL" />
-      <updated>1729543392621</updated>
-    </task>
-    <task id="LOCAL-00050" summary="ripristinati css base.html eliminati ennesima prova">
-      <option name="closed" value="true" />
-      <created>1729543577781</created>
-      <option name="number" value="00050" />
-      <option name="presentableId" value="LOCAL-00050" />
-      <option name="project" value="LOCAL" />
-      <updated>1729543577782</updated>
-    </task>
-    <task id="LOCAL-00051" summary="fix carousel vari">
-      <option name="closed" value="true" />
-      <created>1729591467410</created>
-      <option name="number" value="00051" />
-      <option name="presentableId" value="LOCAL-00051" />
-      <option name="project" value="LOCAL" />
-      <updated>1729591467410</updated>
     </task>
     <task id="LOCAL-00052" summary="modificata prima pagina">
       <option name="closed" value="true" />
@@ -527,7 +412,119 @@
       <option name="project" value="LOCAL" />
       <updated>1741190161955</updated>
     </task>
-    <option name="localTasksCounter" value="87" />
+    <task id="LOCAL-00087" summary="add english">
+      <option name="closed" value="true" />
+      <created>1741215305648</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1741215305648</updated>
+    </task>
+    <task id="LOCAL-00088" summary="update bootstrap 4 to 5">
+      <option name="closed" value="true" />
+      <created>1741258766279</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1741258766280</updated>
+    </task>
+    <task id="LOCAL-00089" summary="minimize css and js">
+      <option name="closed" value="true" />
+      <created>1741260741519</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1741260741519</updated>
+    </task>
+    <task id="LOCAL-00090" summary="minimize ekko css">
+      <option name="closed" value="true" />
+      <created>1741261581929</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1741261581929</updated>
+    </task>
+    <task id="LOCAL-00091" summary="eliminati numeri carousel">
+      <option name="closed" value="true" />
+      <created>1741263436401</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1741263436401</updated>
+    </task>
+    <task id="LOCAL-00092" summary="preload css fix">
+      <option name="closed" value="true" />
+      <created>1741264121422</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1741264121422</updated>
+    </task>
+    <task id="LOCAL-00093" summary="refer css fix">
+      <option name="closed" value="true" />
+      <created>1741274183243</created>
+      <option name="number" value="00093" />
+      <option name="presentableId" value="LOCAL-00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1741274183243</updated>
+    </task>
+    <task id="LOCAL-00094" summary="css fix">
+      <option name="closed" value="true" />
+      <created>1741274550661</created>
+      <option name="number" value="00094" />
+      <option name="presentableId" value="LOCAL-00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1741274550661</updated>
+    </task>
+    <task id="LOCAL-00095" summary="css fix js">
+      <option name="closed" value="true" />
+      <created>1741276127610</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1741276127610</updated>
+    </task>
+    <task id="LOCAL-00096" summary="fix base.html">
+      <option name="closed" value="true" />
+      <created>1741276652926</created>
+      <option name="number" value="00096" />
+      <option name="presentableId" value="LOCAL-00096" />
+      <option name="project" value="LOCAL" />
+      <updated>1741276652927</updated>
+    </task>
+    <task id="LOCAL-00097" summary="fix css">
+      <option name="closed" value="true" />
+      <created>1741276833312</created>
+      <option name="number" value="00097" />
+      <option name="presentableId" value="LOCAL-00097" />
+      <option name="project" value="LOCAL" />
+      <updated>1741276833312</updated>
+    </task>
+    <task id="LOCAL-00098" summary="fix css">
+      <option name="closed" value="true" />
+      <created>1741277094844</created>
+      <option name="number" value="00098" />
+      <option name="presentableId" value="LOCAL-00098" />
+      <option name="project" value="LOCAL" />
+      <updated>1741277094844</updated>
+    </task>
+    <task id="LOCAL-00099" summary="fix ancora fix">
+      <option name="closed" value="true" />
+      <created>1741279137004</created>
+      <option name="number" value="00099" />
+      <option name="presentableId" value="LOCAL-00099" />
+      <option name="project" value="LOCAL" />
+      <updated>1741279137004</updated>
+    </task>
+    <task id="LOCAL-00100" summary="update font">
+      <option name="closed" value="true" />
+      <created>1741280304043</created>
+      <option name="number" value="00100" />
+      <option name="presentableId" value="LOCAL-00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1741280304043</updated>
+    </task>
+    <option name="localTasksCounter" value="101" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -552,18 +549,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="remove redis" />
-    <MESSAGE value="add redis" />
-    <MESSAGE value="upgrade redis 2" />
-    <MESSAGE value="downgrade python" />
-    <MESSAGE value="upgrade redis" />
-    <MESSAGE value="add recaptcha" />
-    <MESSAGE value="resolve recaptcha" />
-    <MESSAGE value="Rimosso .env dal repository e aggiunto a .gitignore" />
-    <MESSAGE value="aggiungo flask migrate" />
-    <MESSAGE value="fixate connessione db" />
-    <MESSAGE value="logica login dashboard aggiornata" />
-    <MESSAGE value=" aggiornate requirements.txt" />
     <MESSAGE value="restyle struttura sito" />
     <MESSAGE value="restyle struttura sito 2" />
     <MESSAGE value="fix upload" />
@@ -576,8 +561,20 @@
     <MESSAGE value="fix dimensioni carousel" />
     <MESSAGE value="fix dimensioni logo" />
     <MESSAGE value="fix contact.html" />
+    <MESSAGE value="add english" />
+    <MESSAGE value="update bootstrap 4 to 5" />
+    <MESSAGE value="minimize css and js" />
+    <MESSAGE value="minimize ekko css" />
+    <MESSAGE value="eliminati numeri carousel" />
+    <MESSAGE value="preload css fix" />
+    <MESSAGE value="refer css fix" />
+    <MESSAGE value="css fix" />
+    <MESSAGE value="css fix js" />
+    <MESSAGE value="fix base.html" />
     <MESSAGE value="fix css" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix css" />
+    <MESSAGE value="fix ancora fix" />
+    <MESSAGE value="update font" />
+    <option name="LAST_COMMIT_MESSAGE" value="update font" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

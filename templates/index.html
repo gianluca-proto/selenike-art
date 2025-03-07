@@ -7,13 +7,13 @@
         <div class="carousel-inner">
             {% for desktop_image, mobile_image in zip(carousel_images_desktop, carousel_images_mobile) %}
             <div class="carousel-item {{ 'active' if loop.first }}">
-              <img src="{{ desktop_image }}"
-                   srcset="{{ mobile_image }} 600w, {{ desktop_image }} 1200w"
-                   sizes="(max-width: 768px) 600px, 100vw"
-                   class="d-block w-100 lazyload"
-                   alt="Slide {{ loop.index }}"
-                   width="1200" height="400"
-                   style="height: 400px; object-fit: cover;">
+                <img src="{{ desktop_image }}"
+                     srcset="{{ mobile_image }} 600w, {{ desktop_image }} 1200w"
+                     sizes="(max-width: 768px) 600px, 100vw"
+                     class="d-block w-100 lazyload"
+                     alt="Slide {{ loop.index }}"
+                     width="1200" height="400"
+                     style="height: 400px; object-fit: cover;">
             </div>
             {% endfor %}
         </div>
@@ -39,12 +39,12 @@
     </div>
 
     <!-- Sezioni con Swiper.js -->
-  {% set sections = [
+    {% set sections = [
     ('Disegni Erotici', carousel_erotic_images, 'eroticiSwiper', _('Esplorate la mia collezione di disegni erotici, opere d\'arte che celebrano la sensualità e l\'intimità con uno stile audace e raffinato. Ideali per chi cerca un tocco di provocazione e sensualità per gli spazi personali, o un regalo sorprendente e originale. La discrezione è garantita, destinati a un pubblico adulto.')),
     ('Disegni di Animali', carousel_animal_images, 'animaliSwiper', _('Scoprite la mia collezione di disegni di animali, che catturano l\'essenza e la personalità di creature affascinanti. Perfetti per gli amanti degli animali che vogliono decorare la propria casa o ufficio con opere ispirate alla natura.')),
     ('Tavole da Fumetto', carousel_comics_images, 'fumettiSwiper', _('Dai un\'occhiata alle mie tavole da fumetto, che includono sia narrativa originale che fan art per Topolino. Un mix perfetto di suspense, narrazione e arte visiva, ideali per appassionati di fumetti, graphic novel e collezionisti alla ricerca di originalità.')),
     ('Opere Personalizzate', carousel_customized_images, 'personalizzateSwiper', _('Offro la creazione di disegni dettagliati e realistici, perfetti per catturare l\'essenza di qualsiasi soggetto, da ritratti individuali a familiari, fino agli amati animali domestici.'))
-] %}
+    ] %}
 
 
     {% for title, images, swiper_class, text in sections %}
@@ -58,8 +58,13 @@
                 <div class="swiper-wrapper">
                     {% for image in images %}
                     <div class="swiper-slide">
-                        <img src="{{ image }}" class="d-block w-100 fixed-size" alt="Opera {{ loop.index }}" onclick="openImageModal(event, this.src)">
+                        <img src="{{ image }}" class="d-block w-100 fixed-size"
+                             alt="Opera {{ loop.index }}"
+                             onclick="openImageModal(event, this.src)"
+                             loading="{{ 'eager' if loop.first else 'lazy' }}"
+                             fetchpriority="{{ 'high' if loop.first else 'auto' }}">
                     </div>
+
                     {% endfor %}
                 </div>
                 <!-- Frecce di navigazione -->
@@ -81,11 +86,11 @@
         <div class="modal-dialog modal-lg modal-fullscreen">
             <div class="modal-content bg-transparent border-0">
                 <div class="modal-body p-0 d-flex align-items-center justify-content-center">
-                    <button class="btn btn-dark position-absolute start-0 top-50 translate-middle-y" onclick="prevImage()">
+                    <button class="btn btn-dark position-fixed start-0 top-50 translate-middle-y" onclick="prevImage()">
                         <i class="fas fa-chevron-left fa-2x"></i>
                     </button>
                     <img id="modalImage" class="img-fluid rounded shadow-lg" style="max-height: 90vh; width: auto;">
-                    <button class="btn btn-dark position-absolute end-0 top-50 translate-middle-y" onclick="nextImage()">
+                    <button class="btn btn-dark position-fixed end-0 top-50 translate-middle-y" onclick="nextImage()">
                         <i class="fas fa-chevron-right fa-2x"></i>
                     </button>
                 </div>
