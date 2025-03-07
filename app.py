@@ -69,10 +69,11 @@ def set_security_headers(response):
             "https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ https://www.gstatic.com/recaptcha/; "
         "style-src 'self' 'unsafe-inline' https://cdn.iubenda.com https://stackpath.bootstrapcdn.com https://cdnjs.cloudflare.com "
             "https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/ https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css "
-            "https://fonts.googleapis.com https://cdn.iubenda.com; "
+            "https://fonts.googleapis.com https://cdn.iubenda.com https://cdn.jsdelivr.net/npm/glightbox/dist/css/; "  # <-- Aggiunto qui
         "style-src-elem 'self' 'unsafe-inline' https://cdn.iubenda.com https://stackpath.bootstrapcdn.com https://cdnjs.cloudflare.com "
             "https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/ https://cdn.jsdelivr.net/npm/swiper/ "
-            "https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css https://fonts.googleapis.com https://cdn.iubenda.com; "
+            "https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css https://fonts.googleapis.com https://cdn.iubenda.com "
+            "https://cdn.jsdelivr.net/npm/glightbox/dist/css/; "  # <-- Aggiunto qui
         "img-src 'self' https://res.cloudinary.com data: https://www.google.com https://www.gstatic.com; "
         "font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com https://fonts.googleapis.com data: blob: application/font-woff application/font-woff2; "
         "frame-src 'self' https://www.google.com/recaptcha/ https://www.recaptcha.net/ https://www.gstatic.com/recaptcha/ "
@@ -84,6 +85,7 @@ def set_security_headers(response):
     response.headers['X-Content-Type-Options'] = 'nosniff'
     response.headers['X-XSS-Protection'] = '1; mode=block'
     return response
+
 
 
 
