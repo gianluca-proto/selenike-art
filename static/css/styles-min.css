@@ -688,3 +688,10 @@ img {
 .arrow-right {
     right: 20px;
 }
+
+.fixed-size {
+    width: 100%;
+    height: auto;
+    max-height: 500px; /* Adatta alla tua grafica */
+    object-fit: cover;
+}
