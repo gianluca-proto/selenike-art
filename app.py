@@ -11,6 +11,8 @@ from flask_wtf.csrf import CSRFProtect
 from flask_compress import Compress
 from dotenv import load_dotenv
 import requests
+from flask import make_response
+
 
 # Importa Flask-Babel
 from flask_babel import Babel, _
@@ -44,6 +46,10 @@ init_limiter(app) # Inizializza Flask-Limiter
 csrf = CSRFProtect(app)
 Compress(app)
 
+@app.after_request
+def add_header(response):
+    response.headers["Cache-Control"] = "public, max-age=3600"
+    return response
 
 
 def get_locale():
