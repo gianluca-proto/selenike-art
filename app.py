@@ -1,5 +1,3 @@
-import logging
-import os
 from flask import Flask, request
 from config import Config
 from routes import main, admin, gallery, security  # ✅ Importa solo i Blueprint giusti
@@ -11,7 +9,6 @@ from flask_wtf.csrf import CSRFProtect
 from flask_compress import Compress
 from dotenv import load_dotenv
 import requests
-from flask import make_response
 
 
 # Importa Flask-Babel
