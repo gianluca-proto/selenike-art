@@ -75,15 +75,10 @@
 }
 
 .logo-img {
-    max-width: 332px;
-    height: auto;
+    max-width: 332px !important;
+    height: 100px !important;
 }
 
-@media (max-width: 767.98px) {
-    .logo-img {
-        max-width: 100%;
-    }
-}
 
 footer {
     background-color: #000;
