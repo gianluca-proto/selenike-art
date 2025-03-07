@@ -46,6 +46,10 @@ init_limiter(app) # Inizializza Flask-Limiter
 csrf = CSRFProtect(app)
 Compress(app)
 
+if not app.debug:
+    app.logger.disabled = True
+
+
 @app.after_request
 def add_header(response):
     response.headers["Cache-Control"] = "public, max-age=3600"

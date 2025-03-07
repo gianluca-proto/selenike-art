@@ -25,6 +25,7 @@ body {
             z-index: 1000;
         }
 
+
 .nav-link {
     position: relative;
     color: #41c4ef !important; /* Assicura che il colore azzurro sia prioritario */
