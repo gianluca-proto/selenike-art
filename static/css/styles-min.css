@@ -292,11 +292,6 @@ img {
     margin: 5px; /* Aggiunge uno spazio regolare tra le immagini */
 }
 
-.gallery-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
 
 
 .gallery-grid {
@@ -324,7 +319,7 @@ img {
   }
 }
 
-@media (max-width: 767.98px) { /* Mobile */
+@media (max-width: 768) { /* Mobile */
   .gallery-grid {
     grid-template-columns: repeat(1, 1fr); /* 1 immagine per riga su mobile */
   }
