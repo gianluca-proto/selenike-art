@@ -11,6 +11,7 @@ from flask_wtf.csrf import CSRFProtect
 from flask_compress import Compress
 from dotenv import load_dotenv
 import requests
+from flask_caching import Cache
 
 # Importa Flask-Babel
 from flask_babel import Babel, _
@@ -27,6 +28,13 @@ print(f"🌐 IP pubblico del server Heroku: {get_server_ip()}")
 # Creazione dell'app Flask
 app = Flask(__name__)
 app.config.from_object(Config)
+
+
+# Configurazione della cache
+app.config['CACHE_TYPE'] = 'simple'  # Usa 'simple' per una cache in memoria
+app.config['CACHE_DEFAULT_TIMEOUT'] = 300  # Tempo di cache in secondi (5 minuti)
+cache = Cache(app)
+
 
 # Imposta la lingua predefinita se non definita in Config
 app.config.setdefault('BABEL_DEFAULT_LOCALE', 'it')
@@ -59,20 +67,21 @@ def set_security_headers(response):
     response.headers['Content-Security-Policy'] = (
         "default-src 'self' https://www.google.com https://www.gstatic.com https://www.recaptcha.net; "
         "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://code.jquery.com https://cdn.jsdelivr.net/npm/ "
-            "https://cdnjs.cloudflare.com https://cdn.iubenda.com https://www.google.com https://www.gstatic.com "
-            "https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ https://www.gstatic.com/recaptcha/; "
+        "https://cdnjs.cloudflare.com https://cdn.iubenda.com https://www.google.com https://www.gstatic.com "
+        "https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ https://www.gstatic.com/recaptcha/; "
         "style-src 'self' 'unsafe-inline' https://cdn.iubenda.com https://stackpath.bootstrapcdn.com https://cdnjs.cloudflare.com "
-            "https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/ https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css "
-            "https://fonts.googleapis.com https://cdn.iubenda.com; "
+        "https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/ https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css "
+        "https://fonts.googleapis.com https://cdn.iubenda.com; "
         "style-src-elem 'self' 'unsafe-inline' https://cdn.iubenda.com https://stackpath.bootstrapcdn.com https://cdnjs.cloudflare.com "
-            "https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/ https://cdn.jsdelivr.net/npm/swiper/ "
-            "https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css https://fonts.googleapis.com https://cdn.iubenda.com; "
+        " https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/ https://cdn.jsdelivr.net/npm/swiper/ "
+        " https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css https://fonts.googleapis.com https://cdn.iubenda.com "
+        " https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css ;"
         "img-src 'self' https://res.cloudinary.com data: https://www.google.com https://www.gstatic.com; "
         "font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com https://fonts.googleapis.com data: blob: application/font-woff application/font-woff2; "
         "frame-src 'self' https://www.google.com/recaptcha/ https://www.recaptcha.net/ https://www.gstatic.com/recaptcha/ "
-            "https://www.google.com https://www.iubenda.com; " 
+        "https://www.google.com https://www.iubenda.com; "
         "connect-src 'self' https://res.cloudinary.com https://fonts.googleapis.com https://fonts.gstatic.com "
-            "https://cdn.jsdelivr.net https://www.google.com https://www.gstatic.com https://www.recaptcha.net;"
+        "https://cdn.jsdelivr.net https://www.google.com https://www.gstatic.com https://www.recaptcha.net;"
     )
     response.headers['X-Frame-Options'] = 'SAMEORIGIN'
     response.headers['X-Content-Type-Options'] = 'nosniff'
