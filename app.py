@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, send_from_directory
 from config import Config
 from routes import main, admin, gallery, security  # ✅ Importa solo i Blueprint giusti
 from models import db  # ✅ Importa il database dal modello giusto
@@ -42,6 +42,14 @@ init_mail(app)    # Inizializza Flask-Mail
 init_limiter(app) # Inizializza Flask-Limiter
 csrf = CSRFProtect(app)
 Compress(app)
+from flask import make_response
+
+@app.route('/static/<path:filename>')
+def serve_static(filename):
+    response = make_response(send_from_directory('static', filename))
+    response.headers['Cache-Control'] = 'public, max-age=31536000'
+    return response
+
 
 if not app.debug:
     app.logger.disabled = True
