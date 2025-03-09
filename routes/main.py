@@ -1,6 +1,7 @@
 import requests
 from flask_mail import Message
 
+from app import cache
 from forms.contact_form import ContactForm
 from services.cloudinary_service import get_resources
 from flask import Blueprint, render_template, request, redirect, flash, \
@@ -14,7 +15,10 @@ bp = Blueprint('main', __name__)
 from flask import Blueprint, render_template
 from services.cloudinary_service import get_resources
 
+
+
 @bp.route('/')
+@cache.cached(timeout=300)
 def home():
     try:
         desktop_images = [img['url'] for img in get_resources('upload', 'img/banner/')]

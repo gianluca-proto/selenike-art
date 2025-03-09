@@ -1,6 +1,8 @@
+import importlib
+
+import app
 from flask import Flask, request, send_from_directory
-from config import Config
-from routes import main, admin, gallery, security  # ✅ Importa solo i Blueprint giusti
+from config import Config # ✅ Importa solo i Blueprint giusti
 from models import db  # ✅ Importa il database dal modello giusto
 from services.email_service import init_mail
 from services.security_service import init_limiter, anonymize_ip
@@ -9,6 +11,9 @@ from flask_wtf.csrf import CSRFProtect
 from flask_compress import Compress
 from dotenv import load_dotenv
 import requests
+from flask_caching import Cache
+
+
 
 
 # Importa Flask-Babel
@@ -26,7 +31,7 @@ print(f"🌐 IP pubblico del server Heroku: {get_server_ip()}")
 # Creazione dell'app Flask
 app = Flask(__name__)
 app.config.from_object(Config)
-
+cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 # Imposta la lingua predefinita se non definita in Config
 app.config.setdefault('BABEL_DEFAULT_LOCALE', 'it')
 # Cartella per le traduzioni (assicurati che esista e contenga i file .mo compilati)
@@ -104,11 +109,19 @@ def log_request(response):
     app.logger.info(f"IP: {anon_ip} - Request: {request.method} {request.path} - Response: {response.status_code}")
     return response
 
+main = importlib.import_module("routes.main")
+admin = importlib.import_module("routes.admin")
+gallery = importlib.import_module("routes.gallery")
+security = importlib.import_module("routes.security")
+
 # Registra i Blueprint
 app.register_blueprint(main.bp)      # Route principali
 app.register_blueprint(admin.bp)      # Route admin
 app.register_blueprint(gallery.bp)    # Route galleria
 app.register_blueprint(security.bp)   # Route sicurezza
+
+from routes import main, admin, gallery, security
+
 
 if __name__ == '__main__':
     app.run(debug=True)
