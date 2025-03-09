@@ -52,19 +52,21 @@ def upload_image():
             upload_result = cloudinary.uploader.upload(
                 file,
                 folder='img/gallery/altro',
-                upload_preset="ml_default"
+                upload_preset="ml_default",
+                format="webp"  # 🚀 Conversione diretta in WebP
             )
 
             print(f"✅ Upload riuscito: {upload_result}")
 
             if upload_result.get('secure_url'):
-                flash(f'✅ Immagine {file.filename} caricata con successo!', 'success')
+                flash(f'✅ Immagine {file.filename} caricata con successo come WebP!', 'success')
             else:
                 flash(f'❌ Caricamento di {file.filename} non riuscito.', 'danger')
 
         return redirect(url_for('gallery.upload_image'))
 
     return render_template('admin/upload.html', form=form)
+
 
 
 @bp.route('/delete-image/<path:public_id>', methods=['POST'])
