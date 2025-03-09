@@ -7,13 +7,20 @@
         <div class="carousel-inner">
             {% for desktop_image, mobile_image in zip(carousel_images_desktop, carousel_images_mobile) %}
             <div class="carousel-item {{ 'active' if loop.first }}">
-                <img src="{{ desktop_image }}"
-                     srcset="{{ mobile_image }} 600w, {{ desktop_image }} 1200w"
-                     sizes="(max-width: 768px) 600px, 100vw"
-                     class="d-block w-100 {% if loop.first %}preload-lcp{% else %}lazyload{% endif %}"
-                     alt="Slide {{ loop.index }}"
-                     {% if loop.first %} fetchpriority="high" {% endif %}>
+                <picture>
+                    <!-- Immagine per dispositivi mobili -->
+                    <source srcset="{{ mobile_image }}" media="(max-width: 768px)">
+                    <!-- Immagine per desktop -->
+                    <source srcset="{{ desktop_image }}" media="(min-width: 769px)">
+                    <!-- Fallback per browser che non supportano <picture> -->
+                    <img src="{{ desktop_image }}"
+                         class="d-block w-100 {% if loop.first %}preload-lcp{% else %}lazyload{% endif %}"
+                         alt="Slide {{ loop.index }}"
+                         {% if loop.first %} fetchpriority="high" {% endif %}>
+                </picture>
             </div>
+
+
 
             {% endfor %}
         </div>
