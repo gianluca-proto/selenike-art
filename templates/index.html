@@ -12,11 +12,11 @@
                     <source srcset="{{ mobile_image }}" media="(max-width: 768px)">
                     <!-- Immagine per desktop -->
                     <source srcset="{{ desktop_image }}" media="(min-width: 769px)">
-                    <!-- Fallback per browser che non supportano <picture> -->
+                    <!-- Fallback per browser che non supportano <picture>
                     <img src="{{ desktop_image }}?f_auto,q_auto,w_1200"
                          class="d-block w-100 {% if loop.first %}preload-lcp{% else %}lazyload{% endif %}"
                          alt="Slide {{ loop.index }}"
-                         {% if loop.first %} fetchpriority="high" {% endif %}>
+                         {% if loop.first %} fetchpriority="high" {% endif %}>-->
 
                 </picture>
             </div>
