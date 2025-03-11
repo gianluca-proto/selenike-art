@@ -121,5 +121,4 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
     });
-
-}); // 🔴 CHIUSURA CORRETTA DEL `DOMContentLoaded`
+});
