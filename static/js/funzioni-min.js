@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
+    console.log("✅ DOM completamente caricato");
+
     // 📌 Navbar Sticky
     let navbar = document.querySelector('.navbar');
     if (navbar) {
@@ -35,11 +37,24 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     window.acceptCookies = function () {
+        console.log("✅ Cookie accettati");
         localStorage.setItem('cookiesAccepted', 'true');
         if (cookieBanner) {
             cookieBanner.style.display = 'none';
         }
     };
+
+    // 📌 Funzione per filtrare la galleria
+    window.filterGallery = function (category) {
+        console.log(`📌 Filtrando per categoria: ${category}`);
+
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            item.style.display = (category === 'all' || item.classList.contains(category)) ? 'block' : 'none';
+        });
+    };
+
+    // 📌 Mostra tutte le immagini di default nella galleria
+    filterGallery('all');
 
     // 📌 Modale per immagini
     let images = [];
@@ -106,4 +121,5 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
     });
-});
+
+}); // 🔴 CHIUSURA CORRETTA DEL `DOMContentLoaded`
