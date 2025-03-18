@@ -113,8 +113,9 @@ function moveImage(selectElement) {
     console.log("🔍 Debug: src_category:", src_category);
     console.log("🔍 Debug: dest_category:", dest_category);
 
-    var src_public_id = `${filename}`;
+    var src_public_id = `img/gallery/${src_category}/${filename}`;
     var dest_public_id = `img/gallery/${dest_category}/${filename}`;
+
 
     console.log("📂 src_public_id:", src_public_id);
     console.log("📂 dest_public_id:", dest_public_id);
