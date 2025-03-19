@@ -105,20 +105,32 @@ function deleteImage(category, filename) {
 
 
 function moveImage(selectElement) {
-    var filename = selectElement.dataset.filename;
-    var src_category = selectElement.dataset.category.replace("img/gallery/", "");
-    var dest_category = selectElement.value;
+    // Il valore già contiene il percorso completo
+    var filename = selectElement.dataset.filename; // es: "img/gallery/commissioni/images_tulthh"
+    var currentCategory = selectElement.dataset.category; // es: "commissioni"
+    var dest_category = selectElement.value; // es: "ideepersonali"
 
-    console.log("🔍 Debug: filename:", filename);
-    console.log("🔍 Debug: src_category:", src_category);
-    console.log("🔍 Debug: dest_category:", dest_category);
+    console.log("🔍 Debug Frontend: filename:", filename);
+    console.log("🔍 Debug Frontend: currentCategory:", currentCategory);
+    console.log("🔍 Debug Frontend: dest_category:", dest_category);
 
-    var src_public_id = `img/gallery/${src_category}/${filename}`;
-    var dest_public_id = `img/gallery/${dest_category}/${filename}`;
+    // Usa il filename così com'è come src_public_id
+    var src_public_id = filename;
 
+    // Per creare il dest_public_id, sostituisci la parte della categoria in filename
+    var parts = filename.split('/');
+    // Assumiamo che filename abbia la forma: "img/gallery/{oldCategory}/{rest}"
+    if (parts.length >= 4) {
+        // Sostituisci la terza parte (indice 2) con la nuova categoria
+        parts[2] = dest_category;
+        var dest_public_id = parts.join('/');
+    } else {
+        // Fallback se la struttura non è quella attesa
+        var dest_public_id = `img/gallery/${dest_category}/${filename}`;
+    }
 
-    console.log("📂 src_public_id:", src_public_id);
-    console.log("📂 dest_public_id:", dest_public_id);
+    console.log("📂 src_public_id inviato al backend:", src_public_id);
+    console.log("📂 dest_public_id inviato al backend:", dest_public_id);
 
     if (src_public_id === dest_public_id) {
         Swal.fire({
@@ -132,7 +144,7 @@ function moveImage(selectElement) {
 
     Swal.fire({
         title: "Sicuro di voler spostare l'immagine?",
-        text: `L'immagine verrà spostata da ${src_category} a ${dest_category}.`,
+        text: `L'immagine verrà spostata da ${currentCategory} a ${dest_category}.`,
         icon: "question",
         showCancelButton: true,
         confirmButtonColor: "#28a745",
@@ -191,5 +203,4 @@ function moveImage(selectElement) {
         }
     });
 }
-
 

@@ -75,44 +75,52 @@ def upload_image():
 def delete_gallery_image(public_id):
     return jsonify(delete_image(public_id))
 
+
+import re
+
 @bp.route('/move-image', methods=['POST'])
 @jwt_required
 @csrf.exempt
 def move_image():
     try:
         print("📡 Richiesta ricevuta per spostare un'immagine!")
-        # 🔍 Controlla il tipo di dati ricevuto
-        print("📝 Contenuto di request.data:", request.data)
-        print("📝 Contenuto di request.get_json():", request.get_json())
-        if request.is_json:
-            data = request.get_json()
-        else:
-            return jsonify({"success": False,
-                            "message": "⚠️ Dati ricevuti in un formato non valido"}), 400
+
+        # Debug: stampiamo il JSON ricevuto PRIMA della pulizia
+        data = request.get_json()
+        print("📝 JSON ricevuto:", data)
+
         if not data:
-            return jsonify({"success": False,
-                            "message": "⚠️ Nessun dato ricevuto dalla richiesta"}), 400
+            return jsonify({"success": False, "message": "⚠️ Nessun dato ricevuto dalla richiesta"}), 400
+
         src_public_id = data.get('src_public_id')
         dest_public_id = data.get('dest_public_id')
+
+        print(f"🔎 Prima della pulizia: src_public_id = {src_public_id}")
+        print(f"🔎 Prima della pulizia: dest_public_id = {dest_public_id}")
+
         if not src_public_id or not dest_public_id:
-            return jsonify({"success": False,
-                            "message": "⚠️ Parametri mancanti"}), 400
-        print(
-            f"📂 Spostamento richiesto da {src_public_id} a {dest_public_id}")
-        response = cloudinary.uploader.rename(src_public_id,
-                                              dest_public_id)
+            return jsonify({"success": False, "message": "⚠️ Parametri mancanti"}), 400
+
+        # Puliamo i percorsi errati
+        src_public_id = re.sub(r'(img/gallery/)+', 'img/gallery/', src_public_id)
+        dest_public_id = re.sub(r'(img/gallery/)+', 'img/gallery/', dest_public_id)
+
+        print(f"✅ Dopo la pulizia: src_public_id = {src_public_id}")
+        print(f"✅ Dopo la pulizia: dest_public_id = {dest_public_id}")
+
+        response = cloudinary.uploader.rename(src_public_id, dest_public_id)
+
         if 'public_id' in response:
             print("✅ Spostamento riuscito!")
-            return jsonify({'success': True,
-                            'message': f"✅ Spostamento riuscito: {response['public_id']}!"})
+            return jsonify({'success': True, 'message': f"✅ Spostamento riuscito: {response['public_id']}!"})
         else:
             print("❌ Errore nello spostamento:", response)
-            return jsonify({'success': False,
-                            'message': "❌ Errore nello spostamento"}), 500
+            return jsonify({'success': False, 'message': "❌ Errore nello spostamento"}), 500
+
     except Exception as e:
         print(f"❌ Errore server: {str(e)}")
-        return jsonify({'success': False,
-                        'message': f"❌ Errore server: {str(e)}"}), 500
+        return jsonify({'success': False, 'message': f"❌ Errore server: {str(e)}"}), 500
+
 
 
 @bp.route('/manage-gallery')
