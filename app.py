@@ -87,7 +87,7 @@ def set_security_headers(response):
         "style-src-elem 'self' 'unsafe-inline' https://cdn.iubenda.com https://stackpath.bootstrapcdn.com https://cdnjs.cloudflare.com "
             "https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/ https://cdn.jsdelivr.net/npm/swiper/ "
             "https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css https://fonts.googleapis.com https://cdn.iubenda.com "
-            "https://cdn.jsdelivr.net/npm/glightbox/dist/css/; "  # <-- Aggiunto qui
+            "https://cdn.jsdelivr.net/npm/glightbox/dist/css/; "  
         "img-src 'self' https://res.cloudinary.com data: https://www.google.com https://www.gstatic.com; "
         "font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com https://fonts.googleapis.com data: blob: application/font-woff application/font-woff2; "
         "frame-src 'self' https://www.google.com/recaptcha/ https://www.recaptcha.net/ https://www.gstatic.com/recaptcha/ "

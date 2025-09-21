@@ -2,6 +2,8 @@
 
 {% block content %}
 <!-- Full-width Carousel -->
+
+
 <div class="container-fluid px-0">
     <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
@@ -106,4 +108,95 @@
         </div>
     </div>
 </div>
+<!-- Librerie necessarie -->
+<style>
+  .blur-bg > *:not(#age-modal) {
+    filter: blur(6px);
+    transition: filter 0.3s;
+  }
+  #age-modal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.85);
+    z-index: 2000;
+    display: none; /* di default nascosto, lo script lo mostra se serve */
+    align-items: center;
+    justify-content: center;
+  }
+  #age-modal > div {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    max-width: 350px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  }
+</style>
+
+<div id="age-modal">
+  <div>
+    <h4>Verifica Età</h4>
+    <p>Questo sito è riservato a utenti maggiori di 18 anni.<br>Confermi di avere almeno 18 anni?</p>
+    <button id="age-confirm" class="btn btn-primary">Confermo</button>
+    <button id="age-exit" class="btn btn-secondary ms-2">Esci</button>
+  </div>
+</div>
+
+<script>
+document.getElementById("age-confirm").onclick = function() {
+  localStorage.setItem("age_verified", "true");
+  document.getElementById("age-modal").style.display = "none";
+  document.body.classList.remove("blur-bg");
+  document.body.style.overflow = "";
+};
+document.getElementById("age-exit").onclick = function() {
+  window.location.href = "https://www.google.com";
+};
+</script>
+
+{% endblock %}
+
+{% block overlay %}
+<div id="age-verification-modal" class="modal" tabindex="-1" role="dialog" style="display: none;">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content" style="background-color: white; color: black; max-width: 400px; margin: auto; text-align: center; border: none;">
+            <div class="modal-header" style="justify-content: center; border-bottom: none;">
+                <h5 class="modal-title">Verifica Età</h5>
+            </div>
+            <div class="modal-body">
+                <p>Devi avere almeno 18 anni per accedere a questo sito. Confermi di avere più di 18 anni?</p>
+            </div>
+            <div class="modal-footer" style="justify-content: center; border-top: none;">
+                <button id="confirm-age" class="btn btn-primary me-2">Conferma</button>
+                <button id="cancel-age" class="btn btn-secondary">Annulla</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const modal = document.getElementById("age-verification-modal");
+        const pageRoot = document.getElementById("page-root");
+        const confirmed = localStorage.getItem("ageConfirmed");
+
+        if (!confirmed) {
+            modal.style.display = "block";
+            pageRoot.style.filter = "blur(15px)";
+        }
+
+        document.getElementById("confirm-age").addEventListener("click", function () {
+            localStorage.setItem("ageConfirmed", "true");
+            modal.style.display = "none";
+            pageRoot.style.filter = "none";
+        });
+
+        document.getElementById("cancel-age").addEventListener("click", function () {
+            window.location.href = "https://www.google.com";
+        });
+    });
+</script>
 {% endblock %}

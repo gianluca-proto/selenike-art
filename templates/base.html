@@ -27,7 +27,6 @@
             padding: 0;
             overflow-x: hidden;
         }
-
         .navbar {
             background-color: rgb(155, 81, 224);
             width: 100%;
@@ -40,8 +39,10 @@
 
     </style>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles-min.css') }}" as="style" onload="this.rel='stylesheet'">
+    {% block extra_head %}{% endblock %}
 </head>
-<body>
+<body class="{% block body_class %}{% endblock %}">
+<div id="page-root">
 <!-- Banner dei Cookie -->
 <div id="cookie-banner" style="position: fixed; bottom: 0; width: 100%; background-color: black; color: white; text-align: center; padding: 10px; z-index: 1000;">
     Questo sito utilizza i cookie per migliorare l'esperienza dell'utente.
@@ -188,8 +189,19 @@
         </div>
     </div>
 </footer>
+</div> <!-- /#page-root -->
+
+{% block overlay %}{% endblock %}
+
+
+
 
 <!-- Librerie necessarie -->
+<script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js" defer></script>
+<script src="{{ url_for('static', filename='js/funzioni-min.js') }}"></script>
+<script async src="https://cdn.iubenda.com/iubenda.js"></script>
 
 <!-- GLightbox JS -->
 <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js" defer></script>
@@ -201,5 +213,6 @@
 
 <!-- Iubenda - Caricamento ottimizzato -->
 <script async src="https://cdn.iubenda.com/iubenda.js"></script>
+{% block extra_scripts %}{% endblock %}
 </body>
 </html>
