@@ -79,10 +79,8 @@
                 </div>
                 <!-- Frecce di navigazione -->
                 <div class="swiper-button-prev">
-                    <i class="fas fa-chevron-left fa-2x"></i>
                 </div>
                 <div class="swiper-button-next">
-                    <i class="fas fa-chevron-right fa-2x"></i>
                 </div>
                 <!-- Paginazione -->
                 <div class="swiper-pagination"></div>
@@ -131,6 +129,18 @@
     max-width: 350px;
     text-align: center;
     box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  }
+
+  /* Riduci dimensione frecce Swiper */
+  .swiper-button-prev, .swiper-button-next {
+    width: 35px;
+    height: 35px;
+    background-size: 30px 30px;
+    border-radius: 50%;
+    opacity: 0.85;
+  }
+  .swiper-button-prev::after, .swiper-button-next::after {
+    font-size: 25px;
   }
 </style>
 

@@ -47,7 +47,7 @@
                                 <div class="card-body d-flex align-items-center">
                                     <i class="fas fa-sign-out-alt fa-3x mr-3"></i>
                                     <div>
-                                        <form action="{{ url_for('admin.admin_logout') }}" method="POST">
+                                        <form action="{{ url_for('antro-1986.admin_logout') }}" method="POST">
                                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">  <!-- 🔹 Nasconde il token -->
                                             <button type="submit" class="btn btn-danger">Logout</button>
                                         </form>

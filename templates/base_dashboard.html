@@ -55,7 +55,7 @@
             <a href="https://www.threads.net/selenikeart" class="social-icon"><i class="fab fa-threads"></i></a>
         </div>
         <div class="col-md-4 text-center">
-            <a href="{{ url_for('admin.admin_dashboard') }}" class="logo-link">
+            <a href="{{ url_for('antro-1986.admin_dashboard') }}" class="logo-link">
                 <img src="{{ url_for('static', filename='img/Logo.png') }}" alt="Selenike Art Admin" class="logo-img">
             </a>
         </div>
@@ -77,10 +77,10 @@
         <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
             <ul class="navbar-nav lobster-font-menu">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('admin.admin_dashboard') }}">Dashboard</a>
+                    <a class="nav-link" href="{{ url_for('antro-1986.admin_dashboard') }}">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('admin.admin_logout') }}">Logout</a>
+                    <a class="nav-link" href="{{ url_for('antro-1986.admin_logout') }}">Logout</a>
                 </li>
             </ul>
         </div>
@@ -106,7 +106,7 @@
     {% endwith %}
 
     <div class="d-flex justify-content-center mt-3">
-        <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-primary">Torna alla Dashboard</a>
+        <a href="{{ url_for('antro-1986.admin_dashboard') }}" class="btn btn-primary">Torna alla Dashboard</a>
     </div>
 
     {% block content %}{% endblock %}

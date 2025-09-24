@@ -105,8 +105,11 @@ def set_security_headers(response):
 
 @app.after_request
 def log_request(response):
-    anon_ip = anonymize_ip(request.remote_addr)
-    app.logger.info(f"IP: {anon_ip} - Request: {request.method} {request.path} - Response: {response.status_code}")
+    anon_ip = anonymize_ip(request.remote_addr or "0.0.0.0")
+    user_agent = request.user_agent.string or "N/A"
+    app.logger.info(
+        f"IP: {anon_ip} - Request: {request.method} {request.path} - Response: {response.status_code} - Device: {user_agent}"
+    )
     return response
 
 main = importlib.import_module("routes.main")

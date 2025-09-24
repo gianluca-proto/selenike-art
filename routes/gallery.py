@@ -24,7 +24,7 @@ def art_gallery():
 
     return render_template('gallery.html', images=images)
 
-@bp.route('/admin/upload', methods=['GET', 'POST'])
+@bp.route('/antro-1986/upload', methods=['GET', 'POST'])
 @jwt_required
 @csrf.exempt
 def upload_image():
@@ -65,7 +65,7 @@ def upload_image():
 
         return redirect(url_for('gallery.upload_image'))
 
-    return render_template('admin/upload.html', form=form)
+    return render_template('antro-1986/upload.html', form=form)
 
 
 
@@ -129,4 +129,4 @@ def manage_gallery():
     categories = ['novita', 'commissioni', 'fanart', 'ideepersonali', 'altro']
     images = {category: get_resources('upload', f'img/gallery/{category}/') for category in categories}
 
-    return render_template('admin/manage_gallery.html', images=images, categories=categories)
+    return render_template('antro-1986/manage_gallery.html', images=images, categories=categories)

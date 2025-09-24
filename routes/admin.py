@@ -11,7 +11,7 @@ from flask import current_app as app
 import requests  # Assicurati che sia importato in alto nel file
 from datetime import datetime, timedelta
 
-bp = Blueprint('admin', __name__, url_prefix='/admin')  # ✅ Blueprint Admin
+bp = Blueprint('antro-1986', __name__, url_prefix='/antro-1986')  # ✅ Blueprint Admin
 # Inizializza Argon2
 ph = PasswordHasher()
 FAILED_LOGINS = {}
@@ -23,10 +23,10 @@ def admin_dashboard():
     user_id = verify_jwt(request.cookies.get('auth_token'))  # Ottieni ID utente dal JWT
     if user_id:
         app.logger.info(f"Utente autenticato: ID {user_id}")
-        return render_template('admin/admin.html')
+        return render_template('antro-1986/admin.html')
     else:
         flash("Sessione scaduta. Effettua di nuovo il login.", "warning")
-        return redirect(url_for('admin.admin_login'))
+        return redirect(url_for('antro-1986.admin_login'))
 
 
 @bp.route('/login', methods=['GET', 'POST'])
@@ -38,7 +38,7 @@ def admin_login():
     locked, message = is_account_locked(ip)
     if locked:
         flash(message, 'danger')
-        return redirect(url_for('admin.admin_login'))
+        return redirect(url_for('antro-1986.admin_login'))
 
     if request.method == 'POST' and form.validate_on_submit():
         recaptcha_response = request.form.get('recaptcha_response')
@@ -84,7 +84,7 @@ def admin_login():
                     access_token = generate_access_token(admin.id)
                     refresh_token = generate_refresh_token(admin.id)
 
-                    response = make_response(redirect(url_for('admin.admin_dashboard')))
+                    response = make_response(redirect(url_for('antro-1986.admin_dashboard')))
                     response.set_cookie('auth_token', access_token, httponly=True, secure=True, samesite='Strict')
                     response.set_cookie('refresh_token', refresh_token, httponly=True, secure=True, samesite='Strict')
                     return response
@@ -104,7 +104,7 @@ def admin_login():
             attempts, _ = FAILED_LOGINS[ip]
             FAILED_LOGINS[ip] = (attempts + 1, datetime.now())
 
-    return render_template('admin/login_dashboard.html', form=form, recaptcha_site_key=app.config.get('RECAPTCHA_SITE_KEY', ''))
+    return render_template('antro-1986/login_dashboard.html', form=form, recaptcha_site_key=app.config.get('RECAPTCHA_SITE_KEY', ''))
 
 
 
@@ -117,7 +117,7 @@ def admin_logout():
         RefreshToken.query.filter_by(user_id=user_id).delete()
         db.session.commit()
 
-    response = make_response(redirect(url_for('admin.admin_login')))
+    response = make_response(redirect(url_for('antro-1986.admin_dashboard')))
     response.set_cookie('auth_token', '', expires=0)
     response.set_cookie('refresh_token', '', expires=0)
     flash('Logout effettuato.', 'success')

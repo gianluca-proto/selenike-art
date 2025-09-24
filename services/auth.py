@@ -33,7 +33,7 @@ def jwt_required(f):
         token = request.cookies.get('auth_token')
         if not token or not verify_jwt(token):
             flash('Accesso non autorizzato. Effettua il login.', 'danger')
-            return redirect(url_for('admin.admin_login'))
+            return redirect(url_for('antro-1986.admin_login'))
         return f(*args, **kwargs)
     return decorated_function
 
