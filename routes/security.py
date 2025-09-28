@@ -366,8 +366,7 @@ def _counts_from_map(m: dict):
 
 
 def _counts_from_lines_unique_ips(lines, include_loopback=None):
-    """Semplificato: conta una sola entry per IP direttamente dalle righe fornite.
-    Prende il primo device valido incontrato per ogni IP e lo conta.
+    """Conta una sola entry per IP, ma considera l'ULTIMO device visto per ogni IP (non il primo).
     Filtra richieste statiche e bot come nella versione precedente.
     Se il device non è riconosciuto, conta comunque come 'desktop'.
     """
@@ -395,11 +394,10 @@ def _counts_from_lines_unique_ips(lines, include_loopback=None):
             except Exception:
                 if norm in ('127.0.0.1', '::1'):
                     continue
-        if norm in seen:
-            continue
         dev_type = _classify_device_from_ua(raw_device)
         if not dev_type:
-            dev_type = 'desktop'  # FORZA come desktop se non riconosciuto
+            dev_type = 'desktop'  # fallback
+        # SOVRASCRIVI sempre: conta l'ultimo device visto per quell'IP
         seen[norm] = dev_type
 
     counts = {'mobile': 0, 'desktop': 0, 'tablet': 0}
