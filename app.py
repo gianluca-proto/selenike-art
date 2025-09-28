@@ -1,23 +1,23 @@
-import importlib
+import logging
+from logging.handlers import RotatingFileHandler
 
-import app
 from flask import Flask, request, send_from_directory
 from config import Config # ✅ Importa solo i Blueprint giusti
 from models import db  # ✅ Importa il database dal modello giusto
 from services.email_service import init_mail
-from services.security_service import init_limiter, anonymize_ip
+from services.security_service import init_limiter
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect
 from flask_compress import Compress
 from dotenv import load_dotenv
 import requests
-from flask_caching import Cache
+from extensions import cache  # usa istanza globale
 
 
 
 
 # Importa Flask-Babel
-from flask_babel import Babel, _
+from flask_babel import Babel
 
 # Carica il file .env
 load_dotenv()
@@ -31,7 +31,7 @@ print(f"🌐 IP pubblico del server Heroku: {get_server_ip()}")
 # Creazione dell'app Flask
 app = Flask(__name__)
 app.config.from_object(Config)
-cache = Cache(app, config={'CACHE_TYPE': 'simple'})
+cache.init_app(app, config={'CACHE_TYPE': 'simple'})   # inizializza istanza globale
 # Imposta la lingua predefinita se non definita in Config
 app.config.setdefault('BABEL_DEFAULT_LOCALE', 'it')
 # Cartella per le traduzioni (assicurati che esista e contenga i file .mo compilati)
@@ -54,10 +54,6 @@ def serve_static(filename):
     response = make_response(send_from_directory('static', filename))
     response.headers['Cache-Control'] = 'public, max-age=31536000'
     return response
-
-
-if not app.debug:
-    app.logger.disabled = True
 
 
 @app.after_request
@@ -103,27 +99,37 @@ def set_security_headers(response):
 
 
 
+# Configurazione logging accessi (sempre attiva)
+file_handler = RotatingFileHandler('access.log', maxBytes=1024 * 1024, backupCount=5)
+file_handler.setFormatter(logging.Formatter(
+    '%(asctime)s - %(levelname)s - IP: %(ip)s - Request: %(request)s - Response: %(status)s - Device: %(user_agent)s'
+))
+file_handler.setLevel(logging.INFO)
+# Evita handler duplicati se il modulo viene ricaricato
+if not any(isinstance(h, RotatingFileHandler) for h in app.logger.handlers):
+    app.logger.addHandler(file_handler)
+app.logger.setLevel(logging.INFO)
+
 @app.after_request
-def log_request(response):
-    anon_ip = anonymize_ip(request.remote_addr or "0.0.0.0")
-    user_agent = request.user_agent.string or "N/A"
-    app.logger.info(
-        f"IP: {anon_ip} - Request: {request.method} {request.path} - Response: {response.status_code} - Device: {user_agent}"
-    )
+def log_access(response):
+    ip = request.remote_addr or '0.0.0.0'
+    user_agent = request.user_agent.string or 'N/A'
+    app.logger.info('access', extra={
+        'ip': ip,
+        'request': request.path,
+        'status': response.status_code,
+        'user_agent': user_agent
+    })
     return response
 
-main = importlib.import_module("routes.main")
-admin = importlib.import_module("routes.admin")
-gallery = importlib.import_module("routes.gallery")
-security = importlib.import_module("routes.security")
+# Importa i Blueprint una sola volta, dopo l'inizializzazione dell'app e delle estensioni
+from routes import main, admin, gallery, security
 
 # Registra i Blueprint
 app.register_blueprint(main.bp)      # Route principali
 app.register_blueprint(admin.bp)      # Route admin
 app.register_blueprint(gallery.bp)    # Route galleria
 app.register_blueprint(security.bp)   # Route sicurezza
-
-from routes import main, admin, gallery, security
 
 
 if __name__ == '__main__':

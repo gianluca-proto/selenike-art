@@ -399,14 +399,35 @@ img {
 }
 
 .img-manage .card {
-    margin-bottom: 20px;
+
 }
 
-.img-controls {
+/* Regole per la dashboard di sicurezza: contenitore chart (definizione unica e stabile) */
+.chart-wrapper {
+    width: 100%;
+    /* altezza fissata rispetto alla viewport per evitare cicli di calcolo tra flex e canvas */
+    height: calc(70vh - 140px); /* regola questo valore se la card header/legend occupano spazio diverso */
+    min-height: 180px;
+    max-height: 600px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding-top: 10px;
+    justify-content: center;
+    overflow: hidden; /* evita che il contenuto provochi overflow che forza il resize */
+    flex: none; /* non lasciare che il wrapper cambii dimensione come flex child */
+    position: relative; /* necessario per il canvas absolute */
+}
+
+/* Forziamo il canvas a riempire il wrapper senza percentuali che innescano reflow */
+.device-canvas {
+    position: absolute; /* non parte del flusso, evita di cambiare l'altezza del documento */
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 420px;
+    max-height: 100%;
+    display: block;
+    margin: 0 auto;
 }
 
 .sticky {
@@ -420,6 +441,43 @@ img {
 
 .card {
     border-radius: 15px;
+    /* Assicuriamoci che la card possa occupare l'altezza del genitore */
+    height: 100%;
+}
+
+/* Quando si usano elementi flex con overflow, il genitore deve permettere lo shrink: min-height:0 */
+.card-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0; /* IMPORTANTE: evita che i figli con overflow provochino crescita infinita */
+}
+
+/* Regole per la dashboard di sicurezza: contenitore chart (unica regola stabile) */
+.chart-wrapper {
+    width: 100%;
+    /* altezza fissata rispetto alla viewport per evitare cicli di calcolo tra flex e canvas */
+    height: calc(70vh - 140px); /* regola questo valore se la card header/legend occupano spazio diverso */
+    min-height: 180px;
+    max-height: 600px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* evita che il contenuto provochi overflow che forza il resize */
+    flex: none; /* non lasciare che il wrapper cambii dimensione come flex child */
+}
+
+/* Forziamo il canvas a riempire il wrapper senza percentuali che innescano reflow */
+.device-canvas {
+    position: absolute; /* non parte del flusso, evita di cambiare l'altezza del documento */
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 420px;
+    max-height: 100%;
+    display: block;
+    margin: 0 auto;
 }
 
 .dashboard-header {

@@ -1,7 +1,7 @@
 import requests
 from flask_mail import Message
 
-from app import cache
+from extensions import cache  # cambiato da: from app import cache
 from forms.contact_form import ContactForm
 from services.cloudinary_service import get_resources
 from flask import Blueprint, render_template, request, redirect, flash, \
@@ -11,10 +11,6 @@ from forms.commission_form import CommissionForm
 from services.security_service import limiter
 
 bp = Blueprint('main', __name__)
-
-from flask import Blueprint, render_template
-from services.cloudinary_service import get_resources
-
 
 
 @bp.route('/')

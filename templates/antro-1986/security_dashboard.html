@@ -1,45 +1,376 @@
 {% extends 'base_dashboard.html' %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2>Dashboard di Sicurezza</h2>
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th>Timestamp</th>
-                <th>IP</th>
-                <th>Request URL</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for line in log_lines %}
-            {% set parts = line.split(' - ') %}
-            {% if parts|length > 3 %}
-            {% set ip = parts[2].split('IP: ')[1].strip() if 'IP:' in parts[2] else 'N/A' %}
-            {% set request = parts[3].split('Request: ')[1].strip() if 'Request:' in parts[3] else 'N/A' %}
-            {% set status = parts[4].split('Response: ')[1].strip() if 'Response:' in parts[4] else 'N/A' %}
-            {% set status_class = 'http-other' %}
-            {% if '200' == status %}
-                {% set status_class = 'http-200' %}
-            {% elif '404' == status %}
-                {% set status_class = 'http-404' %}
-            {% elif '500' == status %}
-                {% set status_class = 'http-500' %}
-            {% endif %}
-            <tr class="{{ status_class }}">
-                <td>{{ parts[0] }}</td>
-                <td>{{ ip }}</td>
-                <td>{{ request }}</td>
-                <td>{{ status }}</td>
-            </tr>
-            {% else %}
-            <tr>
-                <td colspan="4">Log format error</td>
-            </tr>
-            {% endif %}
-            {% endfor %}
-        </tbody>
-    </table>
+<div class="container-fluid mt-4">
+    <h2 class="mb-3 text-center">Dashboard di Sicurezza</h2>
+    <div class="row align-items-stretch">
+        <div class="col-md-6" style="height: 70vh; overflow:auto;">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Access Logs</h5>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>IP</th>
+                                    <th>Request URL</th>
+                                    <th>Status</th>
+                                    <th>Dispositivo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in log_lines %}
+                                    {% set status = row.status if row.status is defined else 'N/A' %}
+                                    {% set status_class = 'http-other' %}
+                                    {% if status == '200' %}
+                                        {% set status_class = 'http-200' %}
+                                    {% elif status == '404' %}
+                                        {% set status_class = 'http-404' %}
+                                    {% elif status == '500' %}
+                                        {% set status_class = 'http-500' %}
+                                    {% endif %}
+                                    <tr class="{{ status_class }}">
+                                        <td style="white-space:nowrap">{{ row.timestamp }}</td>
+                                        <td>{{ row.ip }}</td>
+                                        <td style="max-width: 200px; word-break: break-all;">{{ row.request }}</td>
+                                        <td>{{ status }}</td>
+                                        <td style="max-width: 200px; word-break: break-all;">
+                                            {% if row.device_type == 'mobile' %}
+                                                📱
+                                            {% elif row.device_type == 'tablet' %}
+                                                📝
+                                            {% else %}
+                                                💻
+                                            {% endif %}
+                                            &nbsp;<span>{{ row.device_type|capitalize if row.device_type else 'N/D' }}</span>
+                                        </td>
+                                     </tr>
+                                 {% endfor %}
+                             </tbody>
+                        </table>
+                    </div>
+                    <!-- Paginazione -->
+                    <div class="d-flex justify-content-between align-items-center mt-2">
+                        <div>
+                            <button class="btn btn-sm btn-outline-primary" id="prevPage">Prev</button>
+                            <button class="btn btn-sm btn-outline-primary" id="nextPage">Next</button>
+                        </div>
+                        <div>
+                            Pagina {{ page }} / {{ total_pages }} &nbsp; | &nbsp; visualizza
+                            <select id="perPageSelect" class="form-select form-select-sm d-inline-block" style="width: auto;">
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                                <option value="200">200</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6" style="height: 70vh; overflow:auto;">
+            <div class="card h-100">
+                <!-- Allineiamo lo spazio in modo che il chart-wrapper possa crescere e occupare tutta la larghezza/altezza disponibile -->
+                <div class="card-body d-flex flex-column align-items-stretch h-100">
+                      <h5 class="card-title">Distribuzione dispositivi</h5>
+                       <!-- Wrapper gestito via CSS: occupa tutta l'altezza disponibile della card-body -->
+                       <div class="chart-wrapper">
+                          <canvas id="deviceChart" class="device-canvas"></canvas>
+                       </div>
+                        <div id="device-legend" class="mt-3"></div>
+                    </div>
+               </div>
+           </div>
+
+          <!-- Visits time series chart -->
+          <div class="col-12 mt-3">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Visite giornaliere (visitatori unici)</h5>
+                <div style="height:300px;">
+                  <canvas id="visitsChart"></canvas>
+                </div>
+                <div class="small text-muted mt-2">I dati mostrano il numero di visitatori unici per giorno.</div>
+              </div>
+            </div>
+          </div>
+    </div>
 </div>
+
+<!-- Local styles to ensure chart wrapper has stable dimensions -->
+<style>
+.chart-wrapper {
+  width: 100%;
+  height: 340px; /* soluzione veloce: altezza fissa per il grafico a torta */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.device-canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+/* Colorazione righe tabella in base allo status HTTP - specificità aumentata */
+.table tr.http-200 {
+  background-color: #e6f9e6 !important; /* verde chiaro */
+  color: #155724 !important;
+}
+.table tr.http-404 {
+  background-color: #ffe6e6 !important; /* rosso chiaro */
+  color: #721c24 !important;
+}
+.table tr.http-500 {
+  background-color: #fff8e1 !important; /* giallo chiaro */
+  color: #856404 !important;
+}
+.table tr.http-other {
+  background-color: #f2f2f2 !important; /* grigio chiaro */
+  color: #333 !important;
+}
+</style>
+
+<!-- Chart.js UMD build (esplicito) -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
+<script>
+    // DEBUG: verifica presenza e dimensioni del canvas
+    document.addEventListener('DOMContentLoaded', function() {
+        const dcv = document.getElementById('deviceChart');
+        if (dcv) {
+            console.log('DEBUG deviceChart:', dcv, 'width:', dcv.offsetWidth, 'height:', dcv.offsetHeight);
+        } else {
+            console.warn('DEBUG: deviceChart non trovato nel DOM');
+        }
+    });
+
+    // counts viene passato dalla view come dizionario: usiamo device_totals se presente per mostrare subito i totali
+    {% set _initial = device_totals if device_totals is defined else counts %}
+    const serverCounts = {{ _initial | tojson }} || {desktop:0, mobile:0, tablet:0};
+    let data = [Number(serverCounts.desktop) || 0, Number(serverCounts.mobile) || 0, Number(serverCounts.tablet) || 0];
+    let prevData = JSON.stringify(data);
+    let deviceChart = null;
+    // inizialmente non forziamo un overlay permanente: se non ci sono dati il grafico e la legenda verranno mostrati comunque
+    let isLoadingDeviceChart = false;
+
+    function updateLegend(countsArr) {
+        const legendEl = document.getElementById('device-legend');
+        legendEl.innerHTML = `
+            <div class="d-flex justify-content-around w-100">
+                <div><span style="display:inline-block;width:12px;height:12px;background:#4e73df;margin-right:6px;"></span>Desktop: ${countsArr[0]}</div>
+                <div><span style="display:inline-block;width:12px;height:12px;background:#1cc88a;margin-right:6px;"></span>Mobile: ${countsArr[1]}</div>
+                <div><span style="display:inline-block;width:12px;height:12px;background:#36b9cc;margin-right:6px;"></span>Tablet: ${countsArr[2]}</div>
+            </div>
+        `;
+    }
+
+    // Mostra testo di caricamento sopra il grafico
+    function showDeviceChartLoading(show) {
+        let loadingId = 'device-chart-loading';
+        let el = document.getElementById(loadingId);
+        if (show) {
+            if (!el) {
+                el = document.createElement('div');
+                el.id = loadingId;
+                el.style.position = 'absolute';
+                el.style.left = '0';
+                el.style.top = '0';
+                el.style.width = '100%';
+                el.style.height = '100%';
+                el.style.display = 'flex';
+                el.style.alignItems = 'center';
+                el.style.justifyContent = 'center';
+                el.style.background = 'rgba(255,255,255,0.7)';
+                el.style.zIndex = '10';
+                el.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Caricamento...';
+                document.querySelector('.chart-wrapper').style.position = 'relative';
+                document.querySelector('.chart-wrapper').appendChild(el);
+            }
+        } else {
+            if (el) el.remove();
+        }
+    }
+
+    updateLegend(data);
+
+    let visitsChart = null;
+
+    async function initCharts(){
+        // Soluzione veloce: non serve calcolare l'altezza, il CSS la imposta fissa
+
+        // Visits canvas buffer: usiamo il contenitore con altezza fissa (300px)
+        const visitsWrapper = document.getElementById('visitsChart');
+        if (visitsWrapper) {
+            const parent = visitsWrapper.parentElement;
+            if (parent) {
+                // lasciamo le dimensioni al CSS/Chart.js
+            }
+        }
+
+        // distrugge charts precedenti se presenti
+        try { if (deviceChart && typeof deviceChart.destroy === 'function') deviceChart.destroy(); } catch(e){}
+        try { if (visitsChart && typeof visitsChart.destroy === 'function') visitsChart.destroy(); } catch(e){}
+
+        // crea deviceChart con dati attuali (dal server o placeholder)
+        const dctx = document.getElementById('deviceChart').getContext('2d');
+        deviceChart = new Chart(dctx, {
+             type: 'pie',
+             data: {
+                 labels: ['Desktop', 'Mobile', 'Tablet'],
+                 datasets: [{
+                     data: data,
+                     backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
+                     hoverOffset: 6
+                 }]
+             },
+             options: {
+                 responsive: true,
+                 maintainAspectRatio: false,
+                 animation: false,
+                 plugins: {
+                     legend: {
+                         display: true,
+                         position: 'bottom'
+                     }
+                 }
+             }
+         });
+
+        // nascondi il loader subito dopo la creazione del grafico per evitare che copra il canvas quando i valori sono a zero
+        showDeviceChartLoading(false);
+
+        // crea visitsChart (ora lo creiamo qui per garantire dimensioni corrette)
+        const initialVisits = {{ visits | tojson }} || {labels: [], data: []};
+        const vctx = document.getElementById('visitsChart').getContext('2d');
+        visitsChart = new Chart(vctx, {
+          type: 'line',
+          data: {
+            labels: initialVisits.labels || [],
+            datasets: [{
+              label: 'Visitatori unici',
+              data: initialVisits.data || [],
+              borderColor: '#4e73df',
+              backgroundColor: 'rgba(78,115,223,0.05)',
+              fill: true,
+              tension: 0.3,
+              pointRadius: 3
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              x: { title: { display: true, text: 'Giorno' } },
+              y: { title: { display: true, text: 'Visitatori unici' }, beginAtZero: true }
+            },
+            plugins: { legend: { display: false } }
+          }
+        });
+
+        // forziamo un update dopo la creazione
+        try { deviceChart.update(); visitsChart.update(); } catch(e){}
+        try { if (deviceChart && typeof deviceChart.resize === 'function') deviceChart.resize(); } catch(e) { console.warn(e); }
+        try { if (visitsChart && typeof visitsChart.resize === 'function') visitsChart.resize(); } catch(e) { console.warn(e); }
+        try { pollVisits(); } catch(e) { console.warn('pollVisits post-init fallita', e); }
+        // Aggiorna subito i dati del deviceChart appena caricata la pagina
+        // richiedi subito i dati correnti
+        // mostra il loader solo durante la chiamata iniziale di polling e lo nascondiamo alla fine
+        showDeviceChartLoading(true);
+        try { await pollStats(true); } catch(e){ console.warn('initial pollStats failed', e); }
+        showDeviceChartLoading(false);
+    }
+
+    // Inizializza i grafici appena il DOM è pronto (DOMContentLoaded), senza attendere immagini o risorse esterne
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCharts);
+    } else {
+        initCharts();
+    }
+
+    // Polling per aggiornare il grafico ogni 5 secondi
+    async function pollStats(isFirstLoad) {
+        try {
+            const url = '/antro-1986/security-stats';
+            const res = await fetch(url);
+             if (!res.ok) return;
+             const counts = await res.json();
+             const newData = [counts.desktop || 0, counts.mobile || 0, counts.tablet || 0];
+             const sNew = JSON.stringify(newData);
+             if (sNew !== prevData || isFirstLoad) {
+                 if (deviceChart) {
+                     deviceChart.data.datasets[0].data = newData;
+                     deviceChart.update();
+                 }
+                 updateLegend(newData);
+                 prevData = sNew;
+                 if (isLoadingDeviceChart) {
+                     showDeviceChartLoading(false); // Nascondi loader al primo caricamento dati
+                     isLoadingDeviceChart = false;
+                 }
+             }
+         } catch (e) {
+             console.error('Errore polling stats', e);
+         }
+     }
+    setInterval(pollStats, 5000);
+
+    async function pollVisits(){
+      try{
+        if (!visitsChart) return; // evita di accedere a visitsChart prima della sua inizializzazione
+        const res = await fetch('/antro-1986/security-visits');
+        if(!res.ok) return;
+        const json = await res.json();
+        const labels = json.labels || [];
+        const dataV = json.data || [];
+        // update only if changed
+        const sCur = JSON.stringify({labels: visitsChart.data.labels, data: visitsChart.data.datasets[0].data});
+        const sNew = JSON.stringify({labels: labels, data: dataV});
+        if(sCur !== sNew){
+          visitsChart.data.labels = labels;
+          visitsChart.data.datasets[0].data = dataV;
+          visitsChart.update();
+        }
+      }catch(e){ console.error('Errore polling visits', e); }
+    }
+    // poll meno frequentemente
+    setInterval(pollVisits, 30000);
+    // la chiamata iniziale a pollVisits verrà fatta dopo l'inizializzazione dei grafici dentro initCharts()
+
+    // Paginazione: cambia pagina aggiornando query string
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentPage = parseInt(urlParams.get('page') || '{{ page }}', 10);
+    const perPageSelect = document.getElementById('perPageSelect');
+
+    // imposta stato iniziale prev/next e valore perPage dal server
+    try {
+        const prevBtn = document.getElementById('prevPage');
+        const nextBtn = document.getElementById('nextPage');
+        const srvPage = parseInt('{{ page }}', 10) || 1;
+        const srvTotal = parseInt('{{ total_pages }}', 10) || 1;
+        const srvPer = parseInt('{{ per_page }}', 10) || 25;
+        if (perPageSelect) perPageSelect.value = String(srvPer);
+        if (prevBtn) prevBtn.disabled = (srvPage <= 1);
+        if (nextBtn) nextBtn.disabled = (srvPage >= srvTotal);
+    } catch (e) { console.warn('init pagination state error', e); }
+
+    document.getElementById('prevPage').addEventListener('click', () => {
+        const prev = Math.max(1, {{ page }} - 1);
+        urlParams.set('page', prev);
+        urlParams.set('per_page', perPageSelect.value);
+        window.location.search = urlParams.toString();
+    });
+    document.getElementById('nextPage').addEventListener('click', () => {
+        const next = Math.min({{ total_pages }}, {{ page }} + 1);
+        urlParams.set('page', next);
+        urlParams.set('per_page', perPageSelect.value);
+        window.location.search = urlParams.toString();
+    });
+    perPageSelect.addEventListener('change', () => {
+        urlParams.set('page', 1);
+        urlParams.set('per_page', perPageSelect.value);
+        window.location.search = urlParams.toString();
+    });
+</script>
+
 {% endblock %}
