@@ -366,11 +366,12 @@ def _counts_from_map(m: dict):
 
 
 def _counts_from_lines_unique_ips(lines, include_loopback=None):
-    """Conta una sola entry per IP, ma considera l'ULTIMO device visto per ogni IP (non il primo).
+    """Conta una entry per ogni combinazione IP+device (non solo per IP).
     Filtra richieste statiche e bot come nella versione precedente.
     Se il device non è riconosciuto, conta comunque come 'desktop'.
     """
-    seen = {}
+    seen = set()
+    device_counts = {'mobile': 0, 'desktop': 0, 'tablet': 0}
     for line in lines:
         ip, request_path, raw_device, ts = _extract_from_line(line)
         if not ip:
@@ -397,16 +398,15 @@ def _counts_from_lines_unique_ips(lines, include_loopback=None):
         dev_type = _classify_device_from_ua(raw_device)
         if not dev_type:
             dev_type = 'desktop'  # fallback
-        # SOVRASCRIVI sempre: conta l'ultimo device visto per quell'IP
-        seen[norm] = dev_type
-
-    counts = {'mobile': 0, 'desktop': 0, 'tablet': 0}
-    for dev in seen.values():
-        if dev in counts:
-            counts[dev] += 1
+        key = (norm, dev_type)
+        if key in seen:
+            continue
+        seen.add(key)
+        if dev_type in device_counts:
+            device_counts[dev_type] += 1
         else:
-            counts['desktop'] += 1
-    return counts
+            device_counts['desktop'] += 1
+    return device_counts
 
 
 def _stats_from_lines(lines, sample=20):
