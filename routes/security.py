@@ -11,6 +11,7 @@ import tempfile
 from datetime import datetime, timezone, timedelta
 import ipaddress
 import csv
+from services.cloudinary_service import upload_file_to_cloudinary, upload_all_logs_to_cloudinary
 
 try:
     from user_agents import parse as ua_parse
@@ -516,7 +517,7 @@ def _read_visits_history():
 
 
 def _append_visit_to_history(date_str, visits):
-    """Aggiunge una riga allo storico in modo atomico, solo se la data non è già presente."""
+    """Aggiunge una riga allo storico in modo atomico, solo se la data non è già presente. Esegue upload su Cloudinary."""
     history = _read_visits_history()
     if date_str in history:
         return  # già presente
@@ -529,6 +530,9 @@ def _append_visit_to_history(date_str, visits):
         if not lines:
             f.write('data,visite\n')
         f.write(f'{date_str},{visits}\n')
+    # Upload automatico su Cloudinary
+    upload_file_to_cloudinary(str(VISITS_HISTORY_PATH), folder="stats")
+    _upload_logs_to_cloudinary()
 
 
 def _update_visits_history_from_logs(log_lines):
@@ -560,6 +564,14 @@ def _update_visits_history_from_logs(log_lines):
     visits = len(per_day[yest_str])
     if visits > 0:
         _append_visit_to_history(yest_str, visits)
+
+
+def _upload_logs_to_cloudinary():
+    """Carica tutti i file access.log* su Cloudinary nella cartella logs/."""
+    try:
+        upload_all_logs_to_cloudinary(log_dir=".", pattern="access.log", folder="logs")
+    except Exception as e:
+        print(f"Errore upload log su Cloudinary: {e}")
 
 
 @bp.route('/antro-1986/security-dashboard')

@@ -107,3 +107,39 @@ def move_image():
     except Exception as e:
         print(f"❌ Errore Flask: {str(e)}")
         return jsonify({"success": False, "message": f"❌ Errore server: {str(e)}"}), 500
+
+
+def upload_file_to_cloudinary(local_path, folder="stats"):
+    """
+    Carica un file generico (CSV, log, ecc.) su Cloudinary nella cartella specificata.
+    Restituisce la URL sicura del file caricato.
+    """
+    cloudinary.config(logging=True)
+    try:
+        with open(local_path, "rb") as f:
+            upload_result = cloudinary.uploader.upload(
+                f,
+                folder=folder,
+                resource_type="raw",  # Importante per file non immagine
+                use_filename=True,
+                unique_filename=False,
+                overwrite=True
+            )
+        return upload_result.get("secure_url")
+    except Exception as e:
+        print(f"❌ Errore upload file su Cloudinary: {e}")
+        return None
+
+
+def upload_all_logs_to_cloudinary(log_dir=".", pattern="access.log", folder="logs"):
+    """
+    Carica tutti i file di log access.log* presenti nella directory specificata su Cloudinary.
+    """
+    import glob
+    import os
+    log_files = glob.glob(os.path.join(log_dir, pattern + '*'))
+    results = {}
+    for file_path in log_files:
+        url = upload_file_to_cloudinary(file_path, folder=folder)
+        results[file_path] = url
+    return results
