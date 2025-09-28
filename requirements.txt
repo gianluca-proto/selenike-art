@@ -4,6 +4,7 @@ argon2-cffi==23.1.0
 argon2-cffi-bindings==21.2.0
 asgiref==3.8.1
 Babel==2.15.0
+APScheduler==3.10.4
 bidict==0.23.1
 blinker==1.8.2
 Booktype==1.5

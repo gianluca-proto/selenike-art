@@ -12,6 +12,8 @@ from flask_compress import Compress
 from dotenv import load_dotenv
 import requests
 from extensions import cache  # usa istanza globale
+from apscheduler.schedulers.background import BackgroundScheduler
+from services.cloudinary_service import sync_logs_with_cloudinary, sync_files_with_cloudinary
 
 
 
@@ -130,6 +132,12 @@ app.register_blueprint(main.bp)      # Route principali
 app.register_blueprint(admin.bp)      # Route admin
 app.register_blueprint(gallery.bp)    # Route galleria
 app.register_blueprint(security.bp)   # Route sicurezza
+
+# Avvia il job di sincronizzazione automatica ogni 5 minuti
+scheduler = BackgroundScheduler(daemon=True)
+scheduler.add_job(lambda: sync_logs_with_cloudinary(log_dir=".", pattern="access.log", folder="logs"), 'interval', minutes=5, id='sync_logs')
+scheduler.add_job(lambda: sync_files_with_cloudinary(local_dir=".", pattern="*.csv", folder="stats"), 'interval', minutes=5, id='sync_csv')
+scheduler.start()
 
 
 if __name__ == '__main__':
