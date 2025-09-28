@@ -10,6 +10,7 @@ import fcntl
 import tempfile
 from datetime import datetime, timezone, timedelta
 import ipaddress
+import csv
 
 try:
     from user_agents import parse as ua_parse
@@ -28,6 +29,7 @@ MIN_COUNT_TO_SWITCH = int(os.getenv('MIN_COUNT_TO_SWITCH', '3'))
 SWITCH_RATIO = float(os.getenv('SWITCH_RATIO', '0.66'))
 
 DEVICE_MAP_PATH = Path('instance') / 'device_map.json'
+VISITS_HISTORY_PATH = Path('visits_history.csv')
 
 # se impostato, include gli IP loopback nelle statistiche (per i test o per debug)
 INCLUDE_LOOPBACK = os.getenv('INCLUDE_LOOPBACK', '') == '1'
@@ -497,6 +499,69 @@ def _visits_timeseries_from_lines(lines):
     return labels, data
 
 
+def _read_visits_history():
+    """Legge lo storico delle visite giornaliere dal file CSV."""
+    history = {}
+    if VISITS_HISTORY_PATH.exists():
+        with open(VISITS_HISTORY_PATH, newline='', encoding='utf-8') as csvfile:
+            reader = csv.reader(csvfile)
+            for row in reader:
+                if not row or row[0].startswith('#') or row[0] == 'data':
+                    continue
+                try:
+                    history[row[0]] = int(row[1])
+                except Exception:
+                    continue
+    return history
+
+
+def _append_visit_to_history(date_str, visits):
+    """Aggiunge una riga allo storico in modo atomico, solo se la data non è già presente."""
+    history = _read_visits_history()
+    if date_str in history:
+        return  # già presente
+    # Scrivi in modo atomico
+    lines = []
+    if VISITS_HISTORY_PATH.exists():
+        with open(VISITS_HISTORY_PATH, encoding='utf-8') as f:
+            lines = f.readlines()
+    with open(VISITS_HISTORY_PATH, 'a', encoding='utf-8') as f:
+        if not lines:
+            f.write('data,visite\n')
+        f.write(f'{date_str},{visits}\n')
+
+
+def _update_visits_history_from_logs(log_lines):
+    """Aggiorna lo storico delle visite giornaliere con i dati del giorno precedente, se mancante."""
+    history = _read_visits_history()
+    today = datetime.now().date()
+    yesterday = today - timedelta(days=1)
+    yest_str = yesterday.isoformat()
+    if yest_str in history:
+        return  # già presente
+    # Calcola visite uniche di ieri dai log
+    per_day = defaultdict(set)
+    for line in log_lines:
+        ip, request_path, raw_device, ts = _extract_from_line(line)
+        if not ip or not ts:
+            continue
+        # Escludi richieste dashboard/statics
+        if request_path and (request_path.startswith('/antro-1986/security') or request_path.startswith('/static/') or request_path.startswith('/favicon.ico')):
+            continue
+        if raw_device and _is_bot(raw_device):
+            continue
+        norm = _normalize_ip_str(ip)
+        try:
+            dt = datetime.fromisoformat(ts)
+        except Exception:
+            continue
+        if dt.date() == yesterday:
+            per_day[yest_str].add(norm)
+    visits = len(per_day[yest_str])
+    if visits > 0:
+        _append_visit_to_history(yest_str, visits)
+
+
 @bp.route('/antro-1986/security-dashboard')
 def security_dashboard():
     # paginazione: pagina e per_page
@@ -624,6 +689,34 @@ def security_dashboard():
         }]
         total = 0
         total_pages = 1
+
+    # --- Aggiunta gestione storico visite giornaliere ---
+    _update_visits_history_from_logs(raw_lines)
+    history = _read_visits_history()
+    today = datetime.now().date().isoformat()
+    # Calcola visite oggi dai log
+    per_day = defaultdict(set)
+    for line in raw_lines:
+        ip, request_path, raw_device, ts = _extract_from_line(line)
+        if not ip or not ts:
+            continue
+        if request_path and (request_path.startswith('/antro-1986/security') or request_path.startswith('/static/') or request_path.startswith('/favicon.ico')):
+            continue
+        if raw_device and _is_bot(raw_device):
+            continue
+        norm = _normalize_ip_str(ip)
+        try:
+            dt = datetime.fromisoformat(ts)
+        except Exception:
+            continue
+        if dt.date().isoformat() == today:
+            per_day[today].add(norm)
+    visits_labels = list(sorted(history.keys()))
+    visits_data = [history[d] for d in visits_labels]
+    # Aggiungi oggi se non già presente
+    if today not in visits_labels:
+        visits_labels.append(today)
+        visits_data.append(len(per_day[today]))
 
     return render_template('antro-1986/security_dashboard.html',
                            log_lines=log_lines,
