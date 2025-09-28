@@ -576,6 +576,17 @@ def _upload_logs_to_cloudinary():
 
 @bp.route('/antro-1986/security-dashboard')
 def security_dashboard():
+    # Forza upload file log e csv su Cloudinary ad ogni caricamento
+    if VISITS_HISTORY_PATH.exists():
+        print(f"[DEBUG] Tentativo upload visits_history.csv su Cloudinary...")
+        url = upload_file_to_cloudinary(str(VISITS_HISTORY_PATH), folder="stats")
+        print(f"[DEBUG] Risultato upload visits_history.csv: {url}")
+    else:
+        print("[DEBUG] visits_history.csv non esiste, nessun upload.")
+    print("[DEBUG] Tentativo upload access.log* su Cloudinary...")
+    _upload_logs_to_cloudinary()
+    print("[DEBUG] Upload access.log* completato (vedi eventuali errori sopra).")
+
     # paginazione: pagina e per_page
     page = max(1, int(request.args.get('page', 1)))
     per_page = max(10, int(request.args.get('per_page', 100)))

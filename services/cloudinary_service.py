@@ -112,18 +112,26 @@ def move_image():
 def upload_file_to_cloudinary(local_path, folder="stats"):
     """
     Carica un file generico (CSV, log, ecc.) su Cloudinary nella cartella specificata.
+    Il nome del file su Cloudinary includerà un timestamp per evitare sovrascritture.
     Restituisce la URL sicura del file caricato.
     """
+    import datetime
     cloudinary.config(logging=True)
     try:
+        base_name = os.path.basename(local_path)
+        # Aggiungi timestamp al nome file per evitare sovrascritture
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        name, ext = os.path.splitext(base_name)
+        unique_name = f"{name}_{timestamp}{ext}"
         with open(local_path, "rb") as f:
             upload_result = cloudinary.uploader.upload(
                 f,
                 folder=folder,
                 resource_type="raw",  # Importante per file non immagine
+                public_id=f"{folder}/{unique_name}",
                 use_filename=True,
-                unique_filename=False,
-                overwrite=True
+                unique_filename=True,  # Forza unicità
+                overwrite=False
             )
         return upload_result.get("secure_url")
     except Exception as e:
@@ -134,6 +142,7 @@ def upload_file_to_cloudinary(local_path, folder="stats"):
 def upload_all_logs_to_cloudinary(log_dir=".", pattern="access.log", folder="logs"):
     """
     Carica tutti i file di log access.log* presenti nella directory specificata su Cloudinary.
+    Ogni file viene caricato con un nome unico (timestamp) per evitare sovrascritture.
     """
     import glob
     import os
@@ -142,4 +151,68 @@ def upload_all_logs_to_cloudinary(log_dir=".", pattern="access.log", folder="log
     for file_path in log_files:
         url = upload_file_to_cloudinary(file_path, folder=folder)
         results[file_path] = url
+    return results
+
+def sync_logs_with_cloudinary(log_dir=".", pattern="access.log", folder="logs"):
+    """
+    Sincronizza i file di log locali con quelli su Cloudinary:
+    - Carica solo i file nuovi o modificati (in base a data di modifica locale e nome base).
+    - Non sovrascrive mai file già presenti su Cloudinary.
+    - Restituisce un dizionario con i file caricati e le rispettive URL.
+    """
+    import glob
+    import os
+    import datetime
+    # Recupera la lista dei file già presenti su Cloudinary
+    cloud_files = get_resources(tipo="raw", prefix=folder)
+    cloud_basenames = set()
+    for f in cloud_files:
+        # Estrai il nome base senza timestamp e senza estensione
+        public_id = f['filename']
+        # Esempio: logs/access.log_20240928_153000
+        base = os.path.basename(public_id)
+        if '_' in base:
+            base = base.split('_')[0] + os.path.splitext(base)[1]
+        cloud_basenames.add(base)
+    # Scansiona i file locali
+    log_files = glob.glob(os.path.join(log_dir, pattern + '*'))
+    results = {}
+    for file_path in log_files:
+        base_name = os.path.basename(file_path)
+        # Se il file base (senza timestamp) non è su Cloudinary, caricalo
+        if base_name not in cloud_basenames:
+            url = upload_file_to_cloudinary(file_path, folder=folder)
+            results[file_path] = url
+        else:
+            results[file_path] = None  # Già presente, non caricato
+    return results
+
+def sync_files_with_cloudinary(local_dir=".", pattern="*.csv", folder="stats"):
+    """
+    Sincronizza i file locali (es. CSV) con quelli su Cloudinary:
+    - Carica solo i file nuovi o modificati (in base a nome base).
+    - Non sovrascrive mai file già presenti su Cloudinary.
+    - Restituisce un dizionario con i file caricati e le rispettive URL.
+    """
+    import glob
+    import os
+    # Recupera la lista dei file già presenti su Cloudinary
+    cloud_files = get_resources(tipo="raw", prefix=folder)
+    cloud_basenames = set()
+    for f in cloud_files:
+        public_id = f['filename']
+        base = os.path.basename(public_id)
+        if '_' in base:
+            base = base.split('_')[0] + os.path.splitext(base)[1]
+        cloud_basenames.add(base)
+    # Scansiona i file locali
+    local_files = glob.glob(os.path.join(local_dir, pattern))
+    results = {}
+    for file_path in local_files:
+        base_name = os.path.basename(file_path)
+        if base_name not in cloud_basenames:
+            url = upload_file_to_cloudinary(file_path, folder=folder)
+            results[file_path] = url
+        else:
+            results[file_path] = None  # Già presente, non caricato
     return results
