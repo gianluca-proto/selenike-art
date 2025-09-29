@@ -1,10 +1,12 @@
+print('[DEBUG] Modulo cloudinary_service.py caricato')
+
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 import io
 import os
 import requests
-from flask import flash, jsonify
+from flask import flash, jsonify, request
 
 cloudinary.config(
     cloud_name=os.getenv('CLOUD_NAME'),
@@ -12,23 +14,53 @@ cloudinary.config(
     api_secret=os.getenv('CLOUD_API_SECRET')
 )
 
+# Log di debug per le variabili d'ambiente (senza secret)
+print(f"[DEBUG] CLOUD_NAME: {os.getenv('CLOUD_NAME')}")
+print(f"[DEBUG] CLOUD_API_KEY: {os.getenv('CLOUD_API_KEY')}")
+
+
 def get_resources(resource_type, prefix, type_="upload"):
     try:
         response = cloudinary.api.resources(type=type_, prefix=prefix, max_results=100, resource_type=resource_type)
-        return [{'filename': img.get('public_id', ''), 'url': img.get('secure_url', '')} for img in response.get('resources', [])]
+        # Verifica che la risposta sia un dict e contenga 'resources'
+        if not isinstance(response, dict) or 'resources' not in response:
+            print(f"❌ Risposta inattesa da Cloudinary per il prefisso '{prefix}': {response}")
+            # Se la risposta è HTML, mostra solo un estratto
+            if isinstance(response, str) and response.strip().startswith('<!DOCTYPE html'):
+                print(f"[DEBUG] Estratto risposta HTML: {response[:120]} ...")
+            return []
+        return [
+            {'filename': img.get('public_id', ''), 'url': img.get('secure_url', '')}
+            for img in response.get('resources', [])
+        ]
+    except cloudinary.exceptions.Error as e:
+        # Gestione errori di parsing server response (404) o HTML
+        msg = str(e)
+        if 'Error parsing server response' in msg and '404' in msg:
+            print(f"⚠️ Cartella o risorsa non trovata su Cloudinary per il prefisso '{prefix}' (404). Probabile cartella vuota o inesistente.")
+            return []
+        if hasattr(e, 'http_status') and e.http_status == 404:
+            print(f"⚠️ Nessuna risorsa trovata o cartella inesistente su Cloudinary per il prefisso '{prefix}'")
+        else:
+            print(f"❌ Errore nel recupero delle immagini ({prefix}): {msg}")
+        return []
     except Exception as e:
-        print(f"❌ Errore nel recupero delle immagini ({prefix}): {str(e)}")
+        import traceback
+        print(f"❌ Errore sconosciuto nel recupero delle immagini ({prefix}): {str(e)}")
+        traceback.print_exc()
         return []
 
 
 def test_cloudinary_connection():
-    url = f"https://api.cloudinary.com/v1_1/{cloudinary.config().cloud_name}/ping"
+    print("[DEBUG] Avvio test_cloudinary_connection...")
     try:
-        response = requests.get(url)
-        print(f"🌐 Stato connessione Cloudinary: {response.status_code}")
-        return response.status_code == 200
-    except requests.exceptions.RequestException as e:
-        print(f"❌ Errore di connessione a Cloudinary: {e}")
+        response = cloudinary.api.ping()
+        print(f"🌐 Stato connessione Cloudinary: {response}")
+        return True
+    except Exception as e:
+        import traceback
+        print(f"❌ Errore Cloudinary: {e}")
+        traceback.print_exc()
         return False
 
 

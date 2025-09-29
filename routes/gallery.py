@@ -15,14 +15,24 @@ csrf = CSRFProtect()
 
 @bp.route('/art-gallery')  # ✅ Route registrata sotto 'gallery'
 def art_gallery():
-    categories = ['novita', 'commissioni', 'fanart', 'ideepersonali', 'altro']
+    # Recupera tutte le immagini sotto img/gallery/ senza sottocartelle e con tipo 'image'
+    res = get_resources('image', 'img/gallery/')
     images = []
-    for category in categories:
-        res = get_resources('upload', f'img/gallery/{category}/')
-        for img in res:
-            images.append({'filename': img['filename'], 'url': img['url'], 'category': category})
-
+    for img in res:
+        public_id = img['filename']
+        # Estrai la categoria dal public_id: img/gallery/<categoria>/resto...
+        parts = public_id.split('/')
+        category = parts[2] if len(parts) > 2 else 'altro'
+        images.append({'filename': img['filename'], 'url': img['url'], 'category': category})
+    print(f"[DEBUG] Totale immagini trovate: {len(images)}")
     return render_template('gallery.html', images=images)
+
+@bp.route('/art-gallery-debug')
+def art_gallery_debug():
+    # Recupera tutte le immagini sotto img/gallery/ (senza filtro categoria)
+    res = get_resources('image', 'img/gallery/')
+    return render_template('gallery.html', images=[{'filename': img['filename'], 'url': img['url'], 'category': 'debug'} for img in res])
+
 
 @bp.route('/antro-1986/upload', methods=['GET', 'POST'])
 @jwt_required

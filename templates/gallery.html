@@ -21,7 +21,7 @@
             <div class="col-12 col-md-3 col-lg-2 px-0 gallery-item {{ image.category }} show">
 
                 <a href="#" onclick="openImageModal(event, '{{ image.url }}')">
-                    <img src="{{ image.url }}" class="img-fluid rounded shadow-lg img-hover gallery-img" loading="lazy" alt="Opera d'arte">
+                    <img src="{{ image.url }}" class="img-fluid rounded shadow-lg img-hover gallery-img" loading="lazy" alt="Opera d'arte" style="display:block !important; opacity:1 !important; width:100% !important; max-width:100% !important; height:auto !important; background:#fff !important;">
                 </a>
             </div>
             {% endfor %}

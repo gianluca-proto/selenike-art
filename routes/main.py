@@ -17,12 +17,18 @@ bp = Blueprint('main', __name__)
 @cache.cached(timeout=300)
 def home():
     try:
-        desktop_images = [img['url'] for img in get_resources('upload', 'img/banner/')]
-        mobile_images = [img['url'] for img in get_resources('upload', 'img/banner_mobile/')]
-        carousel_animal_images = [img['url'] for img in get_resources('upload', 'img/carousel_animal/')]
-        carousel_erotic_images = [img['url'] for img in get_resources('upload', 'img/carousel_erotic/')]
-        carousel_comics_images = [img['url'] for img in get_resources('upload', 'img/carousel_comics/')]
-        carousel_customized_images = [img['url'] for img in get_resources('upload', 'img/carousel_customized/')]
+        desktop_images = [img['url'] for img in get_resources('image', 'img/banner/')]
+        print(f"[DEBUG] desktop_images: {desktop_images}")
+        mobile_images = [img['url'] for img in get_resources('image', 'img/banner_mobile/')]
+        print(f"[DEBUG] mobile_images: {mobile_images}")
+        carousel_animal_images = [img['url'] for img in get_resources('image', 'img/carousel_animal/')]
+        print(f"[DEBUG] carousel_animal_images: {carousel_animal_images}")
+        carousel_erotic_images = [img['url'] for img in get_resources('image', 'img/carousel_erotic/')]
+        print(f"[DEBUG] carousel_erotic_images: {carousel_erotic_images}")
+        carousel_comics_images = [img['url'] for img in get_resources('image', 'img/carousel_comics/')]
+        print(f"[DEBUG] carousel_comics_images: {carousel_comics_images}")
+        carousel_customized_images = [img['url'] for img in get_resources('image', 'img/carousel_customized/')]
+        print(f"[DEBUG] carousel_customized_images: {carousel_customized_images}")
     except Exception as e:
         desktop_images, mobile_images, carousel_animal_images = [], [], []
         carousel_erotic_images, carousel_comics_images, carousel_customized_images = [], [], []
