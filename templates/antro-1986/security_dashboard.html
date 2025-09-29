@@ -372,6 +372,23 @@
         urlParams.set('per_page', perPageSelect.value);
         window.location.search = urlParams.toString();
     });
+
+    // Funzione per aggiornare il grafico delle visite giornaliere
+    function aggiornaVisitsChart() {
+        fetch('/antro-1986/security-visits')
+            .then(response => response.json())
+            .then(json => {
+                if (json && Array.isArray(json.data) && Array.isArray(json.labels)) {
+                    visitsChart.data.labels = json.labels;
+                    visitsChart.data.datasets[0].data = json.data;
+                    visitsChart.update();
+                }
+            })
+            .catch(err => { /* opzionale: log degli errori */ });
+    }
+
+    // Aggiorna ogni 30 secondi
+    setInterval(aggiornaVisitsChart, 30000);
 </script>
 
 {% endblock %}
