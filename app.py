@@ -1,5 +1,5 @@
 import logging
-from logging.handlers import RotatingFileHandler
+from datetime import datetime
 
 from flask import Flask, request, send_from_directory
 from config import Config # ✅ Importa solo i Blueprint giusti
@@ -14,6 +14,7 @@ import requests
 from extensions import cache  # usa istanza globale
 from apscheduler.schedulers.background import BackgroundScheduler
 from services.cloudinary_service import sync_logs_with_cloudinary, sync_files_with_cloudinary
+from log_utils import write_log_line
 
 
 
@@ -102,30 +103,15 @@ def set_security_headers(response):
 
 
 # Configurazione logging accessi (sempre attiva)
-class CloudinaryRotatingFileHandler(RotatingFileHandler):
-    def doRollover(self):
-        super().doRollover()
-        try:
-            from services.cloudinary_service import sync_logs_with_cloudinary
-            sync_logs_with_cloudinary(log_dir=".", pattern="access.log", folder="logs")
-        except Exception as e:
-            print(f"[ERROR] Upload log su Cloudinary fallito dopo rollover: {e}")
-
-file_handler = CloudinaryRotatingFileHandler('access.log', maxBytes=5 * 1024 * 1024, backupCount=5)
-file_handler.setFormatter(logging.Formatter(
-    '%(asctime)s - %(levelname)s - %(message)s'
-))
-file_handler.setLevel(logging.INFO)
-# Evita handler duplicati se il modulo viene ricaricato
-if not any(isinstance(h, RotatingFileHandler) for h in app.logger.handlers):
-    app.logger.addHandler(file_handler)
-app.logger.setLevel(logging.INFO)
+# RIMOSSA CloudinaryRotatingFileHandler e RotatingFileHandler
 
 @app.after_request
 def log_access(response):
     ip = request.remote_addr or '0.0.0.0'
     user_agent = request.user_agent.string or 'N/A'
-    app.logger.info(f'access | IP: {ip} | Request: {request.path} | Response: {response.status} | Device: {user_agent}')
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S,%f')[:-3]
+    log_line = f"{timestamp} - {ip} - {response.status} - {request.path} - {user_agent}"
+    write_log_line(log_line)
     return response
 
 # Importa i Blueprint una sola volta, dopo l'inizializzazione dell'app e delle estensioni

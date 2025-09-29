@@ -645,10 +645,47 @@ def security_dashboard():
 
             # Prepariamo le righe della pagina come strutture (dizionari) per il template
             log_rows = []
+            debug_printed = False
             for line in page_lines:
                 parts = line.split(' - ')
-                if len(parts) >= 5:
-                    # estrai campi con lo stesso metodo usato prima
+                # Prova a estrarre timestamp se la prima parte sembra una data/ora
+                possible_ts = parts[0].strip() if parts else ''
+                timestamp = 'N/A'
+                # Riconosci formato tipo 'YYYY-MM-DD HH:MM:SS,ms'
+                import re
+                if re.match(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(,\d+)?$", possible_ts):
+                    timestamp = possible_ts
+                if len(parts) == 5:
+                    # Nuovo formato: timestamp - ip - status - url - user_agent
+                    ip = parts[1].strip() if parts[1].strip() else 'N/A'
+                    status = parts[2].strip() if parts[2].strip() else 'N/A'
+                    request_url = parts[3].strip() if parts[3].strip() else 'N/A'
+                    raw_device = parts[4].strip() if parts[4].strip() else 'N/A'
+                    device_type = _classify_device_from_ua(raw_device)
+                    log_rows.append({
+                        'timestamp': timestamp,
+                        'ip': ip,
+                        'request': request_url,
+                        'status': status,
+                        'raw_device': raw_device,
+                        'device_type': device_type
+                    })
+                elif len(parts) == 4:
+                    # Vecchio formato senza timestamp
+                    ip = parts[0].strip() if parts[0].strip() else 'N/A'
+                    status = parts[1].strip() if parts[1].strip() else 'N/A'
+                    request_url = parts[2].strip() if parts[2].strip() else 'N/A'
+                    raw_device = parts[3].strip() if parts[3].strip() else 'N/A'
+                    device_type = _classify_device_from_ua(raw_device)
+                    log_rows.append({
+                        'timestamp': 'N/A',
+                        'ip': ip,
+                        'request': request_url,
+                        'status': status,
+                        'raw_device': raw_device,
+                        'device_type': device_type
+                    })
+                elif len(parts) >= 5:
                     timestamp = parts[0]
                     ip = 'N/A'
                     request_url = 'N/A'
@@ -675,7 +712,6 @@ def security_dashboard():
                         except Exception:
                             raw_device = parts[5]
                     else:
-                        # fallback: possibile UA nell'ultima parte
                         possible = parts[-1]
                         if len(possible) > 20:
                             raw_device = possible
@@ -714,8 +750,9 @@ def security_dashboard():
         total_pages = 1
 
     # --- Aggiunta gestione storico visite giornaliere ---
-    _update_visits_history_from_logs(raw_lines)
     history = _read_visits_history()
+    visits_labels = list(sorted(history.keys()))
+    visits_data = [history[d] for d in visits_labels]
     today = datetime.now().date().isoformat()
     # Calcola visite oggi dai log
     per_day = defaultdict(set)
@@ -734,8 +771,6 @@ def security_dashboard():
             continue
         if dt.date().isoformat() == today:
             per_day[today].add(norm)
-    visits_labels = list(sorted(history.keys()))
-    visits_data = [history[d] for d in visits_labels]
     # Aggiungi oggi se non già presente
     if today not in visits_labels:
         visits_labels.append(today)
@@ -840,13 +875,22 @@ def admin_clear_map():
 
 @bp.route('/antro-1986/security-visits')
 def security_visits():
-    """Endpoint JSON che restituisce serie temporale di visite uniche per giorno."""
+    """Endpoint JSON che restituisce serie temporale di visite uniche per giorno dal CSV."""
     labels = []
     data = []
     try:
-        with open('access.log', 'r') as log:
-            raw_lines = [l.rstrip('\n') for l in log.readlines() if l.strip()]
-            labels, data = _visits_timeseries_from_lines(raw_lines)
+        with open('visits_history.csv', 'r') as csvfile:
+            for line in csvfile:
+                line = line.strip()
+                if not line or line.startswith('#') or line.lower().startswith('data'):
+                    continue
+                parts = line.split(',')
+                if len(parts) == 2:
+                    labels.append(parts[0])
+                    try:
+                        data.append(int(parts[1]))
+                    except ValueError:
+                        data.append(0)
     except FileNotFoundError:
         pass
     return jsonify({'labels': labels, 'data': data})

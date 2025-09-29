@@ -115,25 +115,23 @@ def move_image():
         return jsonify({"success": False, "message": f"❌ Errore server: {str(e)}"}), 500
 
 
-def upload_file_to_cloudinary(local_path, folder="stats", keep_name=False):
-    import datetime
+def upload_file_to_cloudinary(local_path, folder="stats", keep_name=True):
     cloudinary.config(logging=True)
     try:
         base_name = os.path.basename(local_path)
-        if keep_name:
-            unique_name = base_name
+        # Forza sempre lo stesso public_id per visits_history.csv
+        if base_name == "visits_history.csv":
+            public_id = f"{folder}/visits_history.csv"
         else:
-            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-            name, ext = os.path.splitext(base_name)
-            unique_name = f"{name}_{timestamp}{ext}"
+            public_id = f"{folder}/{base_name}"
         with open(local_path, "rb") as f:
             upload_result = cloudinary.uploader.upload(
                 f,
                 folder=folder,
                 resource_type="raw",
-                public_id=f"{folder}/{unique_name}",
+                public_id=public_id,
                 use_filename=True,
-                unique_filename=not keep_name,
+                unique_filename=False,
                 overwrite=True  # Forzato overwrite sempre
             )
         return upload_result.get("secure_url")
@@ -165,12 +163,11 @@ def sync_logs_with_cloudinary(log_dir=".", pattern="access.log", folder="logs"):
     return results
 
 
-def sync_files_with_cloudinary(local_dir=".", pattern="*.csv", folder="stats"):
-    import glob
+def sync_files_with_cloudinary(local_dir=".", pattern=None, folder="stats"):
     import os
-    local_files = glob.glob(os.path.join(local_dir, pattern))
+    file_path = os.path.join(local_dir, "visits_history.csv")
     results = {}
-    for file_path in local_files:
+    if os.path.exists(file_path):
         url = upload_file_to_cloudinary(file_path, folder=folder, keep_name=True)
         results[file_path] = url
     return results
