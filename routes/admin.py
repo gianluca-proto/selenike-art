@@ -24,7 +24,7 @@ def admin_dashboard():
     user_id = verify_jwt(request.cookies.get('auth_token'))  # Ottieni ID utente dal JWT
     if user_id:
         app.logger.info(f"Utente autenticato: ID {user_id}")
-        return render_template('antro-1986/admin.html')
+        return render_template('antro-1986/admin.html', clean_result=None)
     else:
         flash("Sessione scaduta. Effettua di nuovo il login.", "warning")
         return redirect(url_for('antro-1986.admin_login'))
