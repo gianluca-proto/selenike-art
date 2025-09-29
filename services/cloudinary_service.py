@@ -102,7 +102,7 @@ def upload_file_to_cloudinary(local_path, folder="stats", keep_name=False):
                 public_id=f"{folder}/{unique_name}",
                 use_filename=True,
                 unique_filename=not keep_name,
-                overwrite=keep_name
+                overwrite=True  # Forzato overwrite sempre
             )
         return upload_result.get("secure_url")
     except Exception as e:
@@ -125,44 +125,20 @@ def sync_logs_with_cloudinary(log_dir=".", pattern="access.log", folder="logs"):
     import glob
     import os
     import datetime
-    cloud_files = get_resources(resource_type="raw", prefix=folder)
-    cloud_basenames = set()
-    for f in cloud_files:
-        public_id = f['filename']
-        base = os.path.basename(public_id)
-        if '_' in base:
-            base = base.split('_')[0] + os.path.splitext(base)[1]
-        cloud_basenames.add(base)
     log_files = glob.glob(os.path.join(log_dir, pattern + '*'))
     results = {}
     for file_path in log_files:
-        base_name = os.path.basename(file_path)
-        if base_name not in cloud_basenames:
-            url = upload_file_to_cloudinary(file_path, folder=folder)
-            results[file_path] = url
-        else:
-            results[file_path] = None
+        url = upload_file_to_cloudinary(file_path, folder=folder, keep_name=True)
+        results[file_path] = url
     return results
 
 
 def sync_files_with_cloudinary(local_dir=".", pattern="*.csv", folder="stats"):
     import glob
     import os
-    cloud_files = get_resources(resource_type="raw", prefix=folder)
-    cloud_basenames = set()
-    for f in cloud_files:
-        public_id = f['filename']
-        base = os.path.basename(public_id)
-        if '_' in base:
-            base = base.split('_')[0] + os.path.splitext(base)[1]
-        cloud_basenames.add(base)
     local_files = glob.glob(os.path.join(local_dir, pattern))
     results = {}
     for file_path in local_files:
-        base_name = os.path.basename(file_path)
-        if base_name not in cloud_basenames:
-            url = upload_file_to_cloudinary(file_path, folder=folder)
-            results[file_path] = url
-        else:
-            results[file_path] = None
+        url = upload_file_to_cloudinary(file_path, folder=folder, keep_name=True)
+        results[file_path] = url
     return results
