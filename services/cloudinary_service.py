@@ -1,5 +1,3 @@
-print('[DEBUG] Modulo cloudinary_service.py caricato')
-
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
@@ -14,53 +12,27 @@ cloudinary.config(
     api_secret=os.getenv('CLOUD_API_SECRET')
 )
 
-# Log di debug per le variabili d'ambiente (senza secret)
-print(f"[DEBUG] CLOUD_NAME: {os.getenv('CLOUD_NAME')}")
-print(f"[DEBUG] CLOUD_API_KEY: {os.getenv('CLOUD_API_KEY')}")
-
 
 def get_resources(resource_type, prefix, type_="upload"):
     try:
         response = cloudinary.api.resources(type=type_, prefix=prefix, max_results=100, resource_type=resource_type)
-        # Verifica che la risposta sia un dict e contenga 'resources'
         if not isinstance(response, dict) or 'resources' not in response:
-            print(f"❌ Risposta inattesa da Cloudinary per il prefisso '{prefix}': {response}")
-            # Se la risposta è HTML, mostra solo un estratto
-            if isinstance(response, str) and response.strip().startswith('<!DOCTYPE html'):
-                print(f"[DEBUG] Estratto risposta HTML: {response[:120]} ...")
             return []
         return [
             {'filename': img.get('public_id', ''), 'url': img.get('secure_url', '')}
             for img in response.get('resources', [])
         ]
     except cloudinary.exceptions.Error as e:
-        # Gestione errori di parsing server response (404) o HTML
-        msg = str(e)
-        if 'Error parsing server response' in msg and '404' in msg:
-            print(f"⚠️ Cartella o risorsa non trovata su Cloudinary per il prefisso '{prefix}' (404). Probabile cartella vuota o inesistente.")
-            return []
-        if hasattr(e, 'http_status') and e.http_status == 404:
-            print(f"⚠️ Nessuna risorsa trovata o cartella inesistente su Cloudinary per il prefisso '{prefix}'")
-        else:
-            print(f"❌ Errore nel recupero delle immagini ({prefix}): {msg}")
         return []
     except Exception as e:
-        import traceback
-        print(f"❌ Errore sconosciuto nel recupero delle immagini ({prefix}): {str(e)}")
-        traceback.print_exc()
         return []
 
 
 def test_cloudinary_connection():
-    print("[DEBUG] Avvio test_cloudinary_connection...")
     try:
         response = cloudinary.api.ping()
-        print(f"🌐 Stato connessione Cloudinary: {response}")
         return True
     except Exception as e:
-        import traceback
-        print(f"❌ Errore Cloudinary: {e}")
-        traceback.print_exc()
         return False
 
 
@@ -69,26 +41,20 @@ def upload_image(file):
     try:
         file_data = io.BytesIO(file.read())
         file_data.seek(0)
-        print("🔄 Tentativo di upload su Cloudinary...")
-        cloudinary.config(logging=True)
         upload_result = cloudinary.uploader.upload(
             file_data,
             folder="img/gallery/altro",
             upload_preset="ml_default",
             api_key=os.getenv("CLOUD_API_KEY")
         )
-        print(f"📌 Cloudinary Response: {upload_result}")
-        print(f"✅ Upload riuscito: {upload_result.get('secure_url')}")
-        print(f"✅ Risultato upload: {upload_result}")
         if upload_result is None:
-            raise ValueError("❌ Upload a Cloudinary fallito: risposta None")
+            raise ValueError("Upload a Cloudinary fallito: risposta None")
         if upload_result.get('secure_url'):
             flash('✅ Immagine caricata con successo!', 'success')
         else:
             flash('❌ Caricamento non riuscito.', 'danger')
     except Exception as e:
-        print(f"❌ Errore Cloudinary: {str(e)}")
-        flash(f'❌ Errore nel caricamento: {str(e)}', 'danger')
+        flash(f'❌ Errore nel caricamento.', 'danger')
 
 
 def delete_image(public_id):
@@ -100,7 +66,6 @@ def move_image():
     try:
         src_public_id = request.form.get('src_public_id')
         dest_folder = request.form.get('dest_folder')
-        print(f"📂 Spostamento ricevuto: {src_public_id} → {dest_folder}")
         if not src_public_id or not dest_folder:
             return jsonify({"success": False, "message": "⚠️ Parametri mancanti"}), 400
         file_name = src_public_id.split("/")[-1]
@@ -171,3 +136,21 @@ def sync_files_with_cloudinary(local_dir=".", pattern=None, folder="stats"):
         url = upload_file_to_cloudinary(file_path, folder=folder, keep_name=True)
         results[file_path] = url
     return results
+
+
+def download_file_from_cloudinary(public_id, local_path):
+    """Scarica un file raw da Cloudinary e lo salva in local_path. Restituisce True se ok."""
+    import requests
+    try:
+        res = cloudinary.api.resource(public_id, resource_type="raw")
+        url = res.get("secure_url")
+        if not url:
+            return False
+        r = requests.get(url)
+        if r.status_code == 200:
+            with open(local_path, "wb") as f:
+                f.write(r.content)
+            return True
+        return False
+    except Exception:
+        return False
