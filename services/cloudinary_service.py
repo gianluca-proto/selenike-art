@@ -220,3 +220,27 @@ def sync_files_with_cloudinary(local_dir=".", pattern="*.csv", folder="stats"):
         else:
             results[file_path] = None  # Già presente, non caricato
     return results
+
+def delete_micro_logfiles_from_cloudinary(folder="logs", pattern="access.log"):
+    """
+    Elimina tutti i file di log su Cloudinary che hanno un timestamp nel nome (es: access.log_20240929_153000),
+    lasciando solo i file principali (access.log, access.log.1, ecc.).
+    Restituisce il numero di file eliminati e la lista dei nomi eliminati.
+    """
+    import re
+    deleted = []
+    # Recupera tutti i file raw nella cartella dei log
+    resources = get_resources(tipo="raw", prefix=folder)
+    # Regex per identificare i file con timestamp (es: access.log_YYYYMMDD_HHMMSS)
+    timestamp_regex = re.compile(rf"{pattern}_[0-9]{{8}}_[0-9]{{6}}\\..*")
+    for res in resources:
+        public_id = res['filename']
+        base = os.path.basename(public_id)
+        if timestamp_regex.match(base):
+            # Elimina il file
+            try:
+                cloudinary.uploader.destroy(public_id, resource_type="raw", invalidate=True)
+                deleted.append(public_id)
+            except Exception as e:
+                print(f"Errore eliminazione {public_id}: {e}")
+    return {"deleted_count": len(deleted), "deleted_files": deleted}

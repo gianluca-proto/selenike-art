@@ -10,6 +10,7 @@ from services.auth import verify_jwt, jwt_required, generate_access_token, \
 from flask import current_app as app
 import requests  # Assicurati che sia importato in alto nel file
 from datetime import datetime, timedelta
+from services.cloudinary_service import delete_micro_logfiles_from_cloudinary
 
 bp = Blueprint('antro-1986', __name__, url_prefix='/antro-1986')  # ✅ Blueprint Admin
 # Inizializza Argon2
@@ -122,3 +123,18 @@ def admin_logout():
     response.set_cookie('refresh_token', '', expires=0)
     flash('Logout effettuato.', 'success')
     return response
+
+
+@bp.route('/cloudinary/clean_micro_logs', methods=['POST', 'GET'])
+@jwt_required
+def clean_micro_logs():
+    user_id = verify_jwt(request.cookies.get('auth_token'))
+    if not user_id:
+        flash("Sessione scaduta. Effettua di nuovo il login.", "warning")
+        return redirect(url_for('antro-1986.admin_login'))
+    if request.method == 'POST':
+        result = delete_micro_logfiles_from_cloudinary(folder="logs", pattern="access.log")
+        flash(f"Eliminati {result['deleted_count']} microfile di log da Cloudinary.", "success")
+        return render_template('antro-1986/admin.html', clean_result=result)
+    # GET: mostra solo il pulsante
+    return render_template('antro-1986/admin.html', clean_result=None)
