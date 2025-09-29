@@ -576,6 +576,14 @@ def _upload_logs_to_cloudinary():
 
 @bp.route('/antro-1986/security-dashboard')
 def security_dashboard():
+    # Aggiorna visits_history.csv con i dati più recenti dai log
+    try:
+        with open('access.log', 'r') as log:
+            log_lines = [l.rstrip('\n') for l in log.readlines() if l.strip()]
+            _update_visits_history_from_logs(log_lines)
+    except Exception as e:
+        print(f"[DEBUG] Errore aggiornamento visits_history.csv: {e}")
+
     # Sincronizza visits_history.csv da Cloudinary all'avvio della dashboard
     download_file_from_cloudinary('stats/visits_history.csv', str(VISITS_HISTORY_PATH))
     # Forza upload file log e csv su Cloudinary ad ogni caricamento
