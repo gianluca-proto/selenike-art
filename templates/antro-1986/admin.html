@@ -64,33 +64,6 @@
                                 </div>
                             </div>
                         </div></div>
-                        <div class="col-md-6 mb-4">
-                            <div class="card h-100">
-                                <div class="card-body d-flex align-items-center">
-                                    <i class="fas fa-broom fa-3x mr-3"></i>
-                                    <div>
-                                        <form action="{{ url_for('antro-1986.clean_micro_logs') }}" method="POST">
-                                            <button type="submit" class="btn btn-warning">Pulisci microfile log Cloudinary</button>
-                                        </form>
-                                        {% if clean_result is not none %}
-                                            <div class="mt-2">
-                                                <strong>Eliminati:</strong> {{ clean_result.deleted_count }} file<br>
-                                                {% if clean_result.deleted_files %}
-                                                    <details>
-                                                        <summary>Vedi dettagli</summary>
-                                                        <ul style="max-height:150px;overflow:auto;">
-                                                        {% for f in clean_result.deleted_files %}
-                                                            <li>{{ f }}</li>
-                                                        {% endfor %}
-                                                        </ul>
-                                                    </details>
-                                                {% endif %}
-                                            </div>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

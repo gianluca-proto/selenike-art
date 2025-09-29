@@ -1,15 +1,10 @@
-import cloudinary.uploader
-import cloudinary.api
-import io
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
+import io
 import os
 import requests
-from flask import request, jsonify
-import cloudinary.uploader
-
-from flask import flash, request, jsonify
+from flask import flash, jsonify
 
 cloudinary.config(
     cloud_name=os.getenv('CLOUD_NAME'),
@@ -17,9 +12,9 @@ cloudinary.config(
     api_secret=os.getenv('CLOUD_API_SECRET')
 )
 
-def get_resources(tipo, prefix):
+def get_resources(resource_type, prefix, type_="upload"):
     try:
-        response = cloudinary.api.resources(type=tipo, prefix=prefix, max_results=100)
+        response = cloudinary.api.resources(type=type_, prefix=prefix, max_results=100, resource_type=resource_type)
         return [{'filename': img.get('public_id', ''), 'url': img.get('secure_url', '')} for img in response.get('resources', [])]
     except Exception as e:
         print(f"❌ Errore nel recupero delle immagini ({prefix}): {str(e)}")
@@ -38,36 +33,27 @@ def test_cloudinary_connection():
 
 
 def upload_image(file):
-    cloudinary.config(logging=True)  # Abilita il logging avanzato di Cloudinary
-
+    cloudinary.config(logging=True)
     try:
-        file_data = io.BytesIO(file.read())  # Clona il file in memoria
-        file_data.seek(0)  # Reset puntatore
-
+        file_data = io.BytesIO(file.read())
+        file_data.seek(0)
         print("🔄 Tentativo di upload su Cloudinary...")
-
-        cloudinary.config(logging=True)  # Abilita il logging
-
+        cloudinary.config(logging=True)
         upload_result = cloudinary.uploader.upload(
             file_data,
             folder="img/gallery/altro",
             upload_preset="ml_default",
             api_key=os.getenv("CLOUD_API_KEY")
-            # Passiamo l'API Key esplicitamente
         )
         print(f"📌 Cloudinary Response: {upload_result}")
         print(f"✅ Upload riuscito: {upload_result.get('secure_url')}")
-
-        print(f"✅ Risultato upload: {upload_result}")  # Stampa il risultato dell'upload
-
+        print(f"✅ Risultato upload: {upload_result}")
         if upload_result is None:
             raise ValueError("❌ Upload a Cloudinary fallito: risposta None")
-
         if upload_result.get('secure_url'):
             flash('✅ Immagine caricata con successo!', 'success')
         else:
             flash('❌ Caricamento non riuscito.', 'danger')
-
     except Exception as e:
         print(f"❌ Errore Cloudinary: {str(e)}")
         flash(f'❌ Errore nel caricamento: {str(e)}', 'danger')
@@ -78,44 +64,26 @@ def delete_image(public_id):
     return {'success': response.get('result') == 'ok'}
 
 
-
-
 def move_image():
     try:
         src_public_id = request.form.get('src_public_id')
         dest_folder = request.form.get('dest_folder')
-
         print(f"📂 Spostamento ricevuto: {src_public_id} → {dest_folder}")
-
         if not src_public_id or not dest_folder:
             return jsonify({"success": False, "message": "⚠️ Parametri mancanti"}), 400
-
-        # Estrarre il nome del file dall'ID pubblico
-        file_name = src_public_id.split("/")[-1]  # Ottiene solo il nome del file
-
-        # Nuovo percorso completo
+        file_name = src_public_id.split("/")[-1]
         dest_public_id = f"{dest_folder}/{file_name}"
-
-        # Spostamento con rename e `to_folder`
         response = cloudinary.uploader.rename(src_public_id, dest_public_id, overwrite=True)
-
         if "public_id" in response:
             return jsonify({"success": True, "message": f"✅ Spostamento riuscito: {response['public_id']}!"})
         else:
             return jsonify({"success": False, "message": "❌ Errore nello spostamento"}), 500
-
     except Exception as e:
         print(f"❌ Errore Flask: {str(e)}")
         return jsonify({"success": False, "message": f"❌ Errore server: {str(e)}"}), 500
 
 
 def upload_file_to_cloudinary(local_path, folder="stats", keep_name=False):
-    """
-    Carica un file generico (CSV, log, ecc.) su Cloudinary nella cartella specificata.
-    Se keep_name è True, il file viene caricato sempre con lo stesso nome (senza timestamp) e sovrascritto.
-    Se keep_name è False, aggiunge un timestamp per evitare sovrascritture (default per altri file non log).
-    Restituisce la URL sicura del file caricato.
-    """
     import datetime
     cloudinary.config(logging=True)
     try:
@@ -123,7 +91,6 @@ def upload_file_to_cloudinary(local_path, folder="stats", keep_name=False):
         if keep_name:
             unique_name = base_name
         else:
-            # Aggiungi timestamp al nome file per evitare sovrascritture
             timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
             name, ext = os.path.splitext(base_name)
             unique_name = f"{name}_{timestamp}{ext}"
@@ -131,11 +98,11 @@ def upload_file_to_cloudinary(local_path, folder="stats", keep_name=False):
             upload_result = cloudinary.uploader.upload(
                 f,
                 folder=folder,
-                resource_type="raw",  # Importante per file non immagine
+                resource_type="raw",
                 public_id=f"{folder}/{unique_name}",
                 use_filename=True,
-                unique_filename=not keep_name,  # Forza unicità solo se non keep_name
-                overwrite=keep_name  # Sovrascrivi solo se keep_name
+                unique_filename=not keep_name,
+                overwrite=keep_name
             )
         return upload_result.get("secure_url")
     except Exception as e:
@@ -144,10 +111,6 @@ def upload_file_to_cloudinary(local_path, folder="stats", keep_name=False):
 
 
 def upload_all_logs_to_cloudinary(log_dir=".", pattern="access.log", folder="logs"):
-    """
-    Carica tutti i file di log access.log* presenti nella directory specificata su Cloudinary.
-    Ogni file viene caricato con lo stesso nome (senza timestamp) e sovrascritto.
-    """
     import glob
     import os
     log_files = glob.glob(os.path.join(log_dir, pattern + '*'))
@@ -157,51 +120,35 @@ def upload_all_logs_to_cloudinary(log_dir=".", pattern="access.log", folder="log
         results[file_path] = url
     return results
 
+
 def sync_logs_with_cloudinary(log_dir=".", pattern="access.log", folder="logs"):
-    """
-    Sincronizza i file di log locali con quelli su Cloudinary:
-    - Carica solo i file nuovi o modificati (in base a data di modifica locale e nome base).
-    - Non sovrascrive mai file già presenti su Cloudinary.
-    - Restituisce un dizionario con i file caricati e le rispettive URL.
-    """
     import glob
     import os
     import datetime
-    # Recupera la lista dei file già presenti su Cloudinary
-    cloud_files = get_resources(tipo="raw", prefix=folder)
+    cloud_files = get_resources(resource_type="raw", prefix=folder)
     cloud_basenames = set()
     for f in cloud_files:
-        # Estrai il nome base senza timestamp e senza estensione
         public_id = f['filename']
-        # Esempio: logs/access.log_20240928_153000
         base = os.path.basename(public_id)
         if '_' in base:
             base = base.split('_')[0] + os.path.splitext(base)[1]
         cloud_basenames.add(base)
-    # Scansiona i file locali
     log_files = glob.glob(os.path.join(log_dir, pattern + '*'))
     results = {}
     for file_path in log_files:
         base_name = os.path.basename(file_path)
-        # Se il file base (senza timestamp) non è su Cloudinary, caricalo
         if base_name not in cloud_basenames:
             url = upload_file_to_cloudinary(file_path, folder=folder)
             results[file_path] = url
         else:
-            results[file_path] = None  # Già presente, non caricato
+            results[file_path] = None
     return results
 
+
 def sync_files_with_cloudinary(local_dir=".", pattern="*.csv", folder="stats"):
-    """
-    Sincronizza i file locali (es. CSV) con quelli su Cloudinary:
-    - Carica solo i file nuovi o modificati (in base a nome base).
-    - Non sovrascrive mai file già presenti su Cloudinary.
-    - Restituisce un dizionario con i file caricati e le rispettive URL.
-    """
     import glob
     import os
-    # Recupera la lista dei file già presenti su Cloudinary
-    cloud_files = get_resources(tipo="raw", prefix=folder)
+    cloud_files = get_resources(resource_type="raw", prefix=folder)
     cloud_basenames = set()
     for f in cloud_files:
         public_id = f['filename']
@@ -209,7 +156,6 @@ def sync_files_with_cloudinary(local_dir=".", pattern="*.csv", folder="stats"):
         if '_' in base:
             base = base.split('_')[0] + os.path.splitext(base)[1]
         cloud_basenames.add(base)
-    # Scansiona i file locali
     local_files = glob.glob(os.path.join(local_dir, pattern))
     results = {}
     for file_path in local_files:
@@ -218,29 +164,5 @@ def sync_files_with_cloudinary(local_dir=".", pattern="*.csv", folder="stats"):
             url = upload_file_to_cloudinary(file_path, folder=folder)
             results[file_path] = url
         else:
-            results[file_path] = None  # Già presente, non caricato
+            results[file_path] = None
     return results
-
-def delete_micro_logfiles_from_cloudinary(folder="logs", pattern="access.log"):
-    """
-    Elimina tutti i file di log su Cloudinary che hanno un timestamp nel nome (es: access.log_20240929_153000),
-    lasciando solo i file principali (access.log, access.log.1, ecc.).
-    Restituisce il numero di file eliminati e la lista dei nomi eliminati.
-    """
-    import re
-    deleted = []
-    # Recupera tutti i file raw nella cartella dei log
-    resources = get_resources(tipo="raw", prefix=folder)
-    # Regex per identificare i file con timestamp (es: access.log_YYYYMMDD_HHMMSS)
-    timestamp_regex = re.compile(rf"{pattern}_[0-9]{{8}}_[0-9]{{6}}\\..*")
-    for res in resources:
-        public_id = res['filename']
-        base = os.path.basename(public_id)
-        if timestamp_regex.match(base):
-            # Elimina il file
-            try:
-                cloudinary.uploader.destroy(public_id, resource_type="raw", invalidate=True)
-                deleted.append(public_id)
-            except Exception as e:
-                print(f"Errore eliminazione {public_id}: {e}")
-    return {"deleted_count": len(deleted), "deleted_files": deleted}

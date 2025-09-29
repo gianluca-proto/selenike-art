@@ -104,7 +104,7 @@ def set_security_headers(response):
 # Configurazione logging accessi (sempre attiva)
 file_handler = RotatingFileHandler('access.log', maxBytes=1024 * 1024, backupCount=5)
 file_handler.setFormatter(logging.Formatter(
-    '%(asctime)s - %(levelname)s - IP: %(ip)s - Request: %(request)s - Response: %(status)s - Device: %(user_agent)s'
+    '%(asctime)s - %(levelname)s - %(message)s'
 ))
 file_handler.setLevel(logging.INFO)
 # Evita handler duplicati se il modulo viene ricaricato
@@ -116,12 +116,7 @@ app.logger.setLevel(logging.INFO)
 def log_access(response):
     ip = request.remote_addr or '0.0.0.0'
     user_agent = request.user_agent.string or 'N/A'
-    app.logger.info('access', extra={
-        'ip': ip,
-        'request': request.path,
-        'status': response.status_code,
-        'user_agent': user_agent
-    })
+    app.logger.info(f'access | IP: {ip} | Request: {request.path} | Response: {response.status} | Device: {user_agent}')
     return response
 
 # Importa i Blueprint una sola volta, dopo l'inizializzazione dell'app e delle estensioni
