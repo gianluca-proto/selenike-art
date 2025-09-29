@@ -109,20 +109,24 @@ def move_image():
         return jsonify({"success": False, "message": f"❌ Errore server: {str(e)}"}), 500
 
 
-def upload_file_to_cloudinary(local_path, folder="stats"):
+def upload_file_to_cloudinary(local_path, folder="stats", keep_name=False):
     """
     Carica un file generico (CSV, log, ecc.) su Cloudinary nella cartella specificata.
-    Il nome del file su Cloudinary includerà un timestamp per evitare sovrascritture.
+    Se keep_name è True, il file viene caricato sempre con lo stesso nome (senza timestamp) e sovrascritto.
+    Se keep_name è False, aggiunge un timestamp per evitare sovrascritture (default per altri file non log).
     Restituisce la URL sicura del file caricato.
     """
     import datetime
     cloudinary.config(logging=True)
     try:
         base_name = os.path.basename(local_path)
-        # Aggiungi timestamp al nome file per evitare sovrascritture
-        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        name, ext = os.path.splitext(base_name)
-        unique_name = f"{name}_{timestamp}{ext}"
+        if keep_name:
+            unique_name = base_name
+        else:
+            # Aggiungi timestamp al nome file per evitare sovrascritture
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            name, ext = os.path.splitext(base_name)
+            unique_name = f"{name}_{timestamp}{ext}"
         with open(local_path, "rb") as f:
             upload_result = cloudinary.uploader.upload(
                 f,
@@ -130,8 +134,8 @@ def upload_file_to_cloudinary(local_path, folder="stats"):
                 resource_type="raw",  # Importante per file non immagine
                 public_id=f"{folder}/{unique_name}",
                 use_filename=True,
-                unique_filename=True,  # Forza unicità
-                overwrite=False
+                unique_filename=not keep_name,  # Forza unicità solo se non keep_name
+                overwrite=keep_name  # Sovrascrivi solo se keep_name
             )
         return upload_result.get("secure_url")
     except Exception as e:
@@ -142,14 +146,14 @@ def upload_file_to_cloudinary(local_path, folder="stats"):
 def upload_all_logs_to_cloudinary(log_dir=".", pattern="access.log", folder="logs"):
     """
     Carica tutti i file di log access.log* presenti nella directory specificata su Cloudinary.
-    Ogni file viene caricato con un nome unico (timestamp) per evitare sovrascritture.
+    Ogni file viene caricato con lo stesso nome (senza timestamp) e sovrascritto.
     """
     import glob
     import os
     log_files = glob.glob(os.path.join(log_dir, pattern + '*'))
     results = {}
     for file_path in log_files:
-        url = upload_file_to_cloudinary(file_path, folder=folder)
+        url = upload_file_to_cloudinary(file_path, folder=folder, keep_name=True)
         results[file_path] = url
     return results
 
