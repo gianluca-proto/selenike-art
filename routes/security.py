@@ -410,6 +410,29 @@ def _counts_from_lines_unique_ips(lines, include_loopback=None):
     return device_counts
 
 
+def _counts_from_lines_all_accesses(lines):
+    """Conta ogni accesso per device_type (desktop, mobile, tablet), senza deduplicare per IP."""
+    device_counts = {'mobile': 0, 'desktop': 0, 'tablet': 0}
+    for line in lines:
+        ip, request_path, raw_device, ts = _extract_from_line(line)
+        if not ip:
+            continue
+        # Escludi polling/static requests e le richieste dell'area di admin/dashboard
+        if request_path and (request_path.startswith('/antro-1986/security') or request_path.startswith('/static/') or request_path.startswith('/favicon.ico')):
+            continue
+        # Escludi bot
+        if raw_device and _is_bot(raw_device):
+            continue
+        dev_type = _classify_device_from_ua(raw_device)
+        if not dev_type:
+            dev_type = 'desktop'  # fallback
+        if dev_type in device_counts:
+            device_counts[dev_type] += 1
+        else:
+            device_counts['desktop'] += 1
+    return device_counts
+
+
 def _stats_from_lines(lines, sample=20):
     """Restituisce diagnostica: counts, numero unico di IP conteggiati, righe totali ed escluse e una sample degli IP visti."""
     total = len(lines)
@@ -797,10 +820,7 @@ def security_dashboard():
 
 @bp.route('/antro-1986/security-stats')
 def security_stats():
-    """Endpoint JSON per i conteggi (utile per polling dal client).
-    Supporta query param 'day=yesterday' per ottenere i conteggi filtrati alle righe di ieri.
-    Includiamo SEMPRE il loopback per ambiente locale/sviluppo.
-    """
+    """Endpoint JSON per i conteggi (ora conta ogni accesso per device_type, non solo unici)."""
     counts = {'mobile': 0, 'desktop': 0, 'tablet': 0}
     MAX_GRAPH_LINES = 2000  # Limite righe per i grafici anche per il polling
     day = request.args.get('day')
@@ -814,7 +834,6 @@ def security_stats():
             # usa solo le ultime N righe per il polling
             graph_lines = raw_lines[-MAX_GRAPH_LINES:] if len(raw_lines) > MAX_GRAPH_LINES else raw_lines
             if target_date:
-                # filtriamo le righe che appartenngono a target_date in base al timestamp all'inizio della riga
                 filtered = []
                 for line in graph_lines:
                     ts = None
@@ -823,7 +842,6 @@ def security_stats():
                         ts = parts[0]
                     if not ts:
                         continue
-                    # proviamo a parsare timestamp in vari formati
                     parsed = None
                     for fmt in ("%Y-%m-%d %H:%M:%S,%f", "%Y-%m-%dT%H:%M:%S.%fZ", "%Y-%m-%dT%H:%M:%SZ", "%Y-%m-%dT%H:%M:%S%z", "%Y-%m-%dT%H:%M:%S"):
                         try:
@@ -837,15 +855,12 @@ def security_stats():
                         except Exception:
                             parsed = None
                     if parsed:
-                        # normalizziamo in UTC naive date (parsing potrebbe preservare tzinfo)
                         d = parsed.date()
                         if d.isoformat() == target_date:
                             filtered.append(line)
-                # includiamo loopback SEMPRE per il calcolo di ieri (utile in ambiente locale)
-                counts = _counts_from_lines_unique_ips(filtered, include_loopback=True)
+                counts = _counts_from_lines_all_accesses(filtered)
             else:
-                # includiamo loopback SEMPRE anche per il giorno attuale
-                counts = _counts_from_lines_unique_ips(graph_lines, include_loopback=True)
+                counts = _counts_from_lines_all_accesses(graph_lines)
     except FileNotFoundError:
         pass
     return jsonify(counts)
