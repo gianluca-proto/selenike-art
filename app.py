@@ -102,7 +102,16 @@ def set_security_headers(response):
 
 
 # Configurazione logging accessi (sempre attiva)
-file_handler = RotatingFileHandler('access.log', maxBytes=1024 * 1024, backupCount=5)
+class CloudinaryRotatingFileHandler(RotatingFileHandler):
+    def doRollover(self):
+        super().doRollover()
+        try:
+            from services.cloudinary_service import sync_logs_with_cloudinary
+            sync_logs_with_cloudinary(log_dir=".", pattern="access.log", folder="logs")
+        except Exception as e:
+            print(f"[ERROR] Upload log su Cloudinary fallito dopo rollover: {e}")
+
+file_handler = CloudinaryRotatingFileHandler('access.log', maxBytes=5 * 1024 * 1024, backupCount=5)
 file_handler.setFormatter(logging.Formatter(
     '%(asctime)s - %(levelname)s - %(message)s'
 ))
