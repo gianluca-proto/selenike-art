@@ -146,9 +146,8 @@
         }
     });
 
-    // counts viene passato dalla view come dizionario: usiamo device_totals se presente per mostrare subito i totali
-    {% set _initial = device_totals if device_totals is defined else counts %}
-    const serverCounts = {{ _initial | tojson }} || {desktop:0, mobile:0, tablet:0};
+    // Inizializza i dati del grafico a torta solo con counts (non device_totals)
+    const serverCounts = {{ counts | tojson }} || {desktop:0, mobile:0, tablet:0};
     let data = [Number(serverCounts.desktop) || 0, Number(serverCounts.mobile) || 0, Number(serverCounts.tablet) || 0];
     let prevData = JSON.stringify(data);
     let deviceChart = null;
