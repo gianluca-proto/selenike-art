@@ -434,7 +434,7 @@ def _counts_from_lines_all_accesses(lines):
 
 
 def _stats_from_lines(lines, sample=20):
-    """Restituisce diagnostica: counts, numero unico di IP conteggiati, righe totali ed escluse e una sample degli IP visti."""
+    """Restituisce diagnostica: counts, numero unico di IP+device conteggiati, righe totali ed escluse e una sample degli IP+device visti."""
     total = len(lines)
     seen = {}
     excluded = 0
@@ -453,13 +453,15 @@ def _stats_from_lines(lines, sample=20):
         if not norm:
             excluded += 1
             continue
-        if norm in seen:
-            continue
         dev_type = _classify_device_from_ua(raw_device)
         if not dev_type:
             excluded += 1
             continue
-        seen[norm] = {'device': dev_type, 'raw_ua': raw_device, 'request': request_path, 'ts': ts}
+        # Raggruppa per coppia (IP, dispositivo)
+        key = f"{norm}|{dev_type}"
+        if key in seen:
+            continue
+        seen[key] = {'device': dev_type, 'raw_ua': raw_device, 'request': request_path, 'ts': ts, 'ip': norm}
 
     counts = {'mobile': 0, 'desktop': 0, 'tablet': 0}
     for dev in seen.values():
@@ -472,7 +474,7 @@ def _stats_from_lines(lines, sample=20):
     sample_items = dict(list(seen.items())[:sample])
     return {
         'counts': counts,
-        'unique_ips': len(seen),
+        'unique_ip_device': len(seen),
         'total_lines': total,
         'excluded_lines': excluded,
         'sample_seen': sample_items
