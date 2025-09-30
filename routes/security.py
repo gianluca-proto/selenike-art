@@ -782,6 +782,7 @@ def security_dashboard():
         }]
         total = 0
         total_pages = 1
+        raw_lines = []  # <--- AGGIUNTO: inizializza raw_lines come lista vuota
 
     # --- Aggiunta gestione storico visite giornaliere ---
     history = _read_visits_history()
