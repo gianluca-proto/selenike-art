@@ -137,6 +137,6 @@ def move_image():
 @jwt_required  # 🔹 Protegge la gestione della galleria con login
 def manage_gallery():
     categories = ['novita', 'commissioni', 'fanart', 'ideepersonali', 'altro']
-    images = {category: get_resources('upload', f'img/gallery/{category}/') for category in categories}
+    images = {category: get_resources('image', f'img/gallery/{category}/') for category in categories}
 
     return render_template('antro-1986/manage_gallery.html', images=images, categories=categories)
