@@ -783,6 +783,7 @@ def security_dashboard():
         total = 0
         total_pages = 1
         raw_lines = []  # <--- AGGIUNTO: inizializza raw_lines come lista vuota
+        device_totals = {'mobile': 0, 'desktop': 0, 'tablet': 0}  # <--- AGGIUNTO: inizializza device_totals
 
     # --- Aggiunta gestione storico visite giornaliere ---
     history = _read_visits_history()
