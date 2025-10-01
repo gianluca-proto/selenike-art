@@ -823,48 +823,15 @@ def security_dashboard():
 
 @bp.route('/antro-1986/security-stats')
 def security_stats():
-    """Endpoint JSON per i conteggi (ora conta ogni accesso per device_type, non solo unici)."""
+    """Endpoint JSON per i conteggi unici per device_type (IP+device)."""
     counts = {'mobile': 0, 'desktop': 0, 'tablet': 0}
-    MAX_GRAPH_LINES = 2000  # Limite righe per i grafici anche per il polling
-    day = request.args.get('day')
-    target_date = None
-    if day == 'yesterday':
-        # calcola la data di ieri (UTC)
-        target_date = (datetime.now(timezone.utc).date() - timedelta(days=1)).isoformat()
+    MAX_GRAPH_LINES = 2000
     try:
         with open('access.log', 'r') as log:
             raw_lines = [l.rstrip('\n') for l in log.readlines() if l.strip()]
-            # usa solo le ultime N righe per il polling
             graph_lines = raw_lines[-MAX_GRAPH_LINES:] if len(raw_lines) > MAX_GRAPH_LINES else raw_lines
-            if target_date:
-                filtered = []
-                for line in graph_lines:
-                    ts = None
-                    parts = line.split(' - ')
-                    if parts:
-                        ts = parts[0]
-                    if not ts:
-                        continue
-                    parsed = None
-                    for fmt in ("%Y-%m-%d %H:%M:%S,%f", "%Y-%m-%dT%H:%M:%S.%fZ", "%Y-%m-%dT%H:%M:%SZ", "%Y-%m-%dT%H:%M:%S%z", "%Y-%m-%dT%H:%M:%S"):
-                        try:
-                            parsed = datetime.strptime(ts.strip(), fmt)
-                            break
-                        except Exception:
-                            continue
-                    if not parsed:
-                        try:
-                            parsed = datetime.fromisoformat(ts.strip())
-                        except Exception:
-                            parsed = None
-                    if parsed:
-                        d = parsed.date()
-                        if d.isoformat() == target_date:
-                            filtered.append(line)
-                counts = _counts_from_lines_all_accesses(filtered)
-            else:
-                counts = _counts_from_lines_all_accesses(graph_lines)
-    except FileNotFoundError:
+            counts = _counts_from_lines_unique_ips(graph_lines)
+    except Exception:
         pass
     return jsonify(counts)
 

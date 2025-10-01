@@ -39,7 +39,16 @@ class TestCountsFromMap(unittest.TestCase):
         self.assertEqual(counts['mobile'], 1)
         self.assertEqual(counts['tablet'], 1)
 
+    def test_counts_from_lines_unique_ips_desktop(self):
+        from routes.security import _counts_from_lines_unique_ips
+        lines = [
+            '2025-09-30 16:22:56,766 - 10.1.34.91 - 200 OK - /antro-1986/ - Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 Edg/140.0.0.0',
+            '2025-09-30 16:23:01,806 - 10.1.34.91 - 200 OK - /antro-1986/security-dashboard - Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 Edg/140.0.0.0',
+            '2025-09-30 16:23:10,731 - 10.1.34.91 - 200 OK - /antro-1986/security-dashboard - Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 Edg/140.0.0.0',
+        ]
+        counts = _counts_from_lines_unique_ips(lines)
+        assert counts['desktop'] == 1, f"Conteggio desktop errato: {counts['desktop']}"
+
 
 if __name__ == '__main__':
     unittest.main()
-

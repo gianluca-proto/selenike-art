@@ -388,6 +388,20 @@
 
     // Aggiorna ogni 30 secondi
     setInterval(aggiornaVisitsChart, 30000);
+
+    function updateDeviceChart() {
+        fetch('/antro-1986/security-stats')
+            .then(response => response.json())
+            .then(serverCounts => {
+                let data = [Number(serverCounts.desktop) || 0, Number(serverCounts.mobile) || 0, Number(serverCounts.tablet) || 0];
+                if (deviceChart) {
+                    deviceChart.data.datasets[0].data = data;
+                    deviceChart.update();
+                }
+                updateLegend(data);
+            });
+    }
+    setInterval(updateDeviceChart, 30000); // Aggiorna ogni 30 secondi
 </script>
 
 {% endblock %}
