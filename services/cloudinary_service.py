@@ -106,7 +106,8 @@ def upload_file_to_cloudinary(local_path, folder="stats", keep_name=True, append
                     f_merged.writelines(all_lines)
                 upload_path = temp_merged
             else:
-                upload_path = local_path
+                print(f"❌ Download del file precedente da Cloudinary fallito per {public_id}. Upload annullato per evitare reset.")
+                return None  # NON sovrascrivere il file remoto se non si può unire
         else:
             upload_path = local_path
         with open(upload_path, "rb") as f:
