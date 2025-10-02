@@ -180,3 +180,14 @@ def download_file_from_cloudinary(public_id, local_path):
     except Exception as e:
         print(f"❌ Errore download file da Cloudinary: {e}")
         return False
+
+
+def restore_log_from_cloudinary(local_path="access.log", folder="logs"):
+    """Scarica access.log da Cloudinary e lo ripristina localmente se esiste."""
+    public_id = f"{folder}/access.log"
+    success = download_file_from_cloudinary(public_id, local_path)
+    if success:
+        print(f"✅ access.log ripristinato da Cloudinary.")
+    else:
+        print(f"⚠️ access.log non trovato su Cloudinary, verrà creato nuovo.")
+    return success
