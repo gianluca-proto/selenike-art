@@ -1,6 +1,13 @@
 {% extends 'base_dashboard.html' %}
 
 {% block content %}
+<style>
+    /* Colori leggeri per status HTTP con specificità aumentata */
+    .http-2xx { background-color: #eafbe7 !important; }
+    .http-4xx { background-color: #fff6e0 !important; }
+    .http-5xx { background-color: #fdeaea !important; }
+    .http-other { background-color: #e0e0e0 !important; }
+</style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <div class="container-fluid mt-4">
     <h2 class="mb-3 text-center">Dashboard di Sicurezza</h2>
@@ -22,21 +29,27 @@
                             </thead>
                             <tbody>
                                 {% for row in log_lines %}
-                                    {% set status = row.status if row.status is defined else 'N/A' %}
+                                    {% set status = row.status|string if row.status is defined else 'N/A' %}
                                     {% set status_class = 'http-other' %}
-                                    {% if status == '200' %}
-                                        {% set status_class = 'http-200' %}
-                                    {% elif status == '404' %}
-                                        {% set status_class = 'http-404' %}
-                                    {% elif status == '500' %}
-                                        {% set status_class = 'http-500' %}
+                                    {% if status.startswith('2') %}
+                                        {% set status_class = 'http-2xx' %}
+                                    {% elif status.startswith('4') %}
+                                        {% set status_class = 'http-4xx' %}
+                                    {% elif status.startswith('5') %}
+                                        {% set status_class = 'http-5xx' %}
                                     {% endif %}
-                                    <tr class="{{ status_class }}">
-                                        <td style="white-space:nowrap">{{ row.timestamp }}</td>
-                                        <td>{{ row.ip }}</td>
-                                        <td style="max-width: 200px; word-break: break-all;">{{ row.request }}</td>
-                                        <td>{{ status }}</td>
-                                        <td style="max-width: 200px; word-break: break-all;">
+                                    <tr>
+                                        <td class="{{ status_class }}" style="white-space:nowrap">{{ row.timestamp }}</td>
+                                        <td class="{{ status_class }}">{{ row.ip }}</td>
+                                        <td class="{{ status_class }}" style="max-width: 200px; word-break: break-all;">{{ row.request }}</td>
+                                        <td class="{{ status_class }}">
+                                            {% if status == 'N/A' or not status.strip() %}
+                                                <span class="badge bg-secondary">Non disponibile</span>
+                                            {% else %}
+                                                {{ status }}
+                                            {% endif %}
+                                        </td>
+                                        <td class="{{ status_class }}" style="max-width: 200px; word-break: break-all;">
                                             {% if row.device_type == 'mobile' %}
                                                 📱
                                             {% elif row.device_type == 'tablet' %}
