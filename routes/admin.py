@@ -10,6 +10,7 @@ from services.auth import verify_jwt, jwt_required, generate_access_token, \
 from flask import current_app as app
 import requests  # Assicurati che sia importato in alto nel file
 from datetime import datetime, timedelta
+from services.cloudinary_service import restore_log_from_cloudinary
 
 bp = Blueprint('antro-1986', __name__, url_prefix='/antro-1986')  # ✅ Blueprint Admin
 # Inizializza Argon2
@@ -20,6 +21,9 @@ FAILED_LOGINS = {}
 @limiter.limit("5 per minute")  # 5 tentativi al minuto
 @jwt_required
 def admin_dashboard():
+    # Ripristina access.log locale da Cloudinary ogni volta che si accede alla dashboard
+    restore_log_from_cloudinary(local_path="access.log", folder="logs")
+
     user_id = verify_jwt(request.cookies.get('auth_token'))  # Ottieni ID utente dal JWT
     if user_id:
         app.logger.info(f"Utente autenticato: ID {user_id}")
