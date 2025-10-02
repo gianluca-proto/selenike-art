@@ -86,15 +86,19 @@ def upload_file_to_cloudinary(local_path, folder="stats", keep_name=True, append
         base_name = os.path.basename(local_path)
         # Forza sempre lo stesso public_id per visits_history.csv e access.log
         if base_name == "visits_history.csv":
-            public_id = f"{folder}/visits_history.csv"
+            public_id = "visits_history.csv"
+            folder_to_use = folder
         elif base_name == "access.log":
-            public_id = f"logs/access.log"
+            public_id = "access.log"
+            folder_to_use = "logs"
         else:
-            public_id = f"{folder}/{base_name}"
+            public_id = base_name
+            folder_to_use = folder
         # Se richiesto, scarica il file esistente e unisci i record
         if append_if_exists and base_name in ["visits_history.csv", "access.log"]:
             temp_old = f"/tmp/old_{base_name}"
-            if download_file_from_cloudinary(public_id, temp_old):
+            download_ok = download_file_from_cloudinary(f"{folder_to_use}/{public_id}", temp_old)
+            if download_ok:
                 # Unisci i record (evita duplicati)
                 with open(temp_old, "r") as f_old, open(local_path, "r") as f_new:
                     old_lines = f_old.readlines()
@@ -106,14 +110,14 @@ def upload_file_to_cloudinary(local_path, folder="stats", keep_name=True, append
                     f_merged.writelines(all_lines)
                 upload_path = temp_merged
             else:
-                print(f"❌ Download del file precedente da Cloudinary fallito per {public_id}. Upload annullato per evitare reset.")
-                return None  # NON sovrascrivere il file remoto se non si può unire
+                print(f"⚠️ File remoto non trovato su Cloudinary per {folder_to_use}/{public_id}. Verrà creato con il contenuto locale.")
+                upload_path = local_path  # Carica il file locale come nuovo file su Cloudinary
         else:
             upload_path = local_path
         with open(upload_path, "rb") as f:
             upload_result = cloudinary.uploader.upload(
                 f,
-                folder=folder if base_name != "access.log" else "logs",
+                folder=folder_to_use,
                 resource_type="raw",
                 public_id=public_id,
                 use_filename=True,
