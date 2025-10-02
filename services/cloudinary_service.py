@@ -80,19 +80,39 @@ def move_image():
         return jsonify({"success": False, "message": f"❌ Errore server: {str(e)}"}), 500
 
 
-def upload_file_to_cloudinary(local_path, folder="stats", keep_name=True):
+def upload_file_to_cloudinary(local_path, folder="stats", keep_name=True, append_if_exists=True):
     cloudinary.config(logging=True)
     try:
         base_name = os.path.basename(local_path)
-        # Forza sempre lo stesso public_id per visits_history.csv
+        # Forza sempre lo stesso public_id per visits_history.csv e access.log
         if base_name == "visits_history.csv":
             public_id = f"{folder}/visits_history.csv"
+        elif base_name == "access.log":
+            public_id = f"logs/access.log"
         else:
             public_id = f"{folder}/{base_name}"
-        with open(local_path, "rb") as f:
+        # Se richiesto, scarica il file esistente e unisci i record
+        if append_if_exists and base_name in ["visits_history.csv", "access.log"]:
+            temp_old = f"/tmp/old_{base_name}"
+            if download_file_from_cloudinary(public_id, temp_old):
+                # Unisci i record (evita duplicati)
+                with open(temp_old, "r") as f_old, open(local_path, "r") as f_new:
+                    old_lines = f_old.readlines()
+                    new_lines = f_new.readlines()
+                # Unisci evitando duplicati (basato su riga intera)
+                all_lines = old_lines + [line for line in new_lines if line not in old_lines]
+                temp_merged = f"/tmp/merged_{base_name}"
+                with open(temp_merged, "w") as f_merged:
+                    f_merged.writelines(all_lines)
+                upload_path = temp_merged
+            else:
+                upload_path = local_path
+        else:
+            upload_path = local_path
+        with open(upload_path, "rb") as f:
             upload_result = cloudinary.uploader.upload(
                 f,
-                folder=folder,
+                folder=folder if base_name != "access.log" else "logs",
                 resource_type="raw",
                 public_id=public_id,
                 use_filename=True,
@@ -152,5 +172,6 @@ def download_file_from_cloudinary(public_id, local_path):
                 f.write(r.content)
             return True
         return False
-    except Exception:
+    except Exception as e:
+        print(f"❌ Errore download file da Cloudinary: {e}")
         return False

@@ -2,3 +2,7 @@
 .env.env
 .env
 visits_history.csv
+instance/database.db
+dump.sql
+instance/device_map.json
+access.log
