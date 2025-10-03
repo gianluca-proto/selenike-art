@@ -24,4 +24,4 @@ alembic
 werkzeug==3.0.6
 urllib3==2.5.0
 setuptools==78.1.1
-
+gunicorn
