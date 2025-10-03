@@ -21,7 +21,15 @@
             <div class="col-12 col-md-3 col-lg-2 px-0 gallery-item {{ image.category }} show">
 
                 <a href="#" onclick="openImageModal(event, '{{ image.url }}')">
-                    <img src="{{ image.url }}" class="img-fluid rounded shadow-lg img-hover gallery-img" loading="lazy" alt="{{ image.title if image.title else 'Opera d\'arte' }} - {{ image.category }}" style="display:block !important; opacity:1 !important; width:100% !important; max-width:100% !important; height:auto !important; background:#fff !important;">
+                    <picture>
+                        <source srcset="{{ image.url }}?f_avif,q_auto:eco,w_412" type="image/avif" media="(max-width: 768px)">
+                        <source srcset="{{ image.url }}?f_webp,q_auto:eco,w_412" type="image/webp" media="(max-width: 768px)">
+                        <source srcset="{{ image.url }}?f_auto,q_auto:eco,w_412" media="(max-width: 768px)">
+                        <source srcset="{{ image.url }}?f_avif,q_auto:eco,w_1200" type="image/avif" media="(min-width: 769px)">
+                        <source srcset="{{ image.url }}?f_webp,q_auto:eco,w_1200" type="image/webp" media="(min-width: 769px)">
+                        <source srcset="{{ image.url }}?f_auto,q_auto:eco,w_1200" media="(min-width: 769px)">
+                        <img src="{{ image.url }}?f_auto,q_auto:eco,w_1200" class="img-fluid rounded shadow-lg img-hover gallery-img" loading="lazy" alt="{{ image.title if image.title else 'Opera d\'arte' }} - {{ image.category }}" style="display:block !important; opacity:1 !important; width:100% !important; max-width:100% !important; height:auto !important; background:#fff !important;">
+                    </picture>
                 </a>
             </div>
             {% endfor %}
@@ -30,15 +38,18 @@
 
 
     <!-- Modale per Ingrandire le Immagini -->
-    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-fullscreen">
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true" role="dialog">
+        <div class="modal-dialog modal-lg modal-fullscreen" role="document">
             <div class="modal-content bg-transparent border-0">
+                <div class="modal-header" style="border-bottom:none; justify-content:center;">
+                    <h5 class="modal-title" id="imageModalLabel">Anteprima Opera</h5>
+                </div>
                 <div class="modal-body p-0 d-flex align-items-center justify-content-center">
-                    <button class="btn btn-dark position-fixed start-0 top-50 translate-middle-y arrow-left" onclick="prevImage()">
+                    <button class="btn btn-dark position-fixed start-0 top-50 translate-middle-y arrow-left" onclick="prevImage()" aria-label="Immagine precedente">
                         <i class="fas fa-chevron-left fa-2x"></i>
                     </button>
-                    <img id="modalImage" class="img-fluid rounded shadow-lg" src="" style="max-height: 90vh; width: auto;">
-                    <button class="btn btn-dark position-fixed end-0 top-50 translate-middle-y arrow-right" onclick="nextImage()">
+                    <img id="modalImage" class="img-fluid rounded shadow-lg" src="" alt="Anteprima opera selezionata" style="max-height: 90vh; width: auto;">
+                    <button class="btn btn-dark position-fixed end-0 top-50 translate-middle-y arrow-right" onclick="nextImage()" aria-label="Immagine successiva">
                         <i class="fas fa-chevron-right fa-2x"></i>
                     </button>
                 </div>

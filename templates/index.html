@@ -10,12 +10,16 @@
             {% for desktop_image, mobile_image in zip(carousel_images_desktop, carousel_images_mobile) %}
             <div class="carousel-item {{ 'active' if loop.first }}">
                 <picture>
-                    <!-- Immagine per dispositivi mobili -->
-                    <source srcset="{{ mobile_image }}" media="(max-width: 768px)">
-                    <!-- Immagine per desktop -->
-                    <source srcset="{{ desktop_image }}" media="(min-width: 769px)">
-                    <!-- Fallback per browser che non supportano <picture> -->
-                    <img src="{{ desktop_image }}?f_auto,q_auto,w_1200"
+                    <!-- Mobile WebP/AVIF -->
+                    <source srcset="{{ mobile_image }}?f_avif,q_auto:eco,w_412" type="image/avif" media="(max-width: 768px)">
+                    <source srcset="{{ mobile_image }}?f_webp,q_auto:eco,w_412" type="image/webp" media="(max-width: 768px)">
+                    <source srcset="{{ mobile_image }}?f_auto,q_auto:eco,w_412" media="(max-width: 768px)">
+                    <!-- Desktop WebP/AVIF -->
+                    <source srcset="{{ desktop_image }}?f_avif,q_auto:eco,w_1200" type="image/avif" media="(min-width: 769px)">
+                    <source srcset="{{ desktop_image }}?f_webp,q_auto:eco,w_1200" type="image/webp" media="(min-width: 769px)">
+                    <source srcset="{{ desktop_image }}?f_auto,q_auto:eco,w_1200" media="(min-width: 769px)">
+                    <!-- Fallback -->
+                    <img src="{{ desktop_image }}?f_auto,q_auto:eco,w_1200"
                          class="d-block w-100 {% if loop.first %}preload-lcp{% else %}lazyload{% endif %}"
                          alt="Slide {{ loop.index }}"
                          {% if loop.first %} fetchpriority="high" {% endif %}>

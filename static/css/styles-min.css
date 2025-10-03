@@ -27,16 +27,15 @@ body {
 }
 
 .nav-link {
-    position: relative;
-    color: #41c4ef !important; /* Assicura che il colore azzurro sia prioritario */
+    color: #41c4ef !important;
     padding: 5px 10px;
     border-radius: 5px;
-    text-shadow: 0 0 8px #ff69b4; /* Ombra rosa intorno al testo */
-    transition: color 0.3s ease; /* Transizione fluida per il cambio di colore */
+    text-shadow: 0 0 8px #000;
+    transition: color 0.3s;
 }
 
 .nav-link:hover {
-    color: #FFF !important; /* Cambia il colore del testo in bianco e forza la priorità */
+    color: #FFF !important;
 }
 
 @media (max-width: 767.98px) {
@@ -267,7 +266,6 @@ img {
 /* Effetto hover */
 .gallery-filter .btn:hover {
     background-color: #5a32a3; /* Viola più scuro */
-    transform: translateY(-2px); /* Effetto leggero di sollevamento */
 }
 
 /* Effetto attivo/selezionato */
