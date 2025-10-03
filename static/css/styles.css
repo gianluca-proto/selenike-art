@@ -16,7 +16,7 @@ body {
         }
 
         .navbar {
-            background-color: rgb(155, 81, 224);
+            background-color: #3a0066; /* viola più scuro per maggiore contrasto */
             width: 100%;
             margin: 0;
             padding: 0;
@@ -28,15 +28,15 @@ body {
 
 .nav-link {
     position: relative;
-    color: #41c4ef !important; /* Assicura che il colore azzurro sia prioritario */
+    color: #ffffff !important; /* bianco per massimo contrasto */
     padding: 5px 10px;
     border-radius: 5px;
-    text-shadow: 0 0 8px #ff69b4; /* Ombra rosa intorno al testo */
+    text-shadow: 0 0 8px #000; /* ombra nera per leggibilità */
     transition: color 0.3s ease; /* Transizione fluida per il cambio di colore */
 }
 
 .nav-link:hover {
-    color: #FFF !important; /* Cambia il colore del testo in bianco e forza la priorità */
+    color: #ffd700 !important; /* giallo per evidenziare al passaggio */
 }
 
 @media (max-width: 767.98px) {

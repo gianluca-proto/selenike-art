@@ -7,11 +7,11 @@
 
     <!-- Gallery Filter -->
     <div class="gallery-filter text-center mb-4">
-        <button class="btn btn-primary" onclick="filterGallery('all')">All</button>
-        <button class="btn btn-primary" onclick="filterGallery('novita')">Novità</button>
-        <button class="btn btn-primary" onclick="filterGallery('commissioni')">Commissioni</button>
-        <button class="btn btn-primary" onclick="filterGallery('fanart')">Fan Art</button>
-        <button class="btn btn-primary" onclick="filterGallery('ideepersonali')">Idee Personali</button>
+        <button class="btn btn-primary" aria-label="Mostra tutte le opere" onclick="filterGallery('all')">All</button>
+        <button class="btn btn-primary" aria-label="Mostra le novità" onclick="filterGallery('novita')">Novità</button>
+        <button class="btn btn-primary" aria-label="Mostra le commissioni" onclick="filterGallery('commissioni')">Commissioni</button>
+        <button class="btn btn-primary" aria-label="Mostra le fan art" onclick="filterGallery('fanart')">Fan Art</button>
+        <button class="btn btn-primary" aria-label="Mostra idee personali" onclick="filterGallery('ideepersonali')">Idee Personali</button>
     </div>
 
     <div class="container mt-4">
@@ -21,7 +21,7 @@
             <div class="col-12 col-md-3 col-lg-2 px-0 gallery-item {{ image.category }} show">
 
                 <a href="#" onclick="openImageModal(event, '{{ image.url }}')">
-                    <img src="{{ image.url }}" class="img-fluid rounded shadow-lg img-hover gallery-img" loading="lazy" alt="Opera d'arte" style="display:block !important; opacity:1 !important; width:100% !important; max-width:100% !important; height:auto !important; background:#fff !important;">
+                    <img src="{{ image.url }}" class="img-fluid rounded shadow-lg img-hover gallery-img" loading="lazy" alt="{{ image.title if image.title else 'Opera d\'arte' }} - {{ image.category }}" style="display:block !important; opacity:1 !important; width:100% !important; max-width:100% !important; height:auto !important; background:#fff !important;">
                 </a>
             </div>
             {% endfor %}
@@ -37,7 +37,7 @@
                     <button class="btn btn-dark position-fixed start-0 top-50 translate-middle-y arrow-left" onclick="prevImage()">
                         <i class="fas fa-chevron-left fa-2x"></i>
                     </button>
-                    <img id="modalImage" class="img-fluid rounded shadow-lg" style="max-height: 90vh; width: auto;">
+                    <img id="modalImage" class="img-fluid rounded shadow-lg" src="" style="max-height: 90vh; width: auto;">
                     <button class="btn btn-dark position-fixed end-0 top-50 translate-middle-y arrow-right" onclick="nextImage()">
                         <i class="fas fa-chevron-right fa-2x"></i>
                     </button>
