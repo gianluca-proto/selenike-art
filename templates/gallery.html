@@ -23,15 +23,15 @@
 
             {% for image in images %}
             <div class="col-12 col-md-3 col-lg-2 px-0 gallery-item {{ image.category }} show">
-                <a href="#" onclick="openImageModal(event, '{{ image.url }}?f_auto,q_auto:good,w_1200')">
+                <a href="#" onclick="openImageModal(event, '{{ image.url }}?f_auto,q_auto:good,w_412,h_600')">
                     <picture>
-                        <source srcset="{{ image.url }}?f_avif,q_auto:eco,w_412" type="image/avif" media="(max-width: 768px)">
-                        <source srcset="{{ image.url }}?f_webp,q_auto:eco,w_412" type="image/webp" media="(max-width: 768px)">
-                        <source srcset="{{ image.url }}?f_auto,q_auto:eco,w_412" media="(max-width: 768px)">
-                        <source srcset="{{ image.url }}?f_avif,q_auto:good,w_1200" type="image/avif" media="(min-width: 769px)">
-                        <source srcset="{{ image.url }}?f_webp,q_auto:good,w_1200" type="image/webp" media="(min-width: 769px)">
-                        <source srcset="{{ image.url }}?f_auto,q_auto:good,w_1200" media="(min-width: 769px)">
-                        <img src="{{ image.url }}?f_auto,q_auto:good,w_1200" class="img-fluid rounded shadow-lg img-hover gallery-img" loading="lazy" alt="{{ image.title if image.title else 'Opera d\'arte' }} - {{ image.category }}" width="412" height="129" style="display:block !important; opacity:1 !important; width:100% !important; max-width:100% !important; height:auto !important; background:#fff !important;">
+                        <source srcset="{{ image.url }}?f_avif,q_auto:eco,w_328,h_483" type="image/avif" media="(max-width: 768px)">
+                        <source srcset="{{ image.url }}?f_webp,q_auto:eco,w_328,h_483" type="image/webp" media="(max-width: 768px)">
+                        <source srcset="{{ image.url }}?f_auto,q_auto:eco,w_328,h_483" media="(max-width: 768px)">
+                        <source srcset="{{ image.url }}?f_avif,q_auto:good,w_412,h_600" type="image/avif" media="(min-width: 769px)">
+                        <source srcset="{{ image.url }}?f_webp,q_auto:good,w_412,h_600" type="image/webp" media="(min-width: 769px)">
+                        <source srcset="{{ image.url }}?f_auto,q_auto:good,w_412,h_600" media="(min-width: 769px)">
+                        <img src="{{ image.url }}?f_auto,q_auto:good,w_412,h_600" class="img-fluid rounded shadow-lg img-hover gallery-img" loading="lazy" alt="{{ image.title if image.title else 'Opera d\'arte' }} - {{ image.category }}" width="412" height="600" style="display:block !important; opacity:1 !important; width:100% !important; max-width:100% !important; height:auto !important; background:#fff !important;">
                     </picture>
                 </a>
             </div>
