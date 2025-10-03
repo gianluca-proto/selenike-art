@@ -107,7 +107,7 @@ def set_security_headers(response):
 
 @app.after_request
 def log_access(response):
-    ip = request.remote_addr or '0.0.0.0'
+    ip = request.headers.get("X-Forwarded-For", request.remote_addr) or '0.0.0.0'
     user_agent = request.user_agent.string or 'N/A'
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S,%f')[:-3]
     log_line = f"{timestamp} - {ip} - {response.status} - {request.path} - {user_agent}"
