@@ -12,7 +12,8 @@
 <div class="container-fluid mt-4">
     <h2 class="mb-3 text-center">Dashboard di Sicurezza</h2>
     <div class="row align-items-stretch">
-        <div class="col-md-6" style="height: 70vh; overflow:auto;">
+        <!-- Tabella Access Logs a larghezza piena -->
+        <div class="col-12 mb-4" style="overflow:auto;">
             <div class="card h-100">
                 <div class="card-body">
                     <h5 class="card-title">Access Logs</h5>
@@ -84,12 +85,11 @@
             </div>
         </div>
 
-        <div class="col-md-6" style="height: 70vh; overflow:auto;">
+        <!-- Grafico a torta distribuzione dispositivi a larghezza piena -->
+        <div class="col-12 mb-4">
             <div class="card h-100">
-                <!-- Allineiamo lo spazio in modo che il chart-wrapper possa crescere e occupare tutta la larghezza/altezza disponibile -->
                 <div class="card-body d-flex flex-column align-items-stretch h-100">
                       <h5 class="card-title">Distribuzione dispositivi</h5>
-                       <!-- Wrapper gestito via CSS: occupa tutta l'altezza disponibile della card-body -->
                        <div class="chart-wrapper">
                           <canvas id="deviceChart" class="device-canvas"></canvas>
                        </div>
@@ -98,8 +98,7 @@
                </div>
            </div>
 
-          <!-- Visits time series chart -->
-          <div class="col-12 mt-3">
+        <!-- Visits time series chart -->
             <div class="card">
               <div class="card-body">
                 <h5 class="card-title">Visite giornaliere (visitatori unici)</h5>

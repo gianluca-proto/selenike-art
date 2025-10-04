@@ -1,4 +1,3 @@
-import logging
 from datetime import datetime
 
 from flask import Flask, request, send_from_directory, redirect
