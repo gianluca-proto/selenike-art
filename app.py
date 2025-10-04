@@ -1,7 +1,7 @@
 import logging
 from datetime import datetime
 
-from flask import Flask, request, send_from_directory
+from flask import Flask, request, send_from_directory, redirect
 from config import Config # ✅ Importa solo i Blueprint giusti
 from models import db  # ✅ Importa il database dal modello giusto
 from services.email_service import init_mail
@@ -133,6 +133,14 @@ scheduler = BackgroundScheduler(daemon=True)
 scheduler.add_job(lambda: sync_logs_with_cloudinary(log_dir=".", pattern="access.log", folder="logs"), 'interval', minutes=5, id='sync_logs')
 scheduler.add_job(lambda: sync_files_with_cloudinary(local_dir=".", pattern="*.csv", folder="stats"), 'interval', minutes=5, id='sync_csv')
 scheduler.start()
+
+
+@app.before_request
+def redirect_to_www():
+    host = request.host.split(':')[0]
+    if host == 'selenikeart.com':
+        url = request.url.replace('://selenikeart.com', '://www.selenikeart.com', 1)
+        return redirect(url, code=301)
 
 
 if __name__ == '__main__':

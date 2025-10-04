@@ -8,7 +8,6 @@ load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'selenike-a
 
 class Config:
     SECRET_KEY = os.getenv('APP_SECRET_KEY')
-
     SQLALCHEMY_DATABASE_URI = (os.getenv("DATABASE_URL", "").replace("postgres://", "postgresql://")
                                or "postgresql://selenike_user:password123@localhost/selenike_art")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -22,7 +21,8 @@ class Config:
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SECURE = True  # Solo HTTPS
     SESSION_COOKIE_SAMESITE = 'Lax'
-    PRODUCTION = False
+    PRODUCTION = os.getenv('PRODUCTION', 'False').lower() == 'true'
+    DEBUG = not PRODUCTION
 
 MAX_IMAGE_SIZE = 5 * 1024 * 1024  # 5MB
 
