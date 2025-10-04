@@ -3,7 +3,8 @@ import os
 from PIL import Image
 from dotenv import load_dotenv
 
-load_dotenv()
+# Carica il file .env dal percorso protetto
+load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'selenike-art-config', '.env'))
 
 class Config:
     SECRET_KEY = os.getenv('APP_SECRET_KEY')

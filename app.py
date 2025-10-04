@@ -10,6 +10,7 @@ from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect
 from flask_compress import Compress
 from dotenv import load_dotenv
+import os
 import requests
 from extensions import cache  # usa istanza globale
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -22,8 +23,8 @@ from log_utils import write_log_line
 # Importa Flask-Babel
 from flask_babel import Babel
 
-# Carica il file .env
-load_dotenv()
+# Carica il file .env dal percorso protetto
+load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'selenike-art-config', '.env'))
 
 def get_server_ip():
     response = requests.get("https://ifconfig.me")
