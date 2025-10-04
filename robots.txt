@@ -47,4 +47,3 @@ User-agent: noimageai
 Disallow: /
 
 Sitemap: https://selenikeart.com/sitemap.xml
-
