@@ -142,5 +142,10 @@ def redirect_to_www():
         return redirect(url, code=301)
 
 
+@app.route('/sitemap.xml')
+def sitemap():
+    return send_from_directory('static', 'sitemap.xml', mimetype='application/xml')
+
+
 if __name__ == '__main__':
     app.run(debug=True)
