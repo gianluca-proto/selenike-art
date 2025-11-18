@@ -1,102 +1,114 @@
-# Selenike Art
+# 🎨 Selenike Art — Artist Portfolio Website (Flask + Bootstrap + Cloudinary)
 
-Selenike Art è un sito vetrina per l'artista Selenike, sviluppato con Flask (Python) e Bootstrap. Il progetto include: una galleria immagini, una pagina per commissioni, una pagina biografica dell'artista, un modulo di contatto, un pannello di amministrazione per la gestione (upload/sync su Cloudinary) e strumenti di sicurezza (autenticazione con token JWT, protezione CSRF, rate limiting e reCAPTCHA).
+Selenike Art is a modern, responsive portfolio website built with **Flask (Python)** and **Bootstrap** to showcase the artworks, commissions, and biography of the artist **Selenike**.  
+The project includes an image gallery, a commissions page, a contact form, an admin panel for media management (upload/sync via Cloudinary), and multiple security features such as JWT authentication, CSRF protection, rate limiting, and reCAPTCHA.
 
-Questo README è pensato come documento di presentazione da mostrare su GitHub: contiene le informazioni utili per eseguire, testare e valutare il progetto.
-
----
-
-Indice
-- Descrizione
-- Tecnologie
-- Caratteristiche principali
-- Architettura del progetto
-- Requisiti
-- Installazione locale
-- Variabili d'ambiente importanti
-- Avvio in sviluppo
-- Migrazioni e database
-- Test
-- Sicurezza e buone pratiche implementate
-- Deployment (Heroku / Gunicorn)
-- Come presentare/dimostrare il progetto su GitHub
-- Contribuire
-- Licenza
-- Contatti
+This document serves as the official README for GitHub and provides all essential information to run, test, evaluate, and present the project.
 
 ---
 
-## Descrizione
+## 📑 Table of Contents
 
-Sito vetrina per promuovere opere e servizi di commissione dell'artista Selenike. Fornisce un'esperienza utente responsive, gestione di assets multimediali (Cloudinary) e strumenti amministrativi per mantenere la galleria aggiornata.
+- Description  
+- Technologies  
+- Key Features  
+- Project Architecture  
+- Requirements  
+- Local Installation  
+- Environment Variables  
+- Development Run  
+- Migrations & Database  
+- Testing  
+- Security Features  
+- Deployment (Heroku / Gunicorn)  
+- How to Present This Project  
+- Contributing  
+- License  
+- Contacts  
 
-## Tecnologie
-- Python 3.10+ (compatibile con 3.12)
-- Flask 3
-- Flask-SQLAlchemy, Flask-Migrate
-- Flask-WTF (form validation + CSRF)
-- Argon2 per hashing password
-- PyJWT per token JWT
-- Cloudinary per gestione media
-- Flask-Babel per localizzazione
-- Flask-Limiter per rate limiting
-- Flask-Compress, Flask-Caching
-- APScheduler per job periodici (sync dei log)
+---
 
-## Caratteristiche principali
-- Homepage informativa
-- Galleria immagini con filtri per categorie
-- Pagina Commissioni con form di richiesta
-- Modulo di contatto via email
-- Area amministrazione protetta (JWT + token refresh)
-- Upload, spostamento ed eliminazione immagini su Cloudinary
-- Sincronizzazione periodica di log e file CSV su Cloudinary
-- Protezione reCAPTCHA per login amministratore
-- Logging accessi e monitoraggio semplice (access.log)
+## 🖼️ Description
 
-## Architettura del progetto (sintesi)
-- app.py: creazione e configurazione dell'app Flask, registrazione blueprint e job scheduler
-- config.py: configurazione centrale e funzioni d'aiuto (es. validate_image)
-- routes/: blueprint per pagine pubbliche e admin (main.py, admin.py, gallery.py, security.py)
-- models/: modelli SQLAlchemy (Admin, RefreshToken, ecc.)
-- services/: logica di business e integrazioni (auth, cloudinary, email, security)
-- templates/: template Jinja2 per ogni pagina
-- static/: asset CSS/JS/immagini
-- migrations/: script Alembic per la gestione schema DB
+Selenike Art is a portfolio website designed to showcase the artworks and commission services of the artist *Selenike*.  
+It provides a fully responsive user experience, Cloudinary-based media management, and an administrative interface to keep the gallery updated.
 
-## Requisiti
-- Python 3.10 o superiore
-- pip
-- Un database PostgreSQL (in locale o remoto) o usare una stringa DATABASE_URL
-- Account Cloudinary (opzionale per funzioni media)
+---
 
-## Installazione locale (rapida)
+## 🛠 Technologies
 
-1) Clona il repository
+- **Python 3.10+** (compatible with 3.12)
+- **Flask 3**
+- **Flask-SQLAlchemy**, **Flask-Migrate**
+- **Flask-WTF** (validation + CSRF)
+- **Argon2** (password hashing)
+- **PyJWT** (JWT authentication)
+- **Cloudinary** (media storage/management)
+- **Flask-Babel** (localization)
+- **Flask-Limiter** (rate limiting)
+- **Flask-Compress**, **Flask-Caching**
+- **APScheduler** (scheduled tasks)
+
+---
+
+## 🌐 Key Features
+
+- Responsive homepage  
+- Image gallery with category filters  
+- Commission request page  
+- Contact form (email)  
+- **Admin dashboard with JWT authentication + refresh tokens**  
+- Upload / rename / delete images on Cloudinary  
+- Automatic sync of logs and CSV files (APScheduler)  
+- reCAPTCHA-protected admin login  
+- Access logging (access.log)  
+
+---
+
+## 📂 Project Architecture (Overview)
+
+- **app.py:** Flask app creation, configuration, blueprints, scheduler  
+- **config.py:** central configuration, helpers (e.g., `validate_image`)  
+- **routes/**: blueprints for public and admin pages (`main.py`, `admin.py`, `gallery.py`, `security.py`)  
+- **models/**: SQLAlchemy models (`Admin`, `RefreshToken`, etc.)  
+- **services/**: business logic and integrations (auth, Cloudinary, email, security)  
+- **templates/**: Jinja2 templates  
+- **static/**: CSS/JS/Image assets  
+- **migrations/**: Alembic migration scripts  
+
+---
+
+## 📌 Requirements
+
+- Python 3.10+  
+- pip  
+- PostgreSQL (local or remote)  
+- Cloudinary account (optional for media functions)  
+
+---
+
+## 🧪 Local Installation (Quick Start)
+
+### 1) Clone the repository
 
 ```bash
 git clone <repo-url>
 cd selenike-art
-```
-
-2) Crea e attiva un virtual environment
-
-```bash
+2) Create and activate a virtual environment
+bash
+Copia codice
 python -m venv .venv
 source .venv/bin/activate
-```
-
-3) Installa le dipendenze
-
-```bash
+3) Install dependencies
+bash
+Copia codice
 pip install -r requirements.txt
-```
+🔐 Important Environment Variables
+Create a .env file in the project root:
 
-## Variabili d'ambiente (principali)
-Imposta un file `.env` nella root del progetto con le variabili principali. Esempio:
-
-```env
-APP_SECRET_KEY=una_stringa_lunga_e_casuale
+env
+Copia codice
+APP_SECRET_KEY=your_secret_key
 DATABASE_URL=postgresql://user:password@localhost/selenike_art
 MAIL_SERVER=smtp.example.com
 MAIL_PORT=587
@@ -104,103 +116,134 @@ MAIL_USERNAME=user@example.com
 MAIL_PASSWORD=secret
 RECAPTCHA_SITE_KEY=your_site_key
 RECAPTCHA_SECRET_KEY=your_secret_key
-CLOUD_NAME=tuo_cloud_name
-CLOUD_API_KEY=tuo_api_key
-CLOUD_API_SECRET=tuo_api_secret
-```
+CLOUD_NAME=your_cloud_name
+CLOUD_API_KEY=your_api_key
+CLOUD_API_SECRET=your_api_secret
+Notes:
 
-Note:
-- `DATABASE_URL`: se non presente, `config.py` usa una stringa di default pensata per Postgres locale.
-- Per sviluppo locale puoi impostare `SESSION_COOKIE_SECURE=False` temporaneamente (in `config.py` o tramite una variabile di configurazione) se non usi HTTPS.
+If DATABASE_URL is missing, config.py will fall back to a default local Postgres string.
 
-## Migrazioni e database
+For local development without HTTPS, set SESSION_COOKIE_SECURE=False.
 
-1) Crea le migrazioni iniziali (se devi applicare modifiche al DB):
+🗄️ Migrations & Database
+If migrations need to be initialized:
 
-```bash
-flask db init   # solo la prima volta (se migrations/ non esiste o è vuota)
+bash
+Copia codice
+flask db init   # only once
 flask db migrate -m "Initial migration"
 flask db upgrade
-```
+The current project already includes a migrations/ folder.
 
-(Questo progetto include già una cartella `migrations/` con almeno una migrazione.)
+▶️ Run in Development
+Using app.py directly:
 
-## Avvio in sviluppo
-
-Metodo rapido (usa `app.py` direttamente):
-
-```bash
+bash
+Copia codice
 python app.py
-```
+Using Flask CLI:
 
-Oppure con Flask CLI (se `FLASK_APP` impostata):
-
-```bash
+bash
+Copia codice
 export FLASK_APP=app.py
 export FLASK_ENV=development
 flask run
-```
+With Gunicorn (local production / Heroku):
 
-Per eseguire con Gunicorn (produzione locale / Heroku):
-
-```bash
+bash
+Copia codice
 gunicorn --bind 0.0.0.0:8000 app:app
-```
+🧪 Testing
+Tests are located in tests/.
 
-## Test
+Run with:
 
-Il progetto contiene alcuni test nella cartella `tests/`. Per eseguirli:
-
-```bash
-pip install -r requirements.txt
+bash
+Copia codice
 pytest -q
-```
+🔒 Security & Best Practices Implemented
+Argon2 hashing for passwords
 
-## Sicurezza (scelte implementate)
-- Password hashing: Argon2 (file `GenerateHashPassword.py` mostra come generare un hash)
-- Protezione CSRF: Flask-WTF + CSRFProtect
-- Token auth: JWT per l'area admin, con supporto a refresh token (modello `RefreshToken`)
-- reCAPTCHA: usato nel login admin per ridurre bot e brute-force
-- Rate limiting: Flask-Limiter su rotte sensibili
-- Header di sicurezza: Content-Security-Policy, X-Frame-Options, X-Content-Type-Options, X-XSS-Protection sono settati in `app.py`
-- Cookie sicuri: i cookie di sessione e auth sono impostati HttpOnly, Secure e SameSite (in `config.py` e nelle route admin)
+JWT authentication with refresh tokens
 
-## Deployment (note rapide)
-- Il progetto include un `Procfile` per Heroku.
-- Esempio di deploy su Heroku:
-  - Imposta le config vars su Heroku (tutte le variabili d'ambiente sopra)
-  - Push del repo e scale del web dyno
-  - Assicurati che `DATABASE_URL` punti a un database Postgres gestito
+CSRF protection via Flask-WTF
 
-## Come presentare/dimostrare il progetto su GitHub
-- Aggiungi screenshot della homepage, della galleria e del pannello admin nella cartella `docs/` o nella root.
-- Crea un file `DEMO.md` con i link (se il sito è deployato) e una breve walkthrough.
-- Usa il README per mettere in evidenza: caratteristiche, tech stack, screenshot, istruzioni rapide per provare in locale.
-- Eventualmente aggiungi un breve video (GIF o MP4) nella cartella `docs/` che mostra il flusso: visualizzazione galleria → richiesta commissione → login admin → upload immagine (Cloudinary).
+reCAPTCHA for admin login
 
-Suggerimenti per una presentazione in repository:
-- Aggiorna la sezione "Descrizione" con un paio di punti chiave del tuo ruolo e cosa hai implementato (ad es. "Ho implementato autenticazione JWT, integrazione Cloudinary e protezioni anti-bot via reCAPTCHA").
-- Metti un badge di test/coverage (se configuri CI)
-- Metti un badge di license
+Rate limiting with Flask-Limiter
 
-## Contribuire
-- Aprire issue per bug o richieste di funzionalità
-- Fork & pull request: crea un branch per la tua feature e apri PR descrittivo
+Security headers:
 
-## Licenza
-- Questo progetto può essere rilasciato sotto licenza MIT (o altra a tua scelta). Aggiungi un file `LICENSE` se vuoi esplicitare la licenza.
+Content-Security-Policy
 
-## Contatti
-- Managed by Gianluca Proto
-- Per domande o demo live, aggiungi una mail o link di contatto nel README (opzionale).
+X-Frame-Options
 
----
+X-Content-Type-Options
 
-## Stato attuale e note finali
-- Il codice presente contiene già integrazione Cloudinary, job di sincronizzazione, supporto i18n (Flask-Babel) e miglioramenti di sicurezza.
-- Se vuoi, posso aggiungere al repository:
-  - Esempi di `.env.example`
-  - Script di deploy automatico
-  - Piccoli test aggiuntivi per le funzioni di servizio (Cloudinary, auth)
+X-XSS-Protection
 
-Buon lavoro — se vuoi che aggiorni il README con screenshot reali o un `DEMO.md` con comandi di deploy passo-passo, dimmelo e lo aggiungo.
+Secure cookies: HttpOnly, Secure, SameSite
+
+Input validation (forms, images, mime types)
+
+☁️ Deployment (Heroku)
+The project includes a Procfile.
+
+Deployment steps:
+
+Set environment variables in Heroku
+
+Push the repository
+
+Scale the web dyno
+
+Attach a managed PostgreSQL database
+
+Run migrations
+
+🎥 How to Present / Demo This Project on GitHub
+Add screenshots (homepage, gallery, admin panel) to a docs/ folder
+
+Add a DEMO.md file with walkthrough and (optional) demo links
+
+Use the README to highlight tech stack, screenshots, and installation steps
+
+Optionally add a GIF showing workflow:
+
+Viewing gallery → Commission form → Admin login → Image upload
+
+Add badges:
+
+tests coverage
+
+license
+
+Tips for highlighting your work:
+
+Mention your implementations:
+
+JWT authentication
+
+Cloudinary integration
+
+reCAPTCHA anti-bot protections
+
+secure cookies
+
+scheduler jobs
+
+🤝 Contributing
+Open issues for bugs or feature requests
+
+Fork the repo and submit PRs
+
+Use separate branches for each feature
+
+📄 License
+This project can be released under MIT (recommended).
+Add a LICENSE file to explicitly declare it.
+
+📬 Contact
+Developer: Gianluca Proto
+Email: gianlucaproto@gmail.com
+LinkedIn: https://www.linkedin.com/in/gianluca-proto-a4031a269/
