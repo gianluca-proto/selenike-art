@@ -1,4 +1,3 @@
-```md
 # 🎨 Selenike Art — Artist Portfolio Website (Flask + Bootstrap + Cloudinary)
 
 ![Python](https://img.shields.io/badge/Python-3.10+-blue)
@@ -262,4 +261,4 @@ Add a `LICENSE` file for full details.
 **Developer:** Gianluca Proto  
 **Email:** gianlucaproto@gmail.com  
 **LinkedIn:** https://www.linkedin.com/in/gianluca-proto-a4031a269/
-```
+
