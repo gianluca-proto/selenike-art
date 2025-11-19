@@ -43,7 +43,7 @@ It features a responsive interface, Cloudinary-based media management, and an ad
 
 ## 🛠 Technologies
 
-- **Python 3.10+**  
+- **Python 3.12+**  
 - **Flask 3**  
 - Flask-SQLAlchemy  
 - Flask-Migrate  
