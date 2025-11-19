@@ -8,8 +8,8 @@ load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), 'selenike-a
 
 class Config:
     SECRET_KEY = os.getenv('APP_SECRET_KEY')
-    SQLALCHEMY_DATABASE_URI = (os.getenv("DATABASE_URL", "").replace("postgres://", "postgresql://")
-                               or "postgresql://selenike_user:password123@localhost/selenike_art")
+    # Usa solo la variabile d'ambiente DATABASE_URL (senza fallback con password in chiaro)
+    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "").replace("postgres://", "postgresql://")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     MAIL_SERVER = os.getenv('MAIL_SERVER')
     MAIL_PORT = os.getenv('MAIL_PORT')
@@ -23,6 +23,10 @@ class Config:
     SESSION_COOKIE_SAMESITE = 'Lax'
     PRODUCTION = os.getenv('PRODUCTION', 'False').lower() == 'true'
     DEBUG = not PRODUCTION
+
+# Controllo runtime: in produzione richiedi esplicitamente DATABASE_URL
+if Config.PRODUCTION and not Config.SQLALCHEMY_DATABASE_URI:
+    raise RuntimeError('DATABASE_URL must be set in production. Do not use hard-coded credentials in source code.')
 
 MAX_IMAGE_SIZE = 5 * 1024 * 1024  # 5MB
 
