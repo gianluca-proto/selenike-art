@@ -13,10 +13,24 @@ import ipaddress
 import csv
 from services.cloudinary_service import upload_file_to_cloudinary, upload_all_logs_to_cloudinary, download_file_from_cloudinary
 
-try:
-    from user_agents import parse as ua_parse
-except Exception:
-    ua_parse = None
+# Nuovi import: delega a servizi
+from services.log_parser import (
+    _now_iso,
+    _classify_device_from_ua,
+    _is_bot,
+    _extract_from_line,
+    _normalize_ip_str,
+)
+from services.log_stats import (
+    _counts_from_map as _counts_from_map_srv,
+    _counts_from_lines_unique_ips as _counts_from_lines_unique_ips_srv,
+    _counts_from_lines_all_accesses as _counts_from_lines_all_accesses_srv,
+    _stats_from_lines as _stats_from_lines_srv,
+    _visits_timeseries_from_lines as _visits_timeseries_from_lines_srv,
+)
+# Import servizi per device map e history
+from services.device_map import _load_device_map as _load_device_map_srv, _save_device_map as _save_device_map_srv, process_lines_update_map as _process_lines_update_map_srv
+from services.history import _read_visits_history as _read_visits_history_srv, _append_visit_to_history as _append_visit_to_history_srv, _update_visits_history_from_logs as _update_visits_history_from_logs_srv, _upload_logs_to_cloudinary as _upload_logs_to_cloudinary_srv
 
 bp = Blueprint('security', __name__)
 
@@ -36,568 +50,57 @@ VISITS_HISTORY_PATH = Path('visits_history.csv')
 INCLUDE_LOOPBACK = os.getenv('INCLUDE_LOOPBACK', '') == '1'
 
 
-def _now_iso():
-    # timezone-aware ISO 8601 UTC timestamp
-    return datetime.now(timezone.utc).isoformat()
-
-
-def _classify_device_from_ua(ua_string):
-    """Classifica in desktop/mobile/tablet usando user-agents se disponibile, altrimenti heuristica semplice.
-    Ritorna None se ua_string è mancante o non valida.
-    """
-    if not ua_string:
-        return None
-    s = ua_string.lower()
-    # se abbiamo la libreria
-    if ua_parse:
-        try:
-            ua = ua_parse(ua_string)
-            if ua.is_tablet:
-                return 'tablet'
-            if ua.is_mobile:
-                return 'mobile'
-            return 'desktop'
-        except Exception:
-            pass
-    # fallback semplice
-    if 'ipad' in s or 'tablet' in s:
-        return 'tablet'
-    if 'iphone' in s or 'android' in s or 'mobile' in s:
-        return 'mobile'
-    return 'desktop'
-
-
-def _is_bot(ua_string):
-    """Rileva UA di bot usando semplici keyword heuristics."""
-    if not ua_string:
-        return False
-    s = ua_string.lower()
-    bot_indicators = [
-        'bot', 'crawl', 'spider', 'wget', 'curl', 'python-requests', 'headless',
-        'monitor', 'uptime', 'checker', 'scan', 'health', 'statuscake', 'pingdom',
-        'facebookexternalhit', 'bingpreview', 'slurp', 'mediapartners-google', 'googlebot'
-    ]
-    for b in bot_indicators:
-        if b in s:
-            return True
-    return False
-
-
-def _atomic_write(path: Path, content: str):
-    """Scrive atomically il contenuto su disco con lock (flock) per evitare corse."""
-    path.parent.mkdir(parents=True, exist_ok=True)
-    fd, tmp = tempfile.mkstemp(dir=str(path.parent), prefix=path.name, text=True)
-    try:
-        with os.fdopen(fd, 'w', encoding='utf-8') as f:
-            # acquisisci lock sul file temporaneo per essere sicuri
-            try:
-                fcntl.flock(f.fileno(), fcntl.LOCK_EX)
-            except Exception:
-                pass
-            f.write(content)
-            f.flush()
-            os.fsync(f.fileno())
-        # rename atomico
-        os.replace(tmp, str(path))
-    finally:
-        if os.path.exists(tmp):
-            try:
-                os.remove(tmp)
-            except Exception:
-                pass
-
-
-def _load_device_map():
-    try:
-        if DEVICE_MAP_PATH.exists():
-            data = json.loads(DEVICE_MAP_PATH.read_text(encoding='utf-8'))
-            # normalize old format (ip->device string) to new structure
-            first_key = next(iter(data.keys()), None)
-            if first_key and isinstance(data[first_key], str):
-                # convert
-                new = {}
-                for ip, dev in data.items():
-                    new[ip] = {
-                        'device': dev,
-                        'counts': {dev: 1},
-                        'first_seen': None,
-                        'last_seen': None,
-                        'last_updated': None
-                    }
-                return new
-            return data
-    except Exception:
-        pass
-    return {}
-
-
-def _save_device_map(m):
-    try:
-        content = json.dumps(m, ensure_ascii=False, indent=2)
-        _atomic_write(DEVICE_MAP_PATH, content)
-    except Exception:
-        pass
-
-
-def _extract_from_line(line):
-    """Estrae ip, request_path, raw_device, timestamp_str da una riga del log.
-    Restituisce tuple (ip, request_path, raw_device, ts_str)
-    """
-    ip = None
-    request_path = None
-    raw_device = None
-    ts = None
-    parts = line.split(' - ')
-    # timestamp in parts[0] se presente
-    if parts:
-        ts = parts[0]
-    try:
-        if len(parts) > 2 and 'IP:' in parts[2]:
-            ip = parts[2].split('IP: ', 1)[1].strip()
-    except Exception:
-        ip = None
-    if not ip:
-        m = re.search(r"(\d{1,3}(?:\.\d{1,3}){3})", line)
-        if m:
-            ip = m.group(1)
-    # normalizza ip (rimuove eventuale porta numerica e spazi)
-    if ip:
-        ip = ip.strip()
-        # rimuovi eventuali parentesi per IPv6 come [::1]:5000
-        if ip.startswith('[') and ']' in ip:
-            inner = ip.split(']', 1)[0][1:]
-            ip = inner
-        else:
-            # rimuove solo se c'è una porta numerica alla fine (es 1.2.3.4:5000)
-            mport = re.match(r'^(.*?):(\d+)$', ip)
-            if mport:
-                ip = mport.group(1)
-    try:
-        if len(parts) > 3 and 'Request:' in parts[3]:
-            raw_req = parts[3].split('Request: ', 1)[1].strip()
-            # raw_req può essere "GET /path" o solo "/path"; estraiamo il path
-            # gestione semplice: se contiene spazio, prendi la parte dopo il primo spazio
-            if ' ' in raw_req:
-                # es. "GET /foo?bar" -> "/foo?bar"
-                request_path = raw_req.split(' ', 1)[1].strip()
-            else:
-                request_path = raw_req
-    except Exception:
-        request_path = None
-    if 'Device:' in line:
-        try:
-            raw_device = line.split('Device: ', 1)[1].strip()
-        except Exception:
-            raw_device = None
-    else:
-        possible = parts[-1] if parts else ''
-        # fallback: consideriamo possibile UA solo se contiene indicatori tipici di user-agent
-        if len(possible) > 20:
-            ua_indicators = ['mozilla', 'curl', 'android', 'iphone', 'mobile', 'safari', 'chrome', 'edg', 'firefox']
-            s_low = possible.lower()
-            if any(ind in s_low for ind in ua_indicators):
-                raw_device = possible
-            else:
-                raw_device = None
-    return ip, request_path, raw_device, ts
-
-
-def _process_lines_update_map(lines):
-    """Aggiorna la mappa persistente con logica A (first-seen + soglia per aggiornamento).
-    Restituisce la mappa aggiornata.
-    """
-    device_map = _load_device_map()
-    updated = False
-    for line in lines:
-        ip, request_path, raw_device, ts = _extract_from_line(line)
-        if not ip:
-            continue
-        # Escludi polling/static requests e le richieste dell'area di admin/dashboard
-        if request_path and (request_path.startswith('/antro-1986/security') or request_path.startswith('/static/') or request_path.startswith('/favicon.ico')):
-            continue
-        # Escludi bot
-        if raw_device and _is_bot(raw_device):
-            continue
-        dev_type = _classify_device_from_ua(raw_device)
-        if not dev_type:
-            continue
-        entry = device_map.get(ip)
-        if not entry:
-            # create new entry
-            device_map[ip] = {
-                'device': dev_type,
-                'counts': {dev_type: 1},
-                'first_seen': ts or _now_iso(),
-                'last_seen': ts or _now_iso(),
-                'last_updated': None
-            }
-            updated = True
-            try:
-                logger.info('device-map add: ip=%s device=%s first_seen=%s', ip, dev_type, device_map[ip]['first_seen'])
-            except Exception:
-                pass
-            continue
-        # update existing counts and timestamps
-        counts = entry.get('counts') or {}
-        counts[dev_type] = counts.get(dev_type, 0) + 1
-        entry['counts'] = counts
-        entry['last_seen'] = ts or _now_iso()
-        # decide se cambiare device registrato: se il nuovo dev raggiunge soglia
-        current = entry.get('device')
-        if dev_type != current:
-            total = sum(counts.values())
-            if counts[dev_type] >= MIN_COUNT_TO_SWITCH and counts[dev_type] >= int(SWITCH_RATIO * total):
-                entry['device'] = dev_type
-                entry['last_updated'] = _now_iso()
-                updated = True
-                try:
-                    logger.info('device-map switch: ip=%s old=%s new=%s counts=%s', ip, current, dev_type, counts)
-                except Exception:
-                    pass
-    if updated:
-        _save_device_map(device_map)
-        try:
-            logger.info('device-map persisted entries=%d', len(device_map))
-        except Exception:
-            pass
-    return device_map
-
-
-def _normalize_ip_str(ip_str):
-    """Normalizza e valida una stringa IP; ritorna la forma canonica (str) o None se non valida."""
-    if not ip_str:
-        return None
-    s = str(ip_str).strip()
-    # se IPv6 racchiuso tra parentesi [::1] oppure [::1]:5000 -> estrai interno
-    if s.startswith('[') and ']' in s:
-        inner = s.split(']', 1)[0][1:]
-        s = inner
-    # Se sembra un IPv4 o IPv4:porta (contiene punti), rimuovi eventuale porta dopo l'ultimo ':'
-    if '.' in s:
-        if ':' in s:
-            head, tail = s.rsplit(':', 1)
-            if tail.isdigit():
-                s = head
-        try:
-            ip = ipaddress.ip_address(s)
-            return str(ip)
-        except Exception:
-            # fallback: se la stringa contiene cifre e punti (es. 127.0.XX.XX) consideriamola comunque
-            # come chiave normalizzata (non valida come IP reale ma utile per il conteggio).
-            if re.search(r"\d", s) and '.' in s:
-                return s
-            return None
-    # probabile IPv6 senza parentesi
-    try:
-        ip = ipaddress.ip_address(s)
-        return str(ip)
-    except Exception:
-        # fallback: se contiene cifre e due punti (es. formati IPv6 parziali), ritorniamo la stringa
-        if re.search(r"\d", s) and ':' in s:
-            return s
-        return None
-
-
+# Wrappers compatibili con l'API precedente (mantengono i nomi usati nei test)
 def _counts_from_map(m: dict):
-    """Dalla mappa persistente (device_map) ritorna un conteggio per device normalizzando IP.
-
-    Strategia:
-    - normalizza ogni chiave usando _normalize_ip_str
-    - raggruppa le voci con la stessa chiave normalizzata
-    - per ogni gruppo, seleziona l'entry con `last_seen` più recente (gestisce formati ISO/Z e fallback)
-    - restituisce dizionario counts {'mobile': X, 'desktop': Y, 'tablet': Z}
-    """
-    if not isinstance(m, dict):
-        return {'mobile': 0, 'desktop': 0, 'tablet': 0}
-
-    def _parse_ts(ts):
-        if not ts:
-            return None
-        if isinstance(ts, datetime):
-            return ts
-        s = str(ts).strip()
-        # try common ISO formats
-        for fmt in ("%Y-%m-%dT%H:%M:%S.%fZ", "%Y-%m-%dT%H:%M:%S%z", "%Y-%m-%dT%H:%M:%SZ", "%Y-%m-%dT%H:%M:%S.%f", "%Y-%m-%d %H:%M:%S", "%Y-%m-%dT%H:%M:%S"):
-            try:
-                # handle trailing Z as UTC
-                if s.endswith('Z') and '%z' not in fmt:
-                    return datetime.strptime(s, fmt)
-                return datetime.strptime(s, fmt)
-            except Exception:
-                continue
-        try:
-            # last resort: fromisoformat (python 3.11+ tolerates many forms)
-            return datetime.fromisoformat(s)
-        except Exception:
-            return None
-
-    grouped = {}
-    for raw_key, entry in (m.items() if isinstance(m, dict) else []):
-        norm = _normalize_ip_str(raw_key)
-        if not norm:
-            # ignora chiavi non normalizzabili
-            continue
-        # scegli entry con last_seen più recente
-        cur = grouped.get(norm)
-        cur_ts = _parse_ts(cur.get('last_seen')) if cur else None
-        ent_ts = _parse_ts(entry.get('last_seen'))
-        # se cur è None -> prendi entry
-        take = False
-        if cur is None:
-            take = True
-        else:
-            # se ent_ts è None non sostituiamo; se cur_ts è None prendiamo ent
-            if ent_ts and cur_ts:
-                if ent_ts > cur_ts:
-                    take = True
-            elif ent_ts and not cur_ts:
-                take = True
-            # else mantieni cur
-        if take:
-            grouped[norm] = entry
-
-    counts = {'mobile': 0, 'desktop': 0, 'tablet': 0}
-    for entry in grouped.values():
-        d = entry.get('device') if isinstance(entry, dict) else None
-        if d in counts:
-            counts[d] += 1
-        else:
-            counts['desktop'] += 1
-    return counts
+    return _counts_from_map_srv(m)
 
 
 def _counts_from_lines_unique_ips(lines, include_loopback=None):
-    """Conta una entry per ogni combinazione IP+device (non solo per IP).
-    Filtra richieste statiche e bot come nella versione precedente.
-    Se il device non è riconosciuto, conta comunque come 'desktop'.
-    """
-    seen = set()
-    device_counts = {'mobile': 0, 'desktop': 0, 'tablet': 0}
-    for line in lines:
-        ip, request_path, raw_device, ts = _extract_from_line(line)
-        if not ip:
-            continue
-        # Escludi polling/static requests e le richieste dell'area di admin/dashboard
-        if request_path and (request_path.startswith('/antro-1986/security') or request_path.startswith('/static/') or request_path.startswith('/favicon.ico')):
-            continue
-        # Escludi bot
-        if raw_device and _is_bot(raw_device):
-            continue
-        norm = _normalize_ip_str(ip)
-        if not norm:
-            continue
-        # escludi loopback a meno che non sia esplicitamente abilitato
-        use_loopback = INCLUDE_LOOPBACK if include_loopback is None else bool(include_loopback)
-        if not use_loopback:
-            try:
-                nip = ipaddress.ip_address(norm)
-                if nip.is_loopback:
-                    continue
-            except Exception:
-                if norm in ('127.0.0.1', '::1'):
-                    continue
-        dev_type = _classify_device_from_ua(raw_device)
-        if not dev_type:
-            dev_type = 'desktop'  # fallback
-        key = (norm, dev_type)
-        if key in seen:
-            continue
-        seen.add(key)
-        if dev_type in device_counts:
-            device_counts[dev_type] += 1
-        else:
-            device_counts['desktop'] += 1
-    return device_counts
+    return _counts_from_lines_unique_ips_srv(lines, include_loopback=include_loopback)
 
 
 def _counts_from_lines_all_accesses(lines):
-    """Conta ogni accesso per device_type (desktop, mobile, tablet), senza deduplicare per IP."""
-    device_counts = {'mobile': 0, 'desktop': 0, 'tablet': 0}
-    for line in lines:
-        ip, request_path, raw_device, ts = _extract_from_line(line)
-        if not ip:
-            continue
-        # Escludi polling/static requests e le richieste dell'area di admin/dashboard
-        if request_path and (request_path.startswith('/antro-1986/security') or request_path.startswith('/static/') or request_path.startswith('/favicon.ico')):
-            continue
-        # Escludi bot
-        if raw_device and _is_bot(raw_device):
-            continue
-        dev_type = _classify_device_from_ua(raw_device)
-        if not dev_type:
-            dev_type = 'desktop'  # fallback
-        if dev_type in device_counts:
-            device_counts[dev_type] += 1
-        else:
-            device_counts['desktop'] += 1
-    return device_counts
+    return _counts_from_lines_all_accesses_srv(lines)
 
 
 def _stats_from_lines(lines, sample=20):
-    """Restituisce diagnostica: counts, numero unico di IP+device conteggiati, righe totali ed escluse e una sample degli IP+device visti."""
-    total = len(lines)
-    seen = {}
-    excluded = 0
-    for line in lines:
-        ip, request_path, raw_device, ts = _extract_from_line(line)
-        if not ip:
-            excluded += 1
-            continue
-        if request_path and (request_path.startswith('/antro-1986/security') or request_path.startswith('/static/') or request_path.startswith('/favicon.ico')):
-            excluded += 1
-            continue
-        if raw_device and _is_bot(raw_device):
-            excluded += 1
-            continue
-        norm = _normalize_ip_str(ip)
-        if not norm:
-            excluded += 1
-            continue
-        dev_type = _classify_device_from_ua(raw_device)
-        if not dev_type:
-            excluded += 1
-            continue
-        # Raggruppa per coppia (IP, dispositivo)
-        key = f"{norm}|{dev_type}"
-        if key in seen:
-            continue
-        seen[key] = {'device': dev_type, 'raw_ua': raw_device, 'request': request_path, 'ts': ts, 'ip': norm}
-
-    counts = {'mobile': 0, 'desktop': 0, 'tablet': 0}
-    for dev in seen.values():
-        d = dev['device']
-        if d in counts:
-            counts[d] += 1
-        else:
-            counts['desktop'] += 1
-
-    sample_items = dict(list(seen.items())[:sample])
-    return {
-        'counts': counts,
-        'unique_ip_device': len(seen),
-        'total_lines': total,
-        'excluded_lines': excluded,
-        'sample_seen': sample_items
-    }
+    return _stats_from_lines_srv(lines, sample=sample)
 
 
 def _visits_timeseries_from_lines(lines):
-    """Ritorna (labels, data) dove labels sono date YYYY-MM-DD ordinate e data è il numero di visitatori unici (IP) per giorno.
-    """
-    per_day = defaultdict(set)
-    for line in lines:
-        ip, request_path, raw_device, ts = _extract_from_line(line)
-        if not ip:
-            continue
-        # Escludi richieste dashboard/statics
-        if request_path and (request_path.startswith('/antro-1986/security') or request_path.startswith('/static/') or request_path.startswith('/favicon.ico')):
-            continue
-        if raw_device and _is_bot(raw_device):
-            continue
-        norm = _normalize_ip_str(ip)
-        if not norm:
-            continue
-        if not INCLUDE_LOOPBACK:
-            try:
-                nip = ipaddress.ip_address(norm)
-                if nip.is_loopback:
-                    continue
-            except Exception:
-                if norm in ('127.0.0.1', '::1'):
-                    continue
-        if not ts:
-            continue
-        # parse timestamp come 'YYYY-mm-dd HH:MM:SS,fff'
-        try:
-            dt = datetime.strptime(ts.strip(), '%Y-%m-%d %H:%M:%S,%f')
-        except Exception:
-            try:
-                dt = datetime.fromisoformat(ts)
-            except Exception:
-                continue
-        day = dt.date().isoformat()
-        per_day[day].add(norm)
+    return _visits_timeseries_from_lines_srv(lines)
 
-    labels = sorted(per_day.keys())
-    data = [len(per_day[d]) for d in labels]
-    return labels, data
+
+# Wrappers per device_map/history che delegano ai servizi appena creati
+def _load_device_map():
+    return _load_device_map_srv()
+
+
+def _save_device_map(m):
+    return _save_device_map_srv(m)
+
+
+def _process_lines_update_map(lines):
+    return _process_lines_update_map_srv(lines)
 
 
 def _read_visits_history():
-    """Legge lo storico delle visite giornaliere dal file CSV."""
-    history = {}
-    if VISITS_HISTORY_PATH.exists():
-        with open(VISITS_HISTORY_PATH, newline='', encoding='utf-8') as csvfile:
-            reader = csv.reader(csvfile)
-            for row in reader:
-                if not row or row[0].startswith('#') or row[0] == 'data':
-                    continue
-                try:
-                    history[row[0]] = int(row[1])
-                except Exception:
-                    continue
-    return history
+    return _read_visits_history_srv()
 
 
 def _append_visit_to_history(date_str, visits):
-    """Aggiunge una riga allo storico in modo atomico, solo se la data non è già presente. Esegue upload su Cloudinary."""
-    # Scarica sempre la versione più aggiornata prima di modificare
-    download_file_from_cloudinary('stats/visits_history.csv', str(VISITS_HISTORY_PATH))
-    history = _read_visits_history()
-    if date_str in history:
-        return  # già presente
-    # Scrivi in modo atomico
-    lines = []
-    if VISITS_HISTORY_PATH.exists():
-        with open(VISITS_HISTORY_PATH, encoding='utf-8') as f:
-            lines = f.readlines()
-    with open(VISITS_HISTORY_PATH, 'a', encoding='utf-8') as f:
-        if not lines:
-            f.write('data,visite\n')
-        f.write(f'{date_str},{visits}\n')
-    # Upload automatico su Cloudinary
-    upload_file_to_cloudinary(str(VISITS_HISTORY_PATH), folder="stats")
-    _upload_logs_to_cloudinary()
+    return _append_visit_to_history_srv(date_str, visits)
 
 
 def _update_visits_history_from_logs(log_lines):
-    """Aggiorna lo storico delle visite giornaliere con i dati del giorno precedente, se mancante."""
-    history = _read_visits_history()
-    today = datetime.now().date()
-    yesterday = today - timedelta(days=1)
-    yest_str = yesterday.isoformat()
-    if yest_str in history:
-        return  # già presente
-    # Calcola visite uniche di ieri dai log
-    per_day = defaultdict(set)
-    for line in log_lines:
-        ip, request_path, raw_device, ts = _extract_from_line(line)
-        if not ip or not ts:
-            continue
-        # Escludi richieste dashboard/statics
-        if request_path and (request_path.startswith('/antro-1986/security') or request_path.startswith('/static/') or request_path.startswith('/favicon.ico')):
-            continue
-        if raw_device and _is_bot(raw_device):
-            continue
-        norm = _normalize_ip_str(ip)
-        try:
-            dt = datetime.fromisoformat(ts)
-        except Exception:
-            continue
-        if dt.date() == yesterday:
-            per_day[yest_str].add(norm)
-    visits = len(per_day[yest_str])
-    if visits > 0:
-        _append_visit_to_history(yest_str, visits)
+    return _update_visits_history_from_logs_srv(log_lines)
 
 
 def _upload_logs_to_cloudinary():
-    """Carica tutti i file access.log* su Cloudinary nella cartella logs/."""
-    try:
-        upload_all_logs_to_cloudinary(log_dir=".", pattern="access.log", folder="logs")
-    except Exception as e:
-        print(f"Errore upload log su Cloudinary: {e}")
+    return _upload_logs_to_cloudinary_srv()
 
+# Le funzioni di parsing/statistica/persistenza sono ora centralizzate in services/*
+# Il file ora contiene solo la logica di routing / rendering.
 
 @bp.route('/antro-1986/security-dashboard')
 def security_dashboard():
@@ -679,14 +182,12 @@ def security_dashboard():
 
             # Prepariamo le righe della pagina come strutture (dizionari) per il template
             log_rows = []
-            debug_printed = False
             for line in page_lines:
                 parts = line.split(' - ')
                 # Prova a estrarre timestamp se la prima parte sembra una data/ora
                 possible_ts = parts[0].strip() if parts else ''
                 timestamp = 'N/A'
                 # Riconosci formato tipo 'YYYY-MM-DD HH:MM:SS,ms'
-                import re
                 if re.match(r"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}(,\d+)?$", possible_ts):
                     timestamp = possible_ts
                 if len(parts) == 5:
@@ -782,8 +283,8 @@ def security_dashboard():
         }]
         total = 0
         total_pages = 1
-        raw_lines = []  # <--- AGGIUNTO: inizializza raw_lines come lista vuota
-        device_totals = {'mobile': 0, 'desktop': 0, 'tablet': 0}  # <--- AGGIUNTO: inizializza device_totals
+        raw_lines = []
+        device_totals = {'mobile': 0, 'desktop': 0, 'tablet': 0}
 
     # --- Aggiunta gestione storico visite giornaliere ---
     history = _read_visits_history()
