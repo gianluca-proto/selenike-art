@@ -1,6 +1,6 @@
 # 🎨 Selenike Art — Artist Portfolio Website (Flask + Bootstrap + Cloudinary)
 
-![Python](https://img.shields.io/badge/Python-3.10+-blue)
+![Python](https://img.shields.io/badge/Python-3.12+-blue)
 ![Flask](https://img.shields.io/badge/Flask-3.0-red)
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-5-purple)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-blue)
